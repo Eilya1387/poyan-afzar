@@ -86,7 +86,7 @@ export function BestSellers() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === tab
                   ? "bg-white text-slate-900 shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
@@ -98,30 +98,24 @@ export function BestSellers() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex md:grid md:grid-cols-4 gap-3 md:gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group"
+            className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl border border-slate-200 p-2.5 sm:p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group cursor-pointer"
           >
             <div>
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 mb-3 border border-slate-100 flex items-center justify-center p-3">
-                <span className="absolute top-2.5 right-2.5 z-10 bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+              <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 mb-2 sm:mb-3 border border-slate-100 flex items-center justify-center p-2 sm:p-3">
+                <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-10 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
                   {product.discount}
                 </span>
 
-                <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1.5">
+                <div className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1">
                   <button
                     aria-label="افزودن به علاقه‌مندی‌ها"
-                    className="w-7 h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors"
+                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors cursor-pointer"
                   >
-                    <Heart className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    aria-label="مقایسه محصول"
-                    className="w-7 h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-[#2563eb] transition-colors"
-                  >
-                    <Repeat className="w-3.5 h-3.5" />
+                    <Heart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
 
@@ -133,48 +127,37 @@ export function BestSellers() {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] mb-1.5">
-                <span className="font-medium text-slate-600">
+              <div className="flex items-center justify-between text-[10px] sm:text-[11px] mb-1">
+                <span className="font-medium text-slate-600 truncate">
                   {product.brand}
                 </span>
-                <div className="flex items-center gap-1 text-slate-600 font-medium">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <div className="flex items-center gap-1 text-slate-600 font-medium shrink-0">
+                  <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
                   <span className="font-bold text-slate-700">
                     {product.rating}
                   </span>
-                  <span>({product.reviews})</span>
                 </div>
               </div>
 
-              <h3 className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-2 h-10 leading-snug group-hover:text-[#2563eb] transition-colors">
+              <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] transition-colors">
                 {product.title}
               </h3>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100">
-              <div className="flex items-center justify-between mb-2.5">
-                <span className="text-[11px] font-medium text-emerald-600 flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  موجود در انبار
-                </span>
-                <span className="text-[11px] text-slate-600 line-through">
-                  {product.oldPrice}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between gap-2">
+            <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
+              <div className="flex items-center justify-between gap-1 sm:gap-2">
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="rounded-xl px-4 font-bold gap-1"
+                  className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>خرید</span>
                 </Button>
 
-                <div className="flex items-center gap-1 font-black text-sm sm:text-base text-[#0b1528]">
+                <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] truncate">
                   <span>{product.price}</span>
-                  <span className="text-[10px] font-medium text-slate-600">
+                  <span className="text-[9px] sm:text-[10px] font-medium text-slate-600">
                     تومان
                   </span>
                 </div>

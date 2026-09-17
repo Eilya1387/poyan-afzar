@@ -41,7 +41,7 @@ export function BlogSection() {
         </h2>
         <Link
           href="#"
-          className="text-xs sm:text-sm font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1 transition-colors"
+          className="text-xs sm:text-sm font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1 transition-colors cursor-pointer"
         >
           <span>همه مقالات</span>
           <ArrowLeft className="w-4 h-4" />
@@ -52,7 +52,7 @@ export function BlogSection() {
         {articles.map((article) => (
           <article
             key={article.id}
-            className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group"
+            className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group cursor-pointer"
           >
             <div>
               <div className="relative aspect-16/10 overflow-hidden bg-slate-100">
@@ -83,7 +83,7 @@ export function BlogSection() {
               <span className="text-slate-600 font-medium">{article.date}</span>
               <Link
                 href={article.href}
-                className="font-bold text-[#2563eb] hover:text-[#1d4ed8] transition-colors"
+                className="font-bold text-[#2563eb] hover:text-[#1d4ed8] transition-colors cursor-pointer"
               >
                 ادامه مطلب
               </Link>
