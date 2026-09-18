@@ -25,7 +25,8 @@ const suggestedProducts = [
     title: "ماوس بی‌سیم ارگونومیک لاجیتک",
     price: 450000,
     priceString: "۴۵۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
+    image:
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
     brand: "لاجیتک",
   },
   {
@@ -33,7 +34,8 @@ const suggestedProducts = [
     title: "کابل تبدیل USB به USB-C کنفی",
     price: 180000,
     priceString: "۱۸۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
+    image:
+      "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
     brand: "انکر",
   },
   {
@@ -41,7 +43,8 @@ const suggestedProducts = [
     title: "پد ماوس طبی مدل ژله‌ای",
     price: 125000,
     priceString: "۱۲۵,۰۰۰",
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&q=80",
+    image:
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&q=80",
     brand: "تسکو",
   },
 ];
@@ -75,7 +78,9 @@ export function CartView() {
 
   const formatPrice = (num: number) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-    return num.toLocaleString("fa-IR").replace(/[0-9]/g, (w) => persianDigits[+w]);
+    return num
+      .toLocaleString("fa-IR")
+      .replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
   const handleApplyCoupon = (e: React.FormEvent) => {
@@ -86,7 +91,9 @@ export function CartView() {
       setCouponSuccess(true);
       setCouponError("");
     } else {
-      setCouponError("کد تخفیف وارد شده معتبر نیست (کدهای معتبر: off10, takhfif, wexun)");
+      setCouponError(
+        "کد تخفیف وارد شده معتبر نیست (کدهای معتبر: off10, takhfif, wexun)",
+      );
       setCouponSuccess(false);
     }
   };
@@ -98,7 +105,10 @@ export function CartView() {
       <nav aria-label="مسیر راهنما" className="py-2 text-xs text-slate-500">
         <ol className="flex items-center gap-2">
           <li>
-            <Link href="/" className="hover:text-[#2563eb] transition-colors cursor-pointer">
+            <Link
+              href="/"
+              className="hover:text-[#2563eb] transition-colors cursor-pointer"
+            >
               خانه
             </Link>
           </li>
@@ -142,7 +152,8 @@ export function CartView() {
             سبد خرید شما خالی است
           </h2>
           <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
-            می‌توانید برای مشاهده محصولات و کالاهای دیجیتال به صفحه فروشگاه مراجعه کنید.
+            می‌توانید برای مشاهده محصولات و کالاهای دیجیتال به صفحه فروشگاه
+            مراجعه کنید.
           </p>
           <Link href="/" className="inline-block pt-2">
             <Button variant="primary" size="lg" className="font-bold px-8">
@@ -196,13 +207,11 @@ export function CartView() {
                         )}
                       </div>
 
-                      <div className="text-[11px] text-slate-500">
-                        <span>فروشنده: {item.seller || "پویان افزار اکسپرس"}</span>
-                      </div>
-
                       <div className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        <span>{item.inStockText || "موجود در انبار - ارسال فردا"}</span>
+                        <span>
+                          {item.inStockText || "موجود در انبار - ارسال فردا"}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -215,7 +224,8 @@ export function CartView() {
                         </div>
                       )}
                       <div className="text-sm sm:text-base font-black text-slate-900">
-                        {formatPrice(item.price * item.quantity)} <span className="text-xs font-normal">تومان</span>
+                        {formatPrice(item.price * item.quantity)}{" "}
+                        <span className="text-xs font-normal">تومان</span>
                       </div>
                     </div>
 
@@ -279,7 +289,9 @@ export function CartView() {
               </form>
 
               {couponError && (
-                <p className="text-[11px] text-red-500 font-bold">{couponError}</p>
+                <p className="text-[11px] text-red-500 font-bold">
+                  {couponError}
+                </p>
               )}
               {couponSuccess && (
                 <p className="text-[11px] text-emerald-600 font-bold">
@@ -298,7 +310,9 @@ export function CartView() {
               <div className="space-y-3 text-xs">
                 <div className="flex items-center justify-between text-slate-600">
                   <span>مبلغ کالاها ({toPersianDigits(itemsCount)} کالا)</span>
-                  <span className="font-bold text-slate-800">{formatPrice(getRawTotal())} تومان</span>
+                  <span className="font-bold text-slate-800">
+                    {formatPrice(getRawTotal())} تومان
+                  </span>
                 </div>
 
                 {getDiscountTotal() > 0 && (
@@ -314,12 +328,16 @@ export function CartView() {
                 </div>
 
                 <div className="border-t border-slate-100 pt-3 flex items-baseline justify-between text-slate-900">
-                  <span className="text-xs font-bold text-slate-600">مبلغ قابل پرداخت</span>
+                  <span className="text-xs font-bold text-slate-600">
+                    مبلغ قابل پرداخت
+                  </span>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl sm:text-2xl font-black text-slate-900">
                       {formatPrice(getFinalTotal())}
                     </span>
-                    <span className="text-xs font-medium text-slate-500">تومان</span>
+                    <span className="text-xs font-medium text-slate-500">
+                      تومان
+                    </span>
                   </div>
                 </div>
               </div>

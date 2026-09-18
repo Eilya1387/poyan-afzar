@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShoppingCart, Heart, Truck, ShieldCheck, Plus, Minus } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  Truck,
+  ShieldCheck,
+  Plus,
+  Minus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
@@ -39,7 +46,9 @@ export function BuyBox({
           id: product.id,
           title: product.title,
           price: product.priceNumber,
-          oldPrice: product.oldPrice ? parseInt(product.oldPrice.replace(/[^0-9]/g, ""), 10) : undefined,
+          oldPrice: product.oldPrice
+            ? parseInt(product.oldPrice.replace(/[^0-9]/g, ""), 10)
+            : undefined,
           discount: product.discount,
           image: product.image,
           seller: product.seller,
@@ -47,7 +56,7 @@ export function BuyBox({
           color: product.colors[0]?.name,
           inStockText: product.stockText,
         },
-        quantity
+        quantity,
       );
     }
     setIsAdded(true);
@@ -75,12 +84,7 @@ export function BuyBox({
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs sticky top-24 space-y-5 text-right">
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-slate-400 font-medium">فروشنده</span>
-        <span className="font-bold text-slate-800">{seller}</span>
-      </div>
-
-      <div className="border-t border-slate-100 pt-4">
+      <div className=" pt-4">
         {discount && oldPrice && (
           <div className="flex items-center justify-between mb-1.5">
             <span className="bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-2xs">
@@ -96,9 +100,7 @@ export function BuyBox({
           <span className="text-2xl font-black text-slate-900 tracking-tight">
             {price}
           </span>
-          <span className="text-xs text-slate-500 font-medium">
-            تومان
-          </span>
+          <span className="text-xs text-slate-500 font-medium">تومان</span>
         </div>
       </div>
 
@@ -155,17 +157,6 @@ export function BuyBox({
         >
           {isFav ? "در لیست علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
         </Button>
-      </div>
-
-      <div className="border-t border-slate-100 pt-4 space-y-2.5 text-xs text-slate-600">
-        <div className="flex items-center gap-2.5">
-          <Truck className="w-4 h-4 text-[#2563eb] shrink-0" />
-          <span>ارسال اکسپرس پویان افزار (تهران ۲ ساعته)</span>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>ضمانت ۷ روز بازگشت وجه در صورت نارضایتی</span>
-        </div>
       </div>
     </div>
   );

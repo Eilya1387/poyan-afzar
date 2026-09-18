@@ -69,9 +69,6 @@ export function FlashSale() {
       <div className="bg-[#0b1528] rounded-3xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-800/80 mb-4 sm:mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-              <Flame className="w-5 h-5 text-blue-400" />
-            </div>
             <div>
               <h2 className="text-base sm:text-xl font-black text-white">
                 پیشنهاد شگفت‌انگیز پویان افزار
