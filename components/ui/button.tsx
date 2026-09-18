@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
+import Link from "next/link";
 
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "icon";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
@@ -11,6 +12,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  href?: string;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -24,6 +26,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       leftIcon,
       rightIcon,
       disabled,
+      href,
       ...props
     },
     ref
@@ -49,13 +52,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       icon: "p-2 rounded-xl h-10 w-10 gap-0",
     };
 
-    return (
-      <button
-        ref={ref}
-        disabled={disabled || isLoading}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
-        {...props}
-      >
+    const content = (
+      <>
         {isLoading ? (
           <span className="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
         ) : (
@@ -65,6 +63,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             {leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
           </>
         )}
+      </>
+    );
+
+    if (href) {
+      return (
+        <Link
+          href={href}
+          className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        >
+          {content}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        ref={ref}
+        disabled={disabled || isLoading}
+        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        {...props}
+      >
+        {content}
       </button>
     );
   }

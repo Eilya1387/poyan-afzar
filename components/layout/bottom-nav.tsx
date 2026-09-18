@@ -1,26 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Home, LayoutGrid, ShoppingBag, Flame, User } from "lucide-react";
+import { useCartCount, useCartStore } from "@/lib/cart-store";
 
 interface NavItem {
   id: string;
   label: string;
+  href: string;
   icon: React.ComponentType<{ className?: string }>;
-  badge?: number;
+  isCart?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { id: "home", label: "خانه", icon: Home },
-  { id: "categories", label: "دسته‌بندی", icon: LayoutGrid },
-  { id: "cart", label: "سبد خرید", icon: ShoppingBag, badge: 2 },
-  { id: "deals", label: "شگفت‌انگیز", icon: Flame },
-  { id: "profile", label: "پروفایل", icon: User },
+  { id: "home", label: "خانه", href: "/", icon: Home },
+  { id: "categories", label: "دسته‌بندی", href: "/products", icon: LayoutGrid },
+  { id: "cart", label: "سبد خرید", href: "/cart", icon: ShoppingBag, isCart: true },
+  { id: "deals", label: "شگفت‌انگیز", href: "/products", icon: Flame },
+  { id: "profile", label: "پروفایل", href: "#", icon: User },
 ];
 
 export function BottomNav() {
+  const pathname = usePathname();
   const [activeId, setActiveId] = useState("home");
-  const activeIndex = navItems.findIndex((item) => item.id === activeId);
+  const cartCount = useCartCount();
+
+  useEffect(() => {
+    if (pathname === "/cart") {
+      setActiveId("cart");
+    } else if (pathname === "/products") {
+      setActiveId("categories");
+    } else if (pathname === "/") {
+      setActiveId("home");
+    }
+  }, [pathname]);
+
+  const activeIndex = Math.max(0, navItems.findIndex((item) => item.id === activeId));
 
   return (
     <nav
@@ -39,10 +56,12 @@ export function BottomNav() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeId === item.id;
+          const badgeValue = item.isCart ? cartCount : undefined;
 
           return (
-            <button
+            <Link
               key={item.id}
+              href={item.href}
               onClick={() => setActiveId(item.id)}
               className="relative z-10 flex flex-col items-center justify-center flex-1 h-full py-1 focus:outline-none cursor-pointer group"
             >
@@ -55,7 +74,7 @@ export function BottomNav() {
                   }`}
                 />
 
-                {item.badge !== undefined && (
+                {badgeValue !== undefined && badgeValue > 0 && (
                   <span
                     className={`absolute -top-2.5 -right-2 text-[10px] font-black rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-xs transition-colors ${
                       isActive
@@ -63,7 +82,7 @@ export function BottomNav() {
                         : "bg-red-500 text-white"
                     }`}
                   >
-                    {item.badge}
+                    {badgeValue}
                   </span>
                 )}
               </div>
@@ -77,7 +96,7 @@ export function BottomNav() {
               >
                 {item.label}
               </span>
-            </button>
+            </Link>
           );
         })}
       </div>
