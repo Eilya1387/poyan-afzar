@@ -1,4 +1,10 @@
+@import url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Vazirmatn", var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-vazir: "Vazirmatn", var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
 :root {
   --background: #f8fafc;
@@ -28,10 +34,18 @@
   --border: #1e293b;
 }
 
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-vazir), "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   direction: rtl;
   text-align: right;
   overflow-x: hidden;

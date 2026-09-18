@@ -93,12 +93,17 @@ export function FlashSale() {
 
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
           {flashDeals.map((deal) => (
-            <Link
+            <div
               key={deal.id}
-              href={`/products/${deal.id}`}
-              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100"
+              className="relative w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group border border-transparent hover:border-blue-100"
             >
-              <div>
+              <Link
+                href={`/products/${deal.id}`}
+                className="absolute inset-0 z-0 rounded-2xl"
+                aria-label={deal.title}
+              />
+
+              <div className="relative z-1 pointer-events-none">
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 mb-2 border border-slate-100 flex items-center justify-center p-1.5">
                   <span className="absolute top-1.5 right-1.5 z-10 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
                     {deal.discount}
@@ -120,7 +125,7 @@ export function FlashSale() {
                 </h3>
               </div>
 
-              <div className="mt-2.5 pt-2 border-t border-slate-100">
+              <div className="relative z-1 mt-2.5 pt-2 border-t border-slate-100">
                 <span className="block text-[10px] text-slate-400 line-through text-left">
                   {deal.oldPrice}
                 </span>
@@ -129,8 +134,9 @@ export function FlashSale() {
                   <Button
                     variant="secondary"
                     size="icon"
+                    type="button"
                     onClick={(e) => handleAddToCart(e, deal)}
-                    className="rounded-lg w-7 h-7 sm:w-8 sm:h-8 cursor-pointer shadow-xs hover:shadow-sm shrink-0"
+                    className="rounded-lg w-7 h-7 sm:w-8 sm:h-8 cursor-pointer shadow-xs hover:shadow-sm shrink-0 relative z-10"
                     aria-label="افزودن به سبد خرید"
                   >
                     {addedId === deal.id ? (
@@ -148,7 +154,7 @@ export function FlashSale() {
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

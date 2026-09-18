@@ -40,7 +40,7 @@ export const useCartStore = create<CartStore>()(
             originalPrice: 1850000,
             color: "مشکی",
             warranty: "۱۸ ماهه",
-            seller: "تک‌مارکت اکسپرس",
+            seller: "پویان افزار اکسپرس",
             deliveryText: "موجود در انبار - ارسال فردا",
             inStock: true,
             image: "/images/products/asus-rog-4070ti.jpg",
@@ -57,7 +57,7 @@ export const useCartStore = create<CartStore>()(
             price: 2400000,
             color: "سفید خاکستری",
             warranty: "۱۲ ماهه شرکتی",
-            seller: "تک‌مارکت اکسپرس",
+            seller: "پویان افزار اکسپرس",
             deliveryText: "موجود در انبار مرکزی",
             inStock: true,
             image: "/images/products/msi-4060ti.jpg",
@@ -126,7 +126,7 @@ export const useCartStore = create<CartStore>()(
         if (!trimmed) {
           return { success: false, message: "لطفاً کد تخفیف را وارد کنید." };
         }
-        if (trimmed === "OFF20" || trimmed === "TAKMARKET" || trimmed === "POYAN" || trimmed === "DISCOUNT") {
+        if (trimmed === "OFF20" || trimmed === "POYANAFZAR" || trimmed === "POYAN" || trimmed === "DISCOUNT") {
           set({ couponCode: trimmed, couponDiscount: 100000 });
           return { success: true, message: "کد تخفیف با موفقیت اعمال شد." };
         }

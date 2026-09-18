@@ -30,6 +30,11 @@ export function BottomNav() {
   const cartCount = useCartStore((state) => state.getItemsCount());
 
   const [activeId, setActiveId] = useState("home");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (pathname === "/login" || pathname === "/panel") {
@@ -74,7 +79,7 @@ export function BottomNav() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeId === item.id;
-          const badgeValue = item.isCart ? cartCount : undefined;
+          const badgeValue = mounted && item.isCart ? cartCount : undefined;
 
           return (
             <Link
