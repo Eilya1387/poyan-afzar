@@ -246,6 +246,18 @@ export function Footer() {
 
           <div className="flex items-center gap-4 flex-wrap justify-center">
             <Link
+              href="/about"
+              className="hover:text-[#2563eb] transition-colors cursor-pointer"
+            >
+              درباره ما
+            </Link>
+            <Link
+              href="/contact"
+              className="hover:text-[#2563eb] transition-colors cursor-pointer"
+            >
+              تماس با ما
+            </Link>
+            <Link
               href="#"
               className="hover:text-[#2563eb] transition-colors cursor-pointer"
             >
@@ -256,18 +268,6 @@ export function Footer() {
               className="hover:text-[#2563eb] transition-colors cursor-pointer"
             >
               حریم خصوصی
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              سوالات متداول
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              ارتباط با پشتیبانی
             </Link>
           </div>
         </div>
