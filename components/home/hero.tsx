@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
 import { ChevronRight, ChevronLeft, ShoppingBag } from "lucide-react";
 
 interface Slide {
@@ -167,13 +168,13 @@ export function Hero() {
                     {slide.subtitle}
                   </p>
 
-                  <button
-                    type="button"
+                  <Link
+                    href="/products"
                     className="mt-0.5 sm:mt-1 inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-black px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white text-slate-900 shadow-md hover:bg-slate-100 transition-all cursor-pointer pointer-events-auto"
                   >
                     <ShoppingBag className="w-3.5 h-3.5 text-[#2563eb]" />
                     <span>{slide.buttonText}</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

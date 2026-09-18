@@ -135,6 +135,7 @@ export function BestSellers() {
             <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
               <div className="flex items-center justify-between gap-1 sm:gap-2">
                 <Button
+                  href="/products"
                   variant="secondary"
                   size="sm"
                   type="button"

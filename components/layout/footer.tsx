@@ -156,7 +156,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 flex flex-col items-center lg:items-start">
               <li>
                 <Link
-                  href="#"
+                  href="/products"
                   className="hover:text-[#2563eb] transition-colors cursor-pointer"
                 >
                   موبایل و تبلت
@@ -164,7 +164,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products"
                   className="hover:text-[#2563eb] transition-colors cursor-pointer"
                 >
                   قطعات کامپیوتر
@@ -172,7 +172,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products"
                   className="hover:text-[#2563eb] transition-colors cursor-pointer"
                 >
                   تجهیزات گیمینگ
@@ -180,7 +180,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products"
                   className="hover:text-[#2563eb] transition-colors cursor-pointer"
                 >
                   لوازم جانبی صوتی
@@ -188,7 +188,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products"
                   className="hover:text-[#2563eb] transition-colors cursor-pointer"
                 >
                   شارژر و کابل

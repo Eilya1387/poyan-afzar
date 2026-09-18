@@ -23,31 +23,57 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-context";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
 
+export interface HeaderProps {
+  cartCount?: number;
+  searchQuery?: string;
+  onSearchChange?: (val: string) => void;
+}
+
 const navLinks = [
-  { name: "خانه", href: "/", active: true },
-  { name: "فروشگاه", href: "/products/airpods-pro-2" },
+  { name: "خانه", href: "/" },
+  { name: "محصولات", href: "/products" },
+  { name: "موبایل و لوازم جانبی", href: "/products" },
+  { name: "کامپیوتر و قطعات", href: "/products" },
+  { name: "گیمینگ", href: "/products" },
+  { name: "تخفیف‌ها", href: "/products" },
   { name: "درباره ما", href: "#" },
   { name: "تماس با ما", href: "#" },
 ];
 
 const categories = [
-  { name: "موبایل و تبلت", href: "#", icon: Smartphone },
-  { name: "قاب و محافظ", href: "#", icon: Shield },
-  { name: "شارژر و کابل", href: "#", icon: Zap },
-  { name: "هدفون و هندزفری", href: "#", icon: Headphones },
-  { name: "ساعت هوشمند", href: "#", icon: Watch },
-  { name: "کیبورد و ماوس", href: "#", icon: Keyboard },
-  { name: "قطعات کامپیوتر", href: "#", icon: Cpu },
-  { name: "تجهیزات گیمینگ", href: "#", icon: Gamepad2 },
+  { name: "موبایل و تبلت", href: "/products", icon: Smartphone },
+  { name: "قاب و محافظ", href: "/products", icon: Shield },
+  { name: "شارژر و کابل", href: "/products", icon: Zap },
+  { name: "هدفون و هندزفری", href: "/products", icon: Headphones },
+  { name: "ساعت هوشمند", href: "/products", icon: Watch },
+  { name: "کیبورد و ماوس", href: "/products", icon: Keyboard },
+  { name: "قطعات کامپیوتر", href: "/products", icon: Cpu },
+  { name: "تجهیزات گیمینگ", href: "/products", icon: Gamepad2 },
 ];
 
-export function Header() {
+export function Header({
+  cartCount: propCartCount,
+  searchQuery: externalSearchQuery,
+  onSearchChange,
+}: HeaderProps = {}) {
   const { user, isLoggedIn, isLoaded } = useAuth();
-  const cartCount = useCartStore((state) => state.getItemsCount());
+  const storeCartCount = useCartStore((state) => state.getItemsCount());
   const favoritesCount = useFavoritesStore((state) => state.favorites.length);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [internalSearchQuery, setInternalSearchQuery] = useState("");
   const [isSticky, setIsSticky] = useState(false);
+
+  const cartCount = propCartCount !== undefined ? propCartCount : storeCartCount;
+
+  const searchQuery =
+    externalSearchQuery !== undefined ? externalSearchQuery : internalSearchQuery;
+
+  const handleSearchChange = (val: string) => {
+    if (onSearchChange) {
+      onSearchChange(val);
+    }
+    setInternalSearchQuery(val);
+  };
 
   useEffect(() => {
     let ticking = false;
@@ -66,8 +92,8 @@ export function Header() {
   }, []);
 
   return (
-    <div className="hidden md:block w-full">
-      {isSticky && <div className="h-32 w-full pointer-events-none" aria-hidden="true" />}
+    <div className="w-full">
+      {isSticky && <div className="hidden md:block h-32 w-full pointer-events-none" aria-hidden="true" />}
       <header
         className={`w-full ${
           isSticky
@@ -76,17 +102,17 @@ export function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-4">
-            <div className="flex items-center gap-8">
-              <Link href="/" className="flex items-center gap-2.5 group cursor-pointer">
-                <div className="w-10 h-10 rounded-xl bg-[#0b1528] flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-[#162544] transition-colors">
+          <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
+            <div className="flex items-center gap-4 sm:gap-8">
+              <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer shrink-0">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0b1528] flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-xs group-hover:bg-[#162544] transition-colors">
                   <span className="text-[#38bdf8]">پ</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-black tracking-tight text-[#0b1528]">
+                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#0b1528]">
                     پویان <span className="text-[#2563eb]">افزار</span>
                   </span>
-                  <span className="text-[10px] text-slate-600 font-medium -mt-1">
+                  <span className="hidden sm:inline-block text-[10px] text-slate-600 font-medium -mt-1">
                     مرجع تخصصی کالای دیجیتال
                   </span>
                 </div>
@@ -97,11 +123,7 @@ export function Header() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-sm font-medium transition-colors hover:text-[#2563eb] cursor-pointer ${
-                    link.active
-                      ? "text-[#0b1528] font-bold"
-                      : "text-slate-600"
-                  }`}
+                  className="text-sm font-medium transition-colors hover:text-[#2563eb] cursor-pointer text-slate-600"
                 >
                   {link.name}
                 </Link>
@@ -109,20 +131,20 @@ export function Header() {
             </nav>
           </div>
 
-          <div className="flex flex-1 max-w-md mx-4">
+          <div className="flex flex-1 max-w-md mx-2 sm:mx-4">
             <div className="relative w-full">
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="جستجوی در میان هزاران کالا..."
-                className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl py-2.5 pr-11 pl-4 text-sm text-slate-800 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl py-2 sm:py-2.5 pr-10 sm:pr-11 pl-4 text-xs sm:text-sm text-slate-800 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
               />
-              <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+              <Search className="absolute right-3 sm:right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {isLoaded ? (
               isLoggedIn ? (
                 <Link href="/panel">
@@ -186,11 +208,12 @@ export function Header() {
         </div>
       </div>
 
-      <div className="border-t border-slate-100 bg-white">
+      <div className="hidden md:block border-t border-slate-100 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-12">
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
                 className="flex items-center gap-2.5 text-sm font-bold text-slate-800 hover:text-[#2563eb] py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
               >

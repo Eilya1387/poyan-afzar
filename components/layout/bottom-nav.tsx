@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Home, LayoutGrid, ShoppingBag, Flame, User } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
@@ -9,9 +10,18 @@ import { useCartStore } from "@/lib/store";
 interface NavItem {
   id: string;
   label: string;
+  href: string;
   icon: React.ComponentType<{ className?: string }>;
-  badge?: number;
+  isCart?: boolean;
 }
+
+const navItems: NavItem[] = [
+  { id: "home", label: "خانه", href: "/", icon: Home },
+  { id: "categories", label: "دسته‌بندی", href: "/products", icon: LayoutGrid },
+  { id: "cart", label: "سبد خرید", href: "/cart", icon: ShoppingBag, isCart: true },
+  { id: "deals", label: "شگفت‌انگیز", href: "/products", icon: Flame },
+  { id: "profile", label: "پروفایل", href: "/panel", icon: User },
+];
 
 export function BottomNav() {
   const router = useRouter();
@@ -21,38 +31,29 @@ export function BottomNav() {
 
   const [activeId, setActiveId] = useState("home");
 
-  const navItems: NavItem[] = [
-    { id: "home", label: "خانه", icon: Home },
-    { id: "categories", label: "دسته‌بندی", icon: LayoutGrid },
-    { id: "cart", label: "سبد خرید", icon: ShoppingBag, badge: cartCount },
-    { id: "deals", label: "شگفت‌انگیز", icon: Flame },
-    { id: "profile", label: "پروفایل", icon: User },
-  ];
-
   useEffect(() => {
     if (pathname === "/login" || pathname === "/panel") {
       setActiveId("profile");
     } else if (pathname === "/cart") {
       setActiveId("cart");
+    } else if (pathname === "/products") {
+      setActiveId("categories");
     } else if (pathname === "/") {
       setActiveId("home");
     }
   }, [pathname]);
 
-  const activeIndex = navItems.findIndex((item) => item.id === activeId);
+  const activeIndex = Math.max(0, navItems.findIndex((item) => item.id === activeId));
 
-  const handleItemClick = (id: string) => {
-    setActiveId(id);
-    if (id === "profile") {
+  const handleItemClick = (e: React.MouseEvent, item: NavItem) => {
+    setActiveId(item.id);
+    if (item.id === "profile") {
+      e.preventDefault();
       if (isLoggedIn) {
         router.push("/panel");
       } else {
         router.push("/login");
       }
-    } else if (id === "cart") {
-      router.push("/cart");
-    } else if (id === "home") {
-      router.push("/");
     }
   };
 
@@ -73,11 +74,13 @@ export function BottomNav() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeId === item.id;
+          const badgeValue = item.isCart ? cartCount : undefined;
 
           return (
-            <button
+            <Link
               key={item.id}
-              onClick={() => handleItemClick(item.id)}
+              href={item.href}
+              onClick={(e) => handleItemClick(e, item)}
               className="relative z-10 flex flex-col items-center justify-center flex-1 h-full py-1 focus:outline-none cursor-pointer group"
             >
               <div className="relative flex items-center justify-center">
@@ -89,7 +92,7 @@ export function BottomNav() {
                   }`}
                 />
 
-                {item.badge !== undefined && (
+                {badgeValue !== undefined && badgeValue > 0 && (
                   <span
                     className={`absolute -top-2.5 -right-2 text-[10px] font-black rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-xs transition-colors ${
                       isActive
@@ -97,7 +100,7 @@ export function BottomNav() {
                         : "bg-red-500 text-white"
                     }`}
                   >
-                    {item.badge}
+                    {badgeValue}
                   </span>
                 )}
               </div>
@@ -111,7 +114,7 @@ export function BottomNav() {
               >
                 {item.label}
               </span>
-            </button>
+            </Link>
           );
         })}
       </div>

@@ -13,14 +13,14 @@ import {
 } from "lucide-react";
 
 const categories = [
-  { name: "موبایل و تبلت", icon: Smartphone, href: "#" },
-  { name: "قاب و محافظ", icon: Shield, href: "#" },
-  { name: "شارژر و کابل", icon: Zap, href: "#" },
-  { name: "هدفون و هندزفری", icon: Headphones, href: "#" },
-  { name: "ساعت هوشمند", icon: Watch, href: "#" },
-  { name: "کیبورد و ماوس", icon: Keyboard, href: "#" },
-  { name: "قطعات کامپیوتر", icon: Cpu, href: "#" },
-  { name: "ذخیره‌سازی", icon: HardDrive, href: "#" },
+  { name: "موبایل و تبلت", icon: Smartphone, href: "/products" },
+  { name: "قاب و محافظ", icon: Shield, href: "/products" },
+  { name: "شارژر و کابل", icon: Zap, href: "/products" },
+  { name: "هدفون و هندزفری", icon: Headphones, href: "/products" },
+  { name: "ساعت هوشمند", icon: Watch, href: "/products" },
+  { name: "کیبورد و ماوس", icon: Keyboard, href: "/products" },
+  { name: "قطعات کامپیوتر", icon: Cpu, href: "/products" },
+  { name: "ذخیره‌سازی", icon: HardDrive, href: "/products" },
 ];
 
 export function PopularCategories() {
@@ -31,7 +31,7 @@ export function PopularCategories() {
           دسته‌بندی‌های محبوب
         </h2>
         <Link
-          href="#"
+          href="/products"
           className="text-xs sm:text-sm font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1 transition-colors"
         >
           <span>مشاهده همه</span>
