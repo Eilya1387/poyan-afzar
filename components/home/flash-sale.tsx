@@ -1,67 +1,34 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Flame, ShoppingCart, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { Flame, ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { products } from "@/lib/products";
+import { useCartStore } from "@/lib/store";
 
-const flashDeals = [
-  {
-    id: 1,
-    title: "هدفون بی‌سیم گیمینگ مدل T-Pro Max",
-    brand: "تسلا / Tesla",
-    discount: "۲۵٪ تخفیف",
-    oldPrice: "۱,۴۰۰,۰۰۰",
-    price: "۱,۱۵۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 2,
-    title: "شارژر دیواری ۶۵ وات دو پورت GaN",
-    brand: "انکر / Anker",
-    discount: "۱۸٪ تخفیف",
-    oldPrice: "۱,۸۵۰,۰۰۰",
-    price: "۱,۵۲۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 3,
-    title: "کیبورد مکانیکال مخصوص بازی مدل G512",
-    brand: "لاجیتک / Logitech",
-    discount: "۳۰٪ تخفیف",
-    oldPrice: "۵,۵۰۰,۰۰۰",
-    price: "۳,۸۵۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 4,
-    title: "اس‌اس‌دی اکسترنال مدل T7 Shield ظرفیت ۱ ترابایت",
-    brand: "سامسونگ / Samsung",
-    discount: "۱۵٪ تخفیف",
-    oldPrice: "۴,۸۰۰,۰۰۰",
-    price: "۴,۰۸۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 5,
-    title: "هندزفری بی‌سیم انکر مدل Liberty 4 NC",
-    brand: "انکر / Anker",
-    discount: "۲۲٪ تخفیف",
-    oldPrice: "۳,۹۰۰,۰۰۰",
-    price: "۳,۰۴۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 6,
-    title: "پاوربانک ۲۰۰۰۰ میلی‌آمپر باسئوس ۶۵ وات",
-    brand: "باسئوس / Baseus",
-    discount: "۱۴٪ تخفیف",
-    oldPrice: "۲,۸۰۰,۰۰۰",
-    price: "۲,۴۰۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
-  },
-];
+const flashDeals = products.slice(0, 6);
 
 export function FlashSale() {
+  const addItem = useCartStore((state) => state.addItem);
+  const [addedId, setAddedId] = useState<string | null>(null);
+
+  const handleAddToCart = (e: React.MouseEvent, deal: (typeof products)[0]) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem({
+      id: deal.id,
+      title: deal.title,
+      price: deal.priceNumber,
+      image: deal.image,
+      seller: deal.seller,
+      guarantee: deal.guarantee,
+      inStockText: deal.stockText,
+    });
+    setAddedId(deal.id);
+    setTimeout(() => setAddedId(null), 1500);
+  };
+
   const [timeLeft, setTimeLeft] = useState({
     hours: 6,
     minutes: 42,
@@ -129,8 +96,9 @@ export function FlashSale() {
 
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
           {flashDeals.map((deal) => (
-            <div
+            <Link
               key={deal.id}
+              href={`/products/${deal.id}`}
               className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100"
             >
               <div>
@@ -164,10 +132,15 @@ export function FlashSale() {
                   <Button
                     variant="secondary"
                     size="icon"
+                    onClick={(e) => handleAddToCart(e, deal)}
                     className="rounded-lg w-7 h-7 sm:w-8 sm:h-8 cursor-pointer shadow-xs hover:shadow-sm shrink-0"
                     aria-label="افزودن به سبد خرید"
                   >
-                    <ShoppingCart className="w-3.5 h-3.5" />
+                    {addedId === deal.id ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <ShoppingCart className="w-3.5 h-3.5" />
+                    )}
                   </Button>
 
                   <div className="flex items-center gap-0.5 font-black text-xs sm:text-sm text-[#0b1528] truncate">
@@ -178,7 +151,7 @@ export function FlashSale() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

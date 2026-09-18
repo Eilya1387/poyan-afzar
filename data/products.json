@@ -1,0 +1,822 @@
+[
+  {
+    "id": "airpods-pro-2",
+    "title": "هدفون بی‌سیم اپل مدل AirPods Pro 2nd Generation",
+    "enTitle": "Apple AirPods Pro (2nd Generation) Wireless Earbuds",
+    "brand": "اپل (Apple)",
+    "category": "موبایل",
+    "categoryName": "هدفون بی‌سیم",
+    "code": "TK-892341",
+    "price": "۹,۷۷۵,۰۰۰",
+    "priceNumber": 9775000,
+    "oldPrice": "۱۱,۵۰۰,۰۰۰",
+    "discount": "۱۵٪ تخفیف",
+    "discountPercent": 15,
+    "rating": 4.8,
+    "reviewsCount": 1240,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه شرکتی + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "سفید صدفی", "hex": "#ffffff" }
+    ],
+    "image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پرفروش", "ضمانت اصالت"],
+    "highlights": [
+      "تراشه قدرتمند Apple H2 برای عملکرد صوتی پیشرفته",
+      "حذف نویز فعال (Active Noise Cancellation) دو برابر قدرتمندتر",
+      "شارژدهی باتری تا ۳۰ ساعت با محفظه شارژ MagSafe",
+      "مقاومت در برابر آب و تعریق با استاندارد IPX4"
+    ],
+    "introTitle": "معرفی اجمالی هدفون بی‌سیم اپل AirPods Pro 2",
+    "introDesc": "هدفون بی‌سیم اپل مدل AirPods Pro 2nd Generation با بهره‌گیری از تراشه مدرن H2، تجربه‌ای کاملاً متحول شده از شنیدن موسیقی و مکالمه را ارائه می‌دهد. فناوری حذف نویز فعال (ANC) در این نسل تا دو برابر نسبت به نسل قبل بهبود یافته است تا در شلوغ‌ترین محیط‌ها نیز سکوت مطلق را تجربه کنید. همچنین حالت Transparency پیشرفته به شما اجازه می‌دهد صدای پیرامون خود را با وضوح بالا بشنوید.",
+    "featureCards": [
+      {
+        "title": "تراشه قدرتمند H2",
+        "desc": "پردازش هوشمند صدا و بهبود فرکانس‌های بالا و بیس عمیق.",
+        "icon": "Zap"
+      },
+      {
+        "title": "Adaptive Audio",
+        "desc": "ترکیب هوشمند ANC و حالت Transparency متناسب با محیط.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "شارژدهی طولانی",
+        "desc": "تا ۶ ساعت گوش دادن مداوم با یک بار شارژ و ۳۰ ساعت با کیس.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بی‌سیم (از طریق بلوتوث نسخه ۵.۳)" },
+      { "label": "رابط‌ها", "value": "لایتنینگ / پورت USB-C (بسته به نسخه کیس) و اتصال MagSafe" },
+      { "label": "قابلیت حذف نویز (ANC)", "value": "دارد (نسخه هوشمند با تراشه H2)" },
+      { "label": "مقاومت در برابر آب", "value": "دارای گواهی‌نامه IPX4 (مقاوم در برابر پاشش آب و تعریق)" },
+      { "label": "وزن هر ایرباد", "value": "۵.۳ گرم" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 85 },
+      { "stars": 4, "percent": 12 },
+      { "stars": 3, "percent": 2 },
+      { "stars": 2, "percent": 1 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "علی محمدی",
+        "verified": true,
+        "date": "۱۴ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "واقعاً کیفیت صدا و حذف نویز این مدل بی‌نظیره. نسبت به نسل قبل خیلی پیشرفت کرده و شارژدهی بسیار عالی داره. از خرید از پویان افزار هم کاملاً راضی هستم چون محصول اورجینال و با گارانتی اصلی به دستم رسید."
+      },
+      {
+        "id": 2,
+        "user": "سارا احمدی",
+        "verified": true,
+        "date": "۱۰ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "کیفیت ساخت فوق‌العاده‌ست. اتصال به محصولات اپل خیلی سریع انجام میشه. تنها نکته قیمت بالای محصوله ولی ارزش خرید داره."
+      }
+    ],
+    "relatedProductIds": ["airpods-3", "sony-wf-1000xm5", "galaxy-buds-2-pro", "anker-liberty-4-nc"]
+  },
+  {
+    "id": "airpods-3",
+    "title": "هدفون بی‌سیم اپل مدل AirPods 3",
+    "enTitle": "Apple AirPods 3rd Generation Wireless Earbuds",
+    "brand": "اپل (Apple)",
+    "category": "موبایل",
+    "categoryName": "هدفون بی‌سیم",
+    "code": "TK-892342",
+    "price": "۷,۸۰۰,۰۰۰",
+    "priceNumber": 7800000,
+    "oldPrice": "۸,۹۰۰,۰۰۰",
+    "discount": "۱۲٪ تخفیف",
+    "discountPercent": 12,
+    "rating": 4.7,
+    "reviewsCount": 840,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه شرکتی + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "سفید براق", "hex": "#ffffff" }
+    ],
+    "image": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پرفروش", "ضمانت اصالت"],
+    "highlights": [
+      "فناوری Spatial Audio با ردیابی پویای حرکات سر",
+      "تراشه صوتی پیشرفته H1 اپل",
+      "شارژدهی کلی تا ۳۰ ساعت همراه با کیس شارژ MagSafe",
+      "استاندارد مقاومت در برابر پاشش آب IPX4"
+    ],
+    "introTitle": "معرفی اجمالی ایرپاد نسل ۳ اپل",
+    "introDesc": "ایرپاد ۳ با طراحی ارگونومیک جدید و پشتیبانی از فناوری Spatial Audio زاویه شنیداری سه‌بعدی را در اختیار شما می‌گذارد. بیس تقویت شده و فرکانس‌های غنی موسیقی را با عمق استثنایی منتقل می‌کنند.",
+    "featureCards": [
+      {
+        "title": "Spatial Audio",
+        "desc": "صدای فراگیر سه‌بعدی و هماهنگ با موقعیت سر کاربر.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "درایور اختصاصی اپل",
+        "desc": "بیس کوبنده و فرکانس‌های بالای بسیار شفاف.",
+        "icon": "Zap"
+      },
+      {
+        "title": "کیس MagSafe",
+        "desc": "شارژ سریع و اتصال آسان به شارژرهای بی‌سیم مگ‌سیف.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بی‌سیم بلوتوث نسخه ۵.۰" },
+      { "label": "رابط‌ها", "value": "پورت لایتنینگ و شارژ بی‌سیم MagSafe" },
+      { "label": "مقاومت در برابر آب", "value": "گواهی IPX4" },
+      { "label": "عمر باتری", "value": "تا ۶ ساعت مداوم، ۳۰ ساعت با کیس" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 80 },
+      { "stars": 4, "percent": 15 },
+      { "stars": 3, "percent": 4 },
+      { "stars": 2, "percent": 1 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "مهدی کریمی",
+        "verified": true,
+        "date": "۲ شهریور ۱۴۰۳",
+        "rating": 5,
+        "comment": "ارگونومی عالی و صدای فراگیر فوق‌العاده با آیفون."
+      }
+    ],
+    "relatedProductIds": ["airpods-pro-2", "sony-wf-1000xm5", "galaxy-buds-2-pro", "anker-liberty-4-nc"]
+  },
+  {
+    "id": "sony-wf-1000xm5",
+    "title": "هدفون بی‌سیم سونی مدل WF-1000XM5",
+    "enTitle": "Sony WF-1000XM5 True Wireless Noise Canceling Earbuds",
+    "brand": "سونی (Sony)",
+    "category": "موبایل",
+    "categoryName": "هدفون بی‌سیم",
+    "code": "TK-892343",
+    "price": "۹,۲۰۰,۰۰۰",
+    "priceNumber": 9200000,
+    "oldPrice": "۱۰,۵۰۰,۰۰۰",
+    "discount": "۱۲٪ تخفیف",
+    "discountPercent": 12,
+    "rating": 4.9,
+    "reviewsCount": 620,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه سونی + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "مشکی مات", "hex": "#111827" },
+      { "name": "نقره‌ای", "hex": "#e2e8f0" }
+    ],
+    "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پیشنهاد ویژه", "ضمانت اصالت"],
+    "highlights": [
+      "بهترین سیستم حذف نویز فعال جهان با پردازنده V2 و QN2e",
+      "درایور داینامیک Dynamic Driver X برای کیفیت صوتی استودیویی",
+      "پشتیبانی از صدای Hi-Res Wireless و کدک باکیفیت LDAC",
+      "طراحی ۲۵٪ کوچک‌تر و سبک‌تر از نسل قبل"
+    ],
+    "introTitle": "معرفی غول نویزکنسلینگ سونی WF-1000XM5",
+    "introDesc": "سونی بار دیگر استانداردهای هدفون‌های بی‌سیم پرچمدار را ارتقا داد. این ایربادز با پردازنده‌های دوگانه حذف نویز پیشرفته، میکروفون‌های بازخورد دوگانه و درایورهای بازطراحی شده کیفیتی بی همتا ارائه می‌دهد.",
+    "featureCards": [
+      {
+        "title": "نویز کنسلینگ V2",
+        "desc": "سکوت کامل در هر محیط شلوغ یا هواپیما.",
+        "icon": "Zap"
+      },
+      {
+        "title": "کدک LDAC",
+        "desc": "انتقال صوتی ۲۴ بیت با کیفیت مستر.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "میکروفون Bone Conduction",
+        "desc": "مکالمه فوق‌العاده شفاف حتی در محیط‌های بادخیز.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بلوتوث نسخه ۵.۳ با فناوری Multipoint" },
+      { "label": "کدک‌های صوتی", "value": "SBC, AAC, LDAC, LC3" },
+      { "label": "مقاومت در برابر آب", "value": "IPX4" },
+      { "label": "عمر باتری", "value": "۸ ساعت با ANC و ۲۴ ساعت همراه کیس" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 90 },
+      { "stars": 4, "percent": 8 },
+      { "stars": 3, "percent": 2 },
+      { "stars": 2, "percent": 0 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "حسین رضایی",
+        "verified": true,
+        "date": "۱۸ شهریور ۱۴۰۳",
+        "rating": 5,
+        "comment": "تفکیک سازها و نویز کنسلینگش باورنکردنیه. واقعا بهترین ایرباد بازاره."
+      }
+    ],
+    "relatedProductIds": ["airpods-pro-2", "galaxy-buds-2-pro", "anker-liberty-4-nc", "airpods-3"]
+  },
+  {
+    "id": "galaxy-buds-2-pro",
+    "title": "هدفون بی‌سیم سامسونگ مدل Galaxy Buds2 Pro",
+    "enTitle": "Samsung Galaxy Buds2 Pro True Wireless Earbuds",
+    "brand": "سامسونگ (Samsung)",
+    "category": "موبایل",
+    "categoryName": "هدفون بی‌سیم",
+    "code": "TK-892344",
+    "price": "۵,۴۵۰,۰۰۰",
+    "priceNumber": 5450000,
+    "oldPrice": "۶,۲۰۰,۰۰۰",
+    "discount": "۱۲٪ تخفیف",
+    "discountPercent": 12,
+    "rating": 4.6,
+    "reviewsCount": 510,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه سامسونگ + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "خاکستری تیره", "hex": "#374151" },
+      { "name": "سفید", "hex": "#ffffff" },
+      { "name": "بنفش بورایی", "hex": "#c084fc" }
+    ],
+    "image": "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پرفروش", "ضمانت اصالت"],
+    "highlights": [
+      "صدای ۲۴ بیتی Hi-Fi برای شفافیت بی‌نقص موسیقی",
+      "فناوری هوشمند حذف نویز فعال (ANC) با ۳ میکروفون SNR بالا",
+      "طراحی ارگونومیک ۱۵٪ جمع‌وجورتر متناسب با گوش",
+      "مقاومت کامل در برابر آب با گواهی IPX7"
+    ],
+    "introTitle": "معرفی گلکسی بادز ۲ پرو سامسونگ",
+    "introDesc": "گلکسی بادز ۲ پرو سامسونگ تجربه صوتی استثنایی را با صدای بدون افت ۲۴ بیتی ارائه می‌دهد. ضدآب بودن کامل IPX7 خیال شما را در ورزش و باران راحت می‌کند.",
+    "featureCards": [
+      {
+        "title": "صدای ۲۴ بیتی Hi-Fi",
+        "desc": "انتقال بدون افت امواج صوتی روی دستگاه‌های گلکسی.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "گواهی IPX7",
+        "desc": "مقاومت در برابر غوطه‌وری تا عمق ۱ متری آب.",
+        "icon": "Zap"
+      },
+      {
+        "title": "صدای ۳۶۰ درجه هوشمند",
+        "desc": "تشخیص زاویه سر و شبیه‌سازی سیستم صوتی چندکاناله.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بلوتوث نسخه ۵.۳" },
+      { "label": "کدک‌های صوتی", "value": "Samsung Seamless Codec (SSC), AAC, SBC" },
+      { "label": "مقاومت در برابر آب", "value": "IPX7" },
+      { "label": "عمر باتری", "value": "تا ۵ ساعت با ANC و ۱۸ ساعت با کیس" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 75 },
+      { "stars": 4, "percent": 18 },
+      { "stars": 3, "percent": 5 },
+      { "stars": 2, "percent": 2 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "پویا صابری",
+        "verified": true,
+        "date": "۵ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "با گوشی سامسونگ بهشت صداست. نویزکنسلینگش خیلی قویه."
+      }
+    ],
+    "relatedProductIds": ["airpods-pro-2", "sony-wf-1000xm5", "anker-liberty-4-nc", "airpods-3"]
+  },
+  {
+    "id": "anker-liberty-4-nc",
+    "title": "هدفون بی‌سیم انکر مدل Soundcore Liberty 4 NC",
+    "enTitle": "Anker Soundcore Liberty 4 NC Wireless Noise Cancelling Earbuds",
+    "brand": "انکر (Anker)",
+    "category": "موبایل",
+    "categoryName": "هدفون بی‌سیم",
+    "code": "TK-892345",
+    "price": "۳,۶۰۰,۰۰۰",
+    "priceNumber": 3600000,
+    "oldPrice": "۴,۲۰۰,۰۰۰",
+    "discount": "۱۴٪ تخفیف",
+    "discountPercent": 14,
+    "rating": 4.7,
+    "reviewsCount": 420,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه فارِس + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "سفید ابریشمی", "hex": "#f8fafc" },
+      { "name": "مشکی مخملی", "hex": "#0f172a" },
+      { "name": "آبی اقیانوسی", "hex": "#1e40af" }
+    ],
+    "image": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["ارزش خرید بالا", "ضمانت اصالت"],
+    "highlights": [
+      "کاهش ۹۸.۵ درصدی نویزهای محیطی با فناوری Adaptive ANC 2.0",
+      "شارژدهی اعجاب‌انگیز ۵۰ ساعته با کیس شارژ",
+      "پشتیبانی از صدای Hi-Res و کدک LDAC",
+      "درایور ۱۱ میلی‌متری با تنظیم تخصصی بیس HearID 2.0"
+    ],
+    "introTitle": "معرفی هندزفری انکر Liberty 4 NC",
+    "introDesc": "انکر لیبرتی ۴ ان‌سی قدرتمندترین هدفون نویزکنسلینگ اقتصادی بازار است که کیفیتی فراتر از رده قیمتی خود را با شارژدهی فوق‌العاده ۵۰ ساعته و درایور ۱۱ میلی‌متری سفارشی ارائه می‌کند.",
+    "featureCards": [
+      {
+        "title": "شارژدهی ۵۰ ساعته",
+        "desc": "۱۰ ساعت پخش بی‌وقفه با یک بار شارژ.",
+        "icon": "BatteryCharging"
+      },
+      {
+        "title": "ANC 2.0 تطبیقی",
+        "desc": "تنظیم هوشمند شدت حذف نویز بر اساس شکل گوش و محیط.",
+        "icon": "Zap"
+      },
+      {
+        "title": "پشتیبانی از LDAC",
+        "desc": "ارائه جزئیات صوتی ۳ برابر بیشتر از بلوتوث معمولی.",
+        "icon": "Headphones"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بلوتوث نسخه ۵.۳ با اتصال به دو دستگاه همزمان" },
+      { "label": "مقاومت در برابر آب", "value": "IPX4" },
+      { "label": "پورت شارژ", "value": "USB Type-C و شارژ بی‌سیم Qi" },
+      { "label": "عمر باتری", "value": "۱۰ ساعت ایرباد، ۵۰ ساعت با کیس" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 82 },
+      { "stars": 4, "percent": 14 },
+      { "stars": 3, "percent": 3 },
+      { "stars": 2, "percent": 1 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "امید رحیمی",
+        "verified": true,
+        "date": "۲۲ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "با این قیمت نویزکنسلینگ و شارژدهیش بی‌رقیبه."
+      }
+    ],
+    "relatedProductIds": ["airpods-pro-2", "sony-wf-1000xm5", "galaxy-buds-2-pro", "airpods-3"]
+  },
+  {
+    "id": "iphone-13",
+    "title": "گوشی موبایل اپل مدل iPhone 13 پارت نامبر CH",
+    "enTitle": "Apple iPhone 13 128GB Smartphone",
+    "brand": "اپل (Apple)",
+    "category": "موبایل",
+    "categoryName": "گوشی موبایل",
+    "code": "TK-892346",
+    "price": "۳۴,۶۵۰,۰۰۰",
+    "priceNumber": 34650000,
+    "oldPrice": "۳۸,۵۰۰,۰۰۰",
+    "discount": "۱۰٪ تخفیف",
+    "discountPercent": 10,
+    "rating": 4.8,
+    "reviewsCount": 426,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه رجیستر شده + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "آبی نیمه‌شب", "hex": "#1e293b" },
+      { "name": "سفید ستاره‌ای", "hex": "#f8fafc" },
+      { "name": "سبز تیره", "hex": "#166534" }
+    ],
+    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پرفروش‌ترین", "ضمانت اصالت"],
+    "highlights": [
+      "صفحه نمایش ۶.۱ اینچی Super Retina XDR OLED",
+      "تراشه پرچمدار و بسیار پرسرعت Apple A15 Bionic",
+      "سیستم دوربین دوگانه ۱۲ مگاپیکسلی با لرزشگیر اپتیکال Sensor-shift",
+      "پشتیبانی کامل از اینترنت پرسرعت 5G و مقاومت IP68"
+    ],
+    "introTitle": "معرفی گوشی محبوب آیفون ۱۳",
+    "introDesc": "آیفون ۱۳ با عمر باتری ارتقا یافته، دوربین‌های زاویه مورب با لرزشگیر سنسورشیفت، و تراشه خارق‌العاده A15 Bionic یکی از بهینه‌ترین و محبوب‌ترین گوشی‌های پرچمدار در بازار جهانی است.",
+    "featureCards": [
+      {
+        "title": "A15 Bionic",
+        "desc": "پردازشگر ۵ نانومتری پرسرعت برای سنگین‌ترین بازی‌ها.",
+        "icon": "Zap"
+      },
+      {
+        "title": "حالت سینمایی فیلمبرداری",
+        "desc": "تغییر فوکوس خودکار هالیوودی در ضبط ویدیو.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "صفحه Super Retina XDR",
+        "desc": "روشنایی تا ۱۲۰۰ نیت زیر نور مستقیم خورشید.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "صفحه نمایش", "value": "۶.۱ اینچ OLED رزولوشن ۲۵۳۲ در ۱۱۷۰" },
+      { "label": "حافظه داخلی", "value": "۱۲۸ گیگابایت" },
+      { "label": "رم", "value": "۴ گیگابایت" },
+      { "label": "مقاومت در برابر نفوذ", "value": "IP68 تا عمق ۶ متری به مدت ۳۰ دقیقه" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 88 },
+      { "stars": 4, "percent": 10 },
+      { "stars": 3, "percent": 2 },
+      { "stars": 2, "percent": 0 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "عرفان نجفی",
+        "verified": true,
+        "date": "۱ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "عالی و پلمپ با رجیستری معتبر رسید. ممنون از پویان افزار."
+      }
+    ],
+    "relatedProductIds": ["airpods-pro-2", "airpods-3", "xiaomi-watch-s1-active", "anker-liberty-4-nc"]
+  },
+  {
+    "id": "razer-deathadder-v3-pro",
+    "title": "ماوس گیمینگ بی‌سیم ریزر مدل DeathAdder V3 Pro",
+    "enTitle": "Razer DeathAdder V3 Pro Ultra-lightweight Wireless Gaming Mouse",
+    "brand": "ریزر (Razer)",
+    "category": "لپ‌تاپ",
+    "categoryName": "ماوس گیمینگ",
+    "code": "TK-892347",
+    "price": "۵,۴۵۰,۰۰۰",
+    "priceNumber": 5450000,
+    "oldPrice": "۶,۲۰۰,۰۰۰",
+    "discount": "۱۲٪ تخفیف",
+    "discountPercent": 12,
+    "rating": 4.7,
+    "reviewsCount": 89,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۲ ساله تعویض پویان افزار + ضمانت اصالت",
+    "colors": [
+      { "name": "سفید", "hex": "#ffffff" },
+      { "name": "مشکی مات", "hex": "#0f172a" }
+    ],
+    "image": "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["گیمینگ حرفه‌ای", "ضمانت اصالت"],
+    "highlights": [
+      "وزن فوق‌العاده سبک تنها ۶۳ گرم بدون ایجاد حفره در بدنه",
+      "سنسور اپتیکال نسل جدید Razer Focus Pro 30K با دقت ۳۰۰۰۰ DPI",
+      "سوییچ‌های اپتیکال نسل ۳ با طول عمر ۹۰ میلیون کلیک",
+      "شارژدهی تا ۹۰ ساعت با اتصال بدون تاخیر HyperSpeed Wireless"
+    ],
+    "introTitle": "معرفی ماوس فوق سبک گیمینگ ریزر DeathAdder V3 Pro",
+    "introDesc": "پرافتخارترین ماوس ارگونومیک مسابقات ورزش‌های الکترونیک با وزن شگفت‌انگیز ۶۳ گرمی و سنسور ۳۰K فکوس پرو آماده است تا هدف‌گیری شما را به اوج دقت برساند.",
+    "featureCards": [
+      {
+        "title": "سنسور Focus Pro 30K",
+        "desc": "ردیابی دقیق روی تمام سطوح حتی شیشه خالص.",
+        "icon": "Zap"
+      },
+      {
+        "title": "وزن ۶۳ گرمی",
+        "desc": "حرکت فوق‌العاده سریع بدون خستگی دست در رقابت‌ها.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "اتصال HyperSpeed",
+        "desc": "اتصال وایرلس با تاخیر کمتر از ۱ میلی‌ثانیه.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع اتصال", "value": "بی‌سیم ۲.۴ گیگاهرتز HyperSpeed و با سیم Type-C" },
+      { "label": "دقت سنسور", "value": "۳۰,۰۰۰ DPI" },
+      { "label": "سرعت ردیابی", "value": "۷۵۰ IPS با شتاب ۷۰G" },
+      { "label": "وزن", "value": "۶۳ گرم" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 85 },
+      { "stars": 4, "percent": 10 },
+      { "stars": 3, "percent": 5 },
+      { "stars": 2, "percent": 0 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "نیما شجاعی",
+        "verified": true,
+        "date": "۲۸ شهریور ۱۴۰۳",
+        "rating": 5,
+        "comment": "خوش‌دست‌ترین ماوسی که تا حالا داشتم. فوق‌العاده سبکه و سنسورش محشره."
+      }
+    ],
+    "relatedProductIds": ["logitech-g512", "samsung-t7-shield-1tb", "sony-wf-1000xm5", "airpods-pro-2"]
+  },
+  {
+    "id": "xiaomi-watch-s1-active",
+    "title": "ساعت هوشمند شیائومی مدل Watch S1 Active",
+    "enTitle": "Xiaomi Watch S1 Active Smartwatch",
+    "brand": "شیائومی (Xiaomi)",
+    "category": "موبایل",
+    "categoryName": "ساعت هوشمند",
+    "code": "TK-892348",
+    "price": "۴,۱۴۰,۰۰۰",
+    "priceNumber": 4140000,
+    "oldPrice": "۴,۵۰۰,۰۰۰",
+    "discount": "۸٪ تخفیف",
+    "discountPercent": 8,
+    "rating": 4.6,
+    "reviewsCount": 120,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۱۸ ماهه می همراه + ضمانت اصالت",
+    "colors": [
+      { "name": "مشکی اسپرت", "hex": "#0f172a" },
+      { "name": "سفید ماه", "hex": "#f1f5f9" }
+    ],
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پرفروش", "ضمانت اصالت"],
+    "highlights": [
+      "نمایشگر ۱.۴۳ اینچی AMOLED با رزولوشن بالا و نرخ نوسازی ۶۰ هرتز",
+      "پشتیبانی از ۱۱۷ حالت ورزشی متنوع و ۱۹ حالت حرفه‌ای",
+      "موقعیت‌یابی چندسیستمه GPS دوبانده با دقت فوق‌العاده",
+      "شارژدهی تا ۱۲ روز در استفاده معمولی و ۲۴ روز در حالت ذخیره انرژی"
+    ],
+    "introTitle": "معرفی ساعت هوشمند شیائومی واچ اس ۱ اکتیو",
+    "introDesc": "این ساعت با بدنه سبک فلزی و قاب ارگونومیک، نمایشگر خیره‌کننده آمولد و پایش ۲۴ ساعته ضربان قلب و اکسیژن خون SpO2 همراه ایده‌آل تمرینات ورزشی و استفاده روزمره است.",
+    "featureCards": [
+      {
+        "title": "صفحه ۱.۴۳ اینچ AMOLED",
+        "desc": "رنگ‌های زنده با وضوح ۴۶۶ در ۴۶۶ پیکسل.",
+        "icon": "Zap"
+      },
+      {
+        "title": "GPS دوبانده",
+        "desc": "پشتیبانی از ماهواره‌های GPS, GLONASS, Galileo, BDS.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "باتری ۱۲ روزه",
+        "desc": "بدون نیاز به شارژ مداوم در سفرهای طولانی.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع صفحه", "value": "AMOLED ۱.۴۳ اینچ" },
+      { "label": "مقاومت در برابر آب", "value": "5ATM تا عمق ۵۰ متر" },
+      { "label": "حسگرها", "value": "سنسور اپتیکال ضربان قلب، شتاب‌سنج، ژیروسکوپ، قطب‌نما" },
+      { "label": "قابلیت مکالمه", "value": "دارد (از طریق بلوتوث و میکروفون داخلی)" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 70 },
+      { "stars": 4, "percent": 22 },
+      { "stars": 3, "percent": 6 },
+      { "stars": 2, "percent": 2 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "سهراب فلاحی",
+        "verified": true,
+        "date": "۱۴ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "شارژدهیش عالیه و صفحه نمایشش زیر آفتاب کاملا خواناست."
+      }
+    ],
+    "relatedProductIds": ["iphone-13", "airpods-pro-2", "anker-liberty-4-nc", "sony-wf-1000xm5"]
+  },
+  {
+    "id": "logitech-g512",
+    "title": "کیبورد مکانیکال مخصوص بازی مدل G512",
+    "enTitle": "Logitech G512 Carbon RGB Mechanical Gaming Keyboard",
+    "brand": "لاجیتک (Logitech)",
+    "category": "لپ‌تاپ",
+    "categoryName": "کیبورد گیمینگ",
+    "code": "TK-892349",
+    "price": "۳,۸۵۰,۰۰۰",
+    "priceNumber": 3850000,
+    "oldPrice": "۵,۵۰۰,۰۰۰",
+    "discount": "۳۰٪ تخفیف",
+    "discountPercent": 30,
+    "rating": 4.8,
+    "reviewsCount": 165,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۲ ساله پویان افزار + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "مشکی کربنی", "hex": "#1e293b" }
+    ],
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["تخفیف شگفت‌انگیز", "ضمانت اصالت"],
+    "highlights": [
+      "سوییچ‌های مکانیکی GX Brown برای حس کلیک نرم و بازخورد عالی",
+      "نورپردازی پیشرفته Lightsync RGB با ۱۶.۸ میلیون رنگ مجزا برای هر کلید",
+      "بدنه ساخته شده از آلومینیوم و منیزیم گرید هواپیما 5052",
+      "پورت USB Passthrough اختصاصی برای اتصال مستقیم ماوس یا هدست"
+    ],
+    "introTitle": "معرفی کیبورد مکانیکی لاجیتک G512 Carbon",
+    "introDesc": "کیبورد مکانیکال لاجیتک G512 با ساختار بدنه آلومینیومی بادوام، سوییچ‌های مهندسی‌شده گیمینگ و نورپردازی پویا یکی از زیباترین و بادوام‌ترین ابزارهای ستاپ‌های حرفه‌ای است.",
+    "featureCards": [
+      {
+        "title": "بدنه آلومینیوم 5052",
+        "desc": "مقاومت و استحکام بالا همراه با ظاهری مات و شیک.",
+        "icon": "Zap"
+      },
+      {
+        "title": "Lightsync RGB",
+        "desc": "همگام‌سازی افکت‌های نوری با بازی‌ها و موسیقی.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "USB Passthrough",
+        "desc": "اتصال مستقیم بدون نیاز به خم شدن زیر میز.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "نوع سوییچ", "value": "مکانیکال GX Brown تیکتایل" },
+      { "label": "نوع اتصال", "value": "کابل بافته شده USB" },
+      { "label": "طول کابل", "value": "۱.۸ متر" },
+      { "label": "عمر سوییچ‌ها", "value": "۷۰ میلیون کلیک" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 86 },
+      { "stars": 4, "percent": 10 },
+      { "stars": 3, "percent": 4 },
+      { "stars": 2, "percent": 0 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "امیرحسین عباسی",
+        "verified": true,
+        "date": "۱۰ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "کیفیت ساخت بدنه آلومینیومیش فوق‌العادست و تایپ کردن باهاش حس بی‌نظیری داره."
+      }
+    ],
+    "relatedProductIds": ["razer-deathadder-v3-pro", "samsung-t7-shield-1tb", "sony-wf-1000xm5", "airpods-pro-2"]
+  },
+  {
+    "id": "samsung-t7-shield-1tb",
+    "title": "اس‌اس‌دی اکسترنال مدل T7 Shield ظرفیت ۱ ترابایت",
+    "enTitle": "Samsung T7 Shield 1TB Portable SSD USB 3.2 Gen2",
+    "brand": "سامسونگ (Samsung)",
+    "category": "لپ‌تاپ",
+    "categoryName": "حافظه اس‌اس‌دی",
+    "code": "TK-892350",
+    "price": "۴,۰۸۰,۰۰۰",
+    "priceNumber": 4080000,
+    "oldPrice": "۴,۸۰۰,۰۰۰",
+    "discount": "۱۵٪ تخفیف",
+    "discountPercent": 15,
+    "rating": 4.9,
+    "reviewsCount": 210,
+    "inStock": true,
+    "stockText": "موجود در انبار پویان افزار (آماده ارسال)",
+    "seller": "پویان افزار (انبار مرکزی)",
+    "guarantee": "گارانتی ۳ ساله سامسونگ + ضمانت اصالت کالا",
+    "colors": [
+      { "name": "آبی متالیک", "hex": "#2563eb" },
+      { "name": "مشکی مات", "hex": "#0f172a" },
+      { "name": "بژ شنی", "hex": "#d6d3d1" }
+    ],
+    "image": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "badges": ["پیشنهاد شگفت‌انگیز", "ضمانت اصالت"],
+    "highlights": [
+      "سرعت انتقال فوق‌العاده تا ۱۰۵۰ مگابایت بر ثانیه با USB 3.2 Gen 2",
+      "مقاومت بالا در برابر گرد و غبار و آب با گواهی استاندارد IP65",
+      "پوشش لاستیکی مقاوم در برابر سقوط از ارتفاع تا ۳ متر",
+      "رمزگذاری سخت‌افزاری ۲۵۶ بیتی AES برای امنیت داده‌ها"
+    ],
+    "introTitle": "معرفی اس‌اس‌دی اکسترنال ضدضربه سامسونگ T7 Shield",
+    "introDesc": "سامسونگ T7 Shield با سرعت انتقال شگفت‌انگیز ۱۰۵۰ مگابایت بر ثانیه و بدنه محافظتی لاستیکی، مقاوم‌ترین و مطمئن‌ترین همراه برای فیلمسازان، طراحان و تولیدکنندگان محتوا در سخت‌ترین شرایط محیطی است.",
+    "featureCards": [
+      {
+        "title": "سرعت ۱۰۵۰MB/s",
+        "desc": "انتقال فایل‌های ویدیویی ۴K در چند ثانیه کوتاه.",
+        "icon": "Zap"
+      },
+      {
+        "title": "ضدآب و غبار IP65",
+        "desc": "ایمنی کامل در برابر بارش باران و گرد و خاک صحرا.",
+        "icon": "Headphones"
+      },
+      {
+        "title": "مقاوم تا سقوط ۳ متر",
+        "desc": "پوشش لاستیکی جذب‌کننده ضربات فیزیکی سنگین.",
+        "icon": "BatteryCharging"
+      }
+    ],
+    "technicalSpecs": [
+      { "label": "ظرفیت", "value": "۱ ترابایت (1000GB)" },
+      { "label": "رابط", "value": "USB 3.2 Gen 2 (10Gbps)" },
+      { "label": "سرعت خواندن متوالی", "value": "تا ۱۰۵۰ مگابایت بر ثانیه" },
+      { "label": "سرعت نوشتن متوالی", "value": "تا ۱۰۰۰ مگابایت بر ثانیه" }
+    ],
+    "ratingDistribution": [
+      { "stars": 5, "percent": 92 },
+      { "stars": 4, "percent": 7 },
+      { "stars": 3, "percent": 1 },
+      { "stars": 2, "percent": 0 },
+      { "stars": 1, "percent": 0 }
+    ],
+    "reviews": [
+      {
+        "id": 1,
+        "user": "کاوه خسروی",
+        "verified": true,
+        "date": "۱۵ مهر ۱۴۰۳",
+        "rating": 5,
+        "comment": "سرعت رید و رایت واقعیه و اصلا داغ نمیکنه. برای ادیتورها بهترین گزینست."
+      }
+    ],
+    "relatedProductIds": ["razer-deathadder-v3-pro", "logitech-g512", "sony-wf-1000xm5", "airpods-pro-2"]
+  }
+]

@@ -1,86 +1,26 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { Heart, Star, Plus, Check } from "lucide-react";
+import { Heart, Star, Plus } from "lucide-react";
+import { Product } from "@/lib/products";
 import { Button } from "@/components/ui/button";
-import { products } from "@/lib/products";
-import { useCartStore, useFavoritesStore } from "@/lib/store";
 
-const tabs = ["همه", "موبایل", "لپ‌تاپ"];
+interface RelatedProductsProps {
+  products: Product[];
+}
 
-export function BestSellers() {
-  const [activeTab, setActiveTab] = useState("همه");
-  const addItem = useCartStore((state) => state.addItem);
-  const { toggleFavorite, isFavorite } = useFavoritesStore();
-  const [addedId, setAddedId] = useState<string | null>(null);
-
-  const filteredProducts =
-    activeTab === "همه"
-      ? products.slice(0, 8)
-      : products.filter((p) => p.category === activeTab);
-
-  const handleAddToCart = (e: React.MouseEvent, product: (typeof products)[0]) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addItem({
-      id: product.id,
-      title: product.title,
-      price: product.priceNumber,
-      image: product.image,
-      seller: product.seller,
-      guarantee: product.guarantee,
-      inStockText: product.stockText,
-    });
-    setAddedId(product.id);
-    setTimeout(() => setAddedId(null), 1500);
-  };
-
-  const handleToggleFavorite = (e: React.MouseEvent, product: (typeof products)[0]) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleFavorite({
-      id: product.id,
-      title: product.title,
-      price: product.priceNumber,
-      priceString: product.price,
-      image: product.image,
-      brand: product.brand,
-      rating: product.rating,
-    });
-  };
+export function RelatedProducts({ products }: RelatedProductsProps) {
+  if (!products || products.length === 0) return null;
 
   return (
-    <section className="py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-lg sm:text-xl font-black text-[#0b1528]">
-            پرفروش‌ترین محصولات
-          </h2>
-          <p className="text-xs text-slate-600 font-medium mt-1">
-            محبوب‌ترین کالاهای دیجیتال بر اساس انتخاب خریداران
-          </p>
-        </div>
-
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === tab
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+    <section className="py-8 text-right">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900">
+          محصولات مشابه و پیشنهادی
+        </h2>
       </div>
 
       <div className="flex md:grid md:grid-cols-4 gap-3 md:gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
-        {filteredProducts.map((product) => (
+        {products.map((product) => (
           <Link
             key={product.id}
             href={`/products/${product.id}`}
@@ -95,15 +35,14 @@ export function BestSellers() {
                 <div className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1">
                   <button
                     type="button"
-                    onClick={(e) => handleToggleFavorite(e, product)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                     aria-label="افزودن به علاقه‌مندی‌ها"
                     className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors cursor-pointer"
                   >
-                    <Heart
-                      className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
-                        isFavorite(product.id) ? "fill-red-500 text-red-500" : ""
-                      }`}
-                    />
+                    <Heart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
 
@@ -138,15 +77,10 @@ export function BestSellers() {
                   variant="secondary"
                   size="sm"
                   type="button"
-                  onClick={(e) => handleAddToCart(e, product)}
                   className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0"
                 >
-                  {addedId === product.id ? (
-                    <Check className="w-3.5 h-3.5" />
-                  ) : (
-                    <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  )}
-                  <span>{addedId === product.id ? "افزوده شد" : "خرید"}</span>
+                  <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <span>خرید</span>
                 </Button>
 
                 <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] truncate">

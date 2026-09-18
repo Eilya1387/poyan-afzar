@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   Heart,
   LogIn,
+  User,
   Menu,
   ChevronDown,
   Smartphone,
@@ -19,14 +20,14 @@ import {
   Gamepad2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth/auth-context";
+import { useCartStore, useFavoritesStore } from "@/lib/store";
 
 const navLinks = [
-  { name: "خانه", href: "#", active: true },
-  { name: "موبایل و لوازم جانبی", href: "#" },
-  { name: "کامپیوتر و قطعات", href: "#" },
-  { name: "گیمینگ", href: "#" },
-  { name: "تخفیف‌ها", href: "#" },
+  { name: "خانه", href: "/", active: true },
+  { name: "فروشگاه", href: "/products/airpods-pro-2" },
   { name: "درباره ما", href: "#" },
+  { name: "تماس با ما", href: "#" },
 ];
 
 const categories = [
@@ -41,6 +42,9 @@ const categories = [
 ];
 
 export function Header() {
+  const { user, isLoggedIn, isLoaded } = useAuth();
+  const cartCount = useCartStore((state) => state.getItemsCount());
+  const favoritesCount = useFavoritesStore((state) => state.favorites.length);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSticky, setIsSticky] = useState(false);
@@ -119,35 +123,65 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              variant="primary"
-              size="md"
-              className="rounded-xl font-semibold gap-2 cursor-pointer shadow-sm hover:shadow-md"
-              leftIcon={<LogIn className="w-4 h-4" />}
-            >
-              ورود / ثبت‌نام
-            </Button>
+            {isLoaded ? (
+              isLoggedIn ? (
+                <Link href="/panel">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="rounded-xl font-semibold gap-2 cursor-pointer shadow-sm hover:shadow-md"
+                    leftIcon={<User className="w-4 h-4 text-blue-400" />}
+                  >
+                    پنل کاربری
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    className="rounded-xl font-semibold gap-2 cursor-pointer shadow-sm hover:shadow-md"
+                    leftIcon={<LogIn className="w-4 h-4" />}
+                  >
+                    ورود / ثبت‌نام
+                  </Button>
+                </Link>
+              )
+            ) : (
+              <div className="w-28 h-10 rounded-xl bg-slate-100 animate-pulse" />
+            )}
 
-            <Button
-              variant="icon"
-              size="icon"
-              className="relative text-slate-700 hover:text-red-500 cursor-pointer"
-              aria-label="علاقه‌مندی‌ها"
-            >
-              <Heart className="w-5 h-5" />
-            </Button>
+            <Link href="/panel?tab=favorites">
+              <Button
+                variant="icon"
+                size="icon"
+                className="relative text-slate-700 hover:text-red-500 cursor-pointer"
+                aria-label="علاقه‌مندی‌ها"
+              >
+                <Heart className="w-5 h-5" />
+                {favoritesCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
 
-            <Button
-              variant="icon"
-              size="icon"
-              className="relative text-slate-700 hover:text-[#2563eb] cursor-pointer"
-              aria-label="سبد خرید"
-            >
-              <ShoppingCart className="w-5 h-5" />
-              <span className="absolute -top-1.5 -right-1.5 bg-[#2563eb] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
-                2
-              </span>
-            </Button>
+            <Link href="/cart">
+              <Button
+                variant="icon"
+                size="icon"
+                className="relative text-slate-700 hover:text-[#2563eb] cursor-pointer"
+                aria-label="سبد خرید"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#2563eb] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

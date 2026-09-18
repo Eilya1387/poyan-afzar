@@ -129,52 +129,24 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-2 text-center lg:text-right">
+          <div className="lg:col-span-3 text-center lg:text-right">
             <h3 className="text-sm font-black text-slate-900 mb-4">
-              خدمات مشتریان
+              نشانی و اطلاعات تماس
             </h3>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 flex flex-col items-center lg:items-start">
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
-                >
-                  پاسخ به سوالات متداول
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
-                >
-                  رویه‌های بازگرداندن کالا
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
-                >
-                  شرایط استفاده از خدمات
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
-                >
-                  حریم خصوصی کاربران
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
-                >
-                  گزارش خطا
-                </Link>
-              </li>
-            </ul>
+            <div className="space-y-3 text-xs sm:text-sm text-slate-600">
+              <div className="flex items-start gap-2.5 justify-center lg:justify-start leading-relaxed">
+                <span className="font-bold text-slate-700 shrink-0">آدرس:</span>
+                <span>تهران، خیابان ولیعصر، نرسیده به تقاطع میرداماد، مجتمع تجاری پویان، طبقه ۳</span>
+              </div>
+              <div className="flex items-center gap-2.5 justify-center lg:justify-start">
+                <span className="font-bold text-slate-700 shrink-0">تلفن:</span>
+                <span dir="ltr" className="font-bold text-slate-900">۰۲۱-۸۸۷۷۶۶۵۵</span>
+              </div>
+              <div className="flex items-center gap-2.5 justify-center lg:justify-start">
+                <span className="font-bold text-slate-700 shrink-0">ساعات کار:</span>
+                <span>شنبه تا چهارشنبه ۹ الی ۱۸</span>
+              </div>
+            </div>
           </div>
 
           <div className="lg:col-span-2 text-center lg:text-right">
@@ -225,7 +197,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right">
+          <div className="lg:col-span-3 flex flex-col items-center lg:items-start text-center lg:text-right">
             <h3 className="text-sm font-black text-slate-900 mb-4">
               نمادها و اعتماد
             </h3>

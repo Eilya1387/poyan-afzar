@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Home, LayoutGrid, ShoppingBag, Flame, User } from "lucide-react";
+import { useAuth } from "@/components/auth/auth-context";
+import { useCartStore } from "@/lib/store";
 
 interface NavItem {
   id: string;
@@ -10,17 +13,48 @@ interface NavItem {
   badge?: number;
 }
 
-const navItems: NavItem[] = [
-  { id: "home", label: "خانه", icon: Home },
-  { id: "categories", label: "دسته‌بندی", icon: LayoutGrid },
-  { id: "cart", label: "سبد خرید", icon: ShoppingBag, badge: 2 },
-  { id: "deals", label: "شگفت‌انگیز", icon: Flame },
-  { id: "profile", label: "پروفایل", icon: User },
-];
-
 export function BottomNav() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { isLoggedIn } = useAuth();
+  const cartCount = useCartStore((state) => state.getItemsCount());
+
   const [activeId, setActiveId] = useState("home");
+
+  const navItems: NavItem[] = [
+    { id: "home", label: "خانه", icon: Home },
+    { id: "categories", label: "دسته‌بندی", icon: LayoutGrid },
+    { id: "cart", label: "سبد خرید", icon: ShoppingBag, badge: cartCount },
+    { id: "deals", label: "شگفت‌انگیز", icon: Flame },
+    { id: "profile", label: "پروفایل", icon: User },
+  ];
+
+  useEffect(() => {
+    if (pathname === "/login" || pathname === "/panel") {
+      setActiveId("profile");
+    } else if (pathname === "/cart") {
+      setActiveId("cart");
+    } else if (pathname === "/") {
+      setActiveId("home");
+    }
+  }, [pathname]);
+
   const activeIndex = navItems.findIndex((item) => item.id === activeId);
+
+  const handleItemClick = (id: string) => {
+    setActiveId(id);
+    if (id === "profile") {
+      if (isLoggedIn) {
+        router.push("/panel");
+      } else {
+        router.push("/login");
+      }
+    } else if (id === "cart") {
+      router.push("/cart");
+    } else if (id === "home") {
+      router.push("/");
+    }
+  };
 
   return (
     <nav
@@ -43,7 +77,7 @@ export function BottomNav() {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveId(item.id)}
+              onClick={() => handleItemClick(item.id)}
               className="relative z-10 flex flex-col items-center justify-center flex-1 h-full py-1 focus:outline-none cursor-pointer group"
             >
               <div className="relative flex items-center justify-center">
