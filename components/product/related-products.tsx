@@ -54,16 +54,8 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-[10px] sm:text-[11px] mb-1">
-                <span className="font-medium text-slate-600 truncate">
-                  {product.brand}
-                </span>
-                <div className="flex items-center gap-1 text-slate-600 font-medium shrink-0">
-                  <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-400 text-amber-400" />
-                  <span className="font-bold text-slate-700">
-                    {product.rating}
-                  </span>
-                </div>
+              <div className="text-[10px] sm:text-[11px] mb-1 font-medium text-slate-500 truncate">
+                {product.brand}
               </div>
 
               <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] transition-colors">

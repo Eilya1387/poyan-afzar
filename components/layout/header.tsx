@@ -32,10 +32,7 @@ export interface HeaderProps {
 const navLinks = [
   { name: "خانه", href: "/" },
   { name: "محصولات", href: "/products" },
-  { name: "موبایل و لوازم جانبی", href: "/products" },
-  { name: "کامپیوتر و قطعات", href: "/products" },
-  { name: "گیمینگ", href: "/products" },
-  { name: "تخفیف‌ها", href: "/products" },
+
   { name: "درباره ما", href: "#" },
   { name: "تماس با ما", href: "#" },
 ];
@@ -56,12 +53,17 @@ export function Header({
   searchQuery: externalSearchQuery,
   onSearchChange,
 }: HeaderProps = {}) {
-  const { user, isLoggedIn, isLoaded } = useAuth();
+  const {  isLoggedIn, isLoaded } = useAuth();
   const storeCartCount = useCartStore((state) => state.getItemsCount());
   const favoritesCount = useFavoritesStore((state) => state.favorites.length);
+  const [mounted, setMounted] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [internalSearchQuery, setInternalSearchQuery] = useState("");
   const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cartCount = propCartCount !== undefined ? propCartCount : storeCartCount;
 
@@ -92,8 +94,8 @@ export function Header({
   }, []);
 
   return (
-    <div className="w-full">
-      {isSticky && <div className="hidden md:block h-32 w-full pointer-events-none" aria-hidden="true" />}
+    <div className="hidden md:block w-full">
+      {isSticky && <div className="h-32 w-full pointer-events-none" aria-hidden="true" />}
       <header
         className={`w-full ${
           isSticky
@@ -102,17 +104,19 @@ export function Header({
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4">
-            <div className="flex items-center gap-4 sm:gap-8">
-              <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer shrink-0">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0b1528] flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-xs group-hover:bg-[#162544] transition-colors">
-                  <span className="text-[#38bdf8]">پ</span>
-                </div>
+          <div className="flex items-center justify-between h-20 gap-4">
+            <div className="flex items-center gap-8">
+              <Link href="/" className="flex items-center gap-2.5 group cursor-pointer shrink-0">
+                <img
+                  src="/logo-poyan-afraz.webp"
+                  alt="پویان افزار"
+                  className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
+                />
                 <div className="flex flex-col">
-                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#0b1528]">
+                  <span className="text-xl font-black tracking-tight text-[#0b1528]">
                     پویان <span className="text-[#2563eb]">افزار</span>
                   </span>
-                  <span className="hidden sm:inline-block text-[10px] text-slate-600 font-medium -mt-1">
+                  <span className="text-[10px] text-slate-600 font-medium -mt-1">
                     مرجع تخصصی کالای دیجیتال
                   </span>
                 </div>
@@ -181,7 +185,7 @@ export function Header({
                 aria-label="علاقه‌مندی‌ها"
               >
                 <Heart className="w-5 h-5" />
-                {favoritesCount > 0 && (
+                {mounted && favoritesCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
                     {favoritesCount}
                   </span>
@@ -197,7 +201,7 @@ export function Header({
                 aria-label="سبد خرید"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
+                {mounted && cartCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 bg-[#2563eb] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
                     {cartCount}
                   </span>

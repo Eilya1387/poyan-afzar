@@ -19,9 +19,16 @@ const navItems: NavItem[] = [
   { id: "home", label: "خانه", href: "/", icon: Home },
   { id: "categories", label: "دسته‌بندی", href: "/products", icon: LayoutGrid },
   { id: "cart", label: "سبد خرید", href: "/cart", icon: ShoppingBag, isCart: true },
-  { id: "deals", label: "شگفت‌انگیز", href: "/products", icon: Flame },
+  { id: "deals", label: "شگفت‌انگیز", href: "/#flash-sale", icon: Flame },
   { id: "profile", label: "پروفایل", href: "/panel", icon: User },
 ];
+
+function getActiveFromPath(path: string) {
+  if (path === "/login" || path === "/panel") return "profile";
+  if (path === "/cart") return "cart";
+  if (path === "/products") return "categories";
+  return "home";
+}
 
 export function BottomNav() {
   const router = useRouter();
@@ -29,18 +36,15 @@ export function BottomNav() {
   const { isLoggedIn } = useAuth();
   const cartCount = useCartStore((state) => state.getItemsCount());
 
-  const [activeId, setActiveId] = useState("home");
+  const [mounted, setMounted] = useState(false);
+  const [activeId, setActiveId] = useState(() => getActiveFromPath(pathname || "/"));
 
   useEffect(() => {
-    if (pathname === "/login" || pathname === "/panel") {
-      setActiveId("profile");
-    } else if (pathname === "/cart") {
-      setActiveId("cart");
-    } else if (pathname === "/products") {
-      setActiveId("categories");
-    } else if (pathname === "/") {
-      setActiveId("home");
-    }
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setActiveId(getActiveFromPath(pathname || "/"));
   }, [pathname]);
 
   const activeIndex = Math.max(0, navItems.findIndex((item) => item.id === activeId));
@@ -53,6 +57,16 @@ export function BottomNav() {
         router.push("/panel");
       } else {
         router.push("/login");
+      }
+    } else if (item.id === "deals") {
+      e.preventDefault();
+      if (pathname === "/") {
+        const el = document.getElementById("flash-sale");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        router.push("/#flash-sale");
       }
     }
   };
@@ -92,7 +106,7 @@ export function BottomNav() {
                   }`}
                 />
 
-                {badgeValue !== undefined && badgeValue > 0 && (
+                {mounted && badgeValue !== undefined && badgeValue > 0 && (
                   <span
                     className={`absolute -top-2.5 -right-2 text-[10px] font-black rounded-full w-4.5 h-4.5 flex items-center justify-center shadow-xs transition-colors ${
                       isActive

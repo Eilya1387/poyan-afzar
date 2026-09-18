@@ -18,13 +18,6 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
   const [activeTab, setActiveTab] = useState("intro");
   const relatedProducts = getRelatedProducts(product);
 
-  const breadcrumbs = [
-    { title: "خانه", href: "/" },
-    { title: "هدفون و هندزفری", href: "#" },
-    { title: product.categoryName, href: "#" },
-    { title: product.title.split("مدل")[1]?.trim() || product.title, href: "#" },
-  ];
-
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     const element = document.getElementById(tabId);

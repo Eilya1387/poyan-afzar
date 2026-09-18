@@ -71,21 +71,7 @@ export function UserPanelView() {
   const displayPhone = user?.phone || "۰۹۱۲۳۴۵۶۷۸۹";
 
   return (
-    <div className="space-y-6 text-right">
-      <nav aria-label="مسیر راهنما" className="py-2 text-xs text-slate-500">
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link href="/" className="hover:text-[#2563eb] transition-colors cursor-pointer">
-              خانه
-            </Link>
-          </li>
-          <li className="text-slate-300">/</li>
-          <li className="text-slate-800 font-bold" aria-current="page">
-            حساب کاربری
-          </li>
-        </ol>
-      </nav>
-
+    <div className="space-y-6 text-right pt-4">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-8 xl:col-span-9 order-2 lg:order-1 space-y-6">
           {activeTab === "dashboard" && (
@@ -673,10 +659,7 @@ export function UserPanelView() {
                 {toPersianDigits(displayPhone)}
               </p>
 
-              <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold px-3 py-1 rounded-full border border-emerald-200/70 shadow-2xs">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>حساب تکمیل شده (۹۰٪)</span>
-              </div>
+  
             </div>
 
             <nav aria-label="منوی حساب کاربری" className="space-y-1">
@@ -732,57 +715,6 @@ export function UserPanelView() {
                 <MapPin className="w-4 h-4" />
               </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("wallet")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "wallet"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>کیف پول</span>
-                <Wallet className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("notifications")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "notifications"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>اعلان‌ها</span>
-                <Bell className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("profile")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "profile"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>اطلاعات حساب</span>
-                <User className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("security")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "security"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>امنیت و رمز عبور</span>
-                <Lock className="w-4 h-4" />
-              </button>
 
               <div className="pt-2 border-t border-slate-100">
                 <button

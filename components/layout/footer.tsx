@@ -85,9 +85,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10">
           <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right">
             <Link href="/" className="flex items-center gap-2.5 mb-4 group cursor-pointer">
-              <div className="w-10 h-10 rounded-xl bg-[#0b1528] flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-[#162544] transition-colors">
-                <span className="text-[#38bdf8]">پ</span>
-              </div>
+              <img
+                src="/logo-poyan-afraz.webp"
+                alt="پویان افزار"
+                className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
+              />
               <span className="text-2xl font-black tracking-tight text-[#0b1528]">
                 پویان <span className="text-[#2563eb]">افزار</span>
               </span>

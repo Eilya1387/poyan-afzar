@@ -65,7 +65,7 @@ export function FlashSale() {
   };
 
   return (
-    <section className="py-4">
+    <section id="flash-sale" className="py-4 scroll-mt-24">
       <div className="bg-[#0b1528] rounded-3xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-800/80 mb-4 sm:mb-6">
           <div className="flex items-center gap-3">
@@ -99,14 +99,14 @@ export function FlashSale() {
               className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100"
             >
               <div>
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-50 mb-2 border border-slate-100 flex items-center justify-center p-1.5">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 border border-slate-100 flex items-center justify-center p-0">
                   <span className="absolute top-1.5 right-1.5 z-10 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
                     {deal.discount}
                   </span>
                   <img
                     src={deal.image}
                     alt={deal.title}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
                 </div>

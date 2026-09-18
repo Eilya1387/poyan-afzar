@@ -18,7 +18,6 @@ export function Pagination({
 
   return (
     <div className="flex items-center justify-center gap-1.5 sm:gap-2 my-10 select-none">
-      {/* Right button (Previous in RTL) */}
       <button
         type="button"
         disabled={currentPage === 1}
@@ -29,7 +28,6 @@ export function Pagination({
         <ChevronRight className="w-4 h-4" />
       </button>
 
-      {/* Pages */}
       {pages.map((page, idx) => {
         if (page === "ellipsis") {
           return (
@@ -60,7 +58,6 @@ export function Pagination({
         );
       })}
 
-      {/* Left button (Next in RTL) */}
       <button
         type="button"
         onClick={() => onPageChange && onPageChange(currentPage + 1)}

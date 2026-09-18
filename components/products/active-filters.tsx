@@ -31,7 +31,6 @@ export function ActiveFilters({
         <span>فیلترهای اعمال‌شده:</span>
       </div>
 
-      {/* Brand Tags */}
       {activeBrands.map((brand) => (
         <button
           key={brand}
@@ -45,7 +44,6 @@ export function ActiveFilters({
         </button>
       ))}
 
-      {/* In-Stock Tag */}
       {onlyInStock && (
         <button
           type="button"
@@ -58,7 +56,6 @@ export function ActiveFilters({
         </button>
       )}
 
-      {/* Clear All */}
       <button
         type="button"
         onClick={onClearAll}

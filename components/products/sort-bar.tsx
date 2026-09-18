@@ -26,7 +26,6 @@ export function SortBar({
 }: SortBarProps) {
   return (
     <div className="w-full bg-white border border-slate-200/80 rounded-2xl p-3 sm:px-4 sm:py-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 shadow-xs">
-      {/* Right: Sort Title and Options */}
       <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
         <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#0b1528] shrink-0 ml-1">
           <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#2563eb] flex items-center justify-center">
@@ -54,14 +53,6 @@ export function SortBar({
             );
           })}
         </div>
-      </div>
-
-      {/* Left: Total Count found */}
-      <div className="inline-flex items-center justify-end gap-1.5 text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200/70 px-3 py-1.5 rounded-xl self-start sm:self-center shrink-0">
-        <Sparkles className="w-3.5 h-3.5 text-[#2563eb]" />
-        <span>
-          <strong className="text-[#0b1528] font-black">{toPersianDigits(totalCount)}</strong> کالا
-        </span>
       </div>
     </div>
   );

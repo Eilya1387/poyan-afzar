@@ -101,24 +101,7 @@ export function CartView() {
   const itemsCount = getItemsCount();
 
   return (
-    <div className="space-y-6 text-right">
-      <nav aria-label="مسیر راهنما" className="py-2 text-xs text-slate-500">
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link
-              href="/"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              خانه
-            </Link>
-          </li>
-          <li className="text-slate-300">/</li>
-          <li className="text-slate-800 font-bold" aria-current="page">
-            سبد خرید
-          </li>
-        </ol>
-      </nav>
-
+    <div className="space-y-6 text-right pt-4">
       <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <h1 className="text-xl sm:text-2xl font-black text-slate-900">
@@ -352,7 +335,7 @@ export function CartView() {
                   ادامه و ثبت سفارش
                 </Button>
 
-                <Link href="/" className="block">
+                <Link href="/products" className="block">
                   <Button
                     variant="outline"
                     size="lg"
@@ -381,63 +364,6 @@ export function CartView() {
           </div>
         </div>
       )}
-
-      <div className="pt-10">
-        <div className="flex items-center gap-2 mb-5">
-          <ShoppingBag className="w-5 h-5 text-[#2563eb]" />
-          <h2 className="text-base sm:text-lg font-black text-slate-900">
-            محصولات پیشنهادی برای شما
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {suggestedProducts.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-xs transition-all"
-            >
-              <div>
-                <div className="aspect-square rounded-xl bg-slate-100 overflow-hidden mb-3 border border-slate-100">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <h3 className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1 mb-2">
-                  {p.title}
-                </h3>
-              </div>
-
-              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
-                <span className="text-xs sm:text-sm font-black text-slate-900">
-                  {p.priceString} تومان
-                </span>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    addItem({
-                      id: p.id,
-                      title: p.title,
-                      price: p.price,
-                      image: p.image,
-                      seller: "پویان افزار اکسپرس",
-                      inStockText: "موجود در انبار",
-                    });
-                  }}
-                  className="font-bold text-xs gap-1"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>افزودن به سبد</span>
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       <CheckoutModal
         isOpen={checkoutOpen}

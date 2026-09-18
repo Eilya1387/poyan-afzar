@@ -149,9 +149,11 @@ export function LoginForm() {
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-8 text-right">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 group cursor-pointer mb-5">
-            <div className="w-10 h-10 rounded-xl bg-[#0b1528] flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-[#162544] transition-colors">
-              <span className="text-[#38bdf8]">پ</span>
-            </div>
+            <img
+              src="/logo-poyan-afraz.webp"
+              alt="پویان افزار"
+              className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
+            />
             <span className="text-2xl font-black tracking-tight text-[#0b1528]">
               پویان <span className="text-[#2563eb]">افزار</span>
             </span>
