@@ -21,7 +21,7 @@ export function ProductTabs({
   ];
 
   return (
-    <div className="border-b border-slate-200 sticky top-20 z-20 bg-[#f8fafc]/95 backdrop-blur-md">
+    <div className="border-b border-slate-200 sticky top-0 z-20 bg-[#f8fafc]/95 backdrop-blur-md">
       <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto no-scrollbar py-1">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;

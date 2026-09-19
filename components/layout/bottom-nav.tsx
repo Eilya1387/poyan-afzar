@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
 function getActiveFromPath(path: string) {
   if (path === "/login" || path === "/panel") return "profile";
   if (path === "/cart") return "cart";
-  if (path === "/products") return "categories";
+  if (path === "/products" || path.startsWith("/products/")) return "categories";
   return "home";
 }
 
@@ -46,6 +46,8 @@ export function BottomNav() {
   useEffect(() => {
     setActiveId(getActiveFromPath(pathname || "/"));
   }, [pathname]);
+
+  if (pathname?.startsWith("/admin")) return null;
 
   const activeIndex = Math.max(0, navItems.findIndex((item) => item.id === activeId));
 
@@ -78,7 +80,7 @@ export function BottomNav() {
     >
       <div className="relative flex items-center justify-around max-w-md mx-auto h-16">
         <div
-          className="absolute -top-6 bottom-5 rounded-xl bg-[#2563eb] shadow-[0_4px_16px_rgba(37,99,235,0.35)] transition-all duration-300 ease-out z-0 pointer-events-none"
+          className="absolute -top-6 bottom-5 rounded-xl bg-[#2563eb] shadow-[0_4px_16px_rgba(37,99,235,0.35)] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-0 pointer-events-none"
           style={{
             right: `calc(${activeIndex * 20}% + 6px)`,
             width: "calc(22% - 20px)",
@@ -99,7 +101,7 @@ export function BottomNav() {
             >
               <div className="relative flex items-center justify-center">
                 <Icon
-                  className={`w-7 h-7 transition-all duration-200 ${
+                  className={`w-7 h-7 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
                     isActive
                       ? "text-white stroke-[2.4] scale-115 -translate-y-6"
                       : "text-slate-500 group-hover:text-slate-800 stroke-[1.8]"
@@ -120,7 +122,7 @@ export function BottomNav() {
               </div>
 
               <span
-                className={`text-[10px] tracking-tight mt-1 transition-all duration-200 leading-none ${
+                className={`text-[10px] tracking-tight mt-1 transition-all duration-300 leading-none ${
                   isActive
                     ? "text-white font-black hidden"
                     : "text-slate-500 group-hover:text-slate-800 font-medium"

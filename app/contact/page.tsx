@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { Button } from "@/components/ui/button";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -221,7 +220,6 @@ export default function ContactPage() {
       </main>
 
       <Footer />
-      <BottomNav />
     </div>
   );
 }

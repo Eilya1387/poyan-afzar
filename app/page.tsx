@@ -1,6 +1,5 @@
 import React from "react";
 import { Header } from "@/components/layout/header";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { Hero } from "@/components/home/hero";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { FlashSale } from "@/components/home/flash-sale";
@@ -34,7 +33,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-      <BottomNav />
     </div>
   );
 }

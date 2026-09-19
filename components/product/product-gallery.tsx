@@ -16,11 +16,11 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
 
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
-      <div className="relative aspect-square w-full rounded-2xl md:rounded-3xl border border-slate-200 bg-slate-100 overflow-hidden group shadow-2xs">
+      <div className="relative aspect-square w-full rounded-2xl md:rounded-3xl border border-slate-200 bg-white flex items-center justify-center overflow-hidden group shadow-2xs">
         <img
           src={displayImages[selectedIndex]}
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 
@@ -32,7 +32,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
               key={`${img}-${idx}`}
               type="button"
               onClick={() => setSelectedIndex(idx)}
-              className={`relative aspect-square rounded-xl md:rounded-2xl border bg-slate-100 overflow-hidden transition-all duration-200 cursor-pointer ${
+              className={`relative aspect-square rounded-xl md:rounded-2xl border  bg-white flex items-center justify-center overflow-hidden transition-all duration-200 cursor-pointer ${
                 isSelected
                   ? "border-[#2563eb] ring-2 ring-blue-500/20 shadow-xs"
                   : "border-slate-200 hover:border-slate-300"

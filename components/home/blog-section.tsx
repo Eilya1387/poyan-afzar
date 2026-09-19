@@ -27,7 +27,7 @@ const articles = [
     desc: "آشنایی با اصول صحیح شارژ کردن، دمای استاندارد و عادت‌های درست استفاده جهت افزایش طول عمر باتری دستگاه‌ها...",
     badge: "آموزش • ۴ دقیقه مطالعه",
     date: "۸ خرداد ۱۴۰۳",
-    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=600&q=80",
     href: "#",
   },
 ];

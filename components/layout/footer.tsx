@@ -1,10 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import {
-  PhoneCall,
-  ShieldCheck,
-  CheckCircle,
-} from "lucide-react";
+import { PhoneCall, ShieldCheck, CheckCircle } from "lucide-react";
 
 function TelegramIcon({ className }: { className?: string }) {
   return (
@@ -84,7 +80,10 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10">
           <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right">
-            <Link href="/" className="flex items-center gap-2.5 mb-4 group cursor-pointer">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 mb-4 group cursor-pointer"
+            >
               <img
                 src="/logo-poyan-afraz.webp"
                 alt="پویان افزار"
@@ -96,7 +95,9 @@ export function Footer() {
             </Link>
 
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm mb-6">
-              پویان افزار، مرجع تخصصی تامین و فروش لوازم جانبی موبایل، قطعات کامپیوتر و تجهیزات گیمینگ با ضمانت اصالت و بهترین قیمت در سراسر کشور.
+              پویان افزار، مرجع تخصصی تامین و فروش لوازم جانبی موبایل، قطعات
+              کامپیوتر و تجهیزات گیمینگ با ضمانت اصالت و بهترین قیمت در سراسر
+              کشور.
             </p>
 
             <div className="flex items-center gap-2.5 justify-center lg:justify-start">
@@ -138,14 +139,21 @@ export function Footer() {
             <div className="space-y-3 text-xs sm:text-sm text-slate-600">
               <div className="flex items-start gap-2.5 justify-center lg:justify-start leading-relaxed">
                 <span className="font-bold text-slate-700 shrink-0">آدرس:</span>
-                <span>تهران، خیابان ولیعصر، نرسیده به تقاطع میرداماد، مجتمع تجاری پویان، طبقه ۳</span>
+                <span>
+                  تهران، خیابان ولیعصر، نرسیده به تقاطع میرداماد، مجتمع تجاری
+                  پویان، طبقه ۳
+                </span>
               </div>
               <div className="flex items-center gap-2.5 justify-center lg:justify-start">
                 <span className="font-bold text-slate-700 shrink-0">تلفن:</span>
-                <span dir="ltr" className="font-bold text-slate-900">۰۲۱-۸۸۷۷۶۶۵۵</span>
+                <span dir="ltr" className="font-bold text-slate-900">
+                  ۰۲۱-۸۸۷۷۶۶۵۵
+                </span>
               </div>
               <div className="flex items-center gap-2.5 justify-center lg:justify-start">
-                <span className="font-bold text-slate-700 shrink-0">ساعات کار:</span>
+                <span className="font-bold text-slate-700 shrink-0">
+                  ساعات کار:
+                </span>
                 <span>شنبه تا چهارشنبه ۹ الی ۱۸</span>
               </div>
             </div>
@@ -228,9 +236,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-slate-100 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 text-center md:text-right">
-          <div>
-            تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳
-          </div>
+          <div>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</div>
 
           <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
             <span>قدرت گرفته از</span>
@@ -242,33 +248,6 @@ export function Footer() {
             >
               WeXuN Team
             </a>
-          </div>
-
-          <div className="flex items-center gap-4 flex-wrap justify-center">
-            <Link
-              href="/about"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              درباره ما
-            </Link>
-            <Link
-              href="/contact"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              تماس با ما
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              قوانین و مقررات
-            </Link>
-            <Link
-              href="#"
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
-            >
-              حریم خصوصی
-            </Link>
           </div>
         </div>
       </div>

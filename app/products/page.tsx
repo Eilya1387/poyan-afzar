@@ -4,7 +4,6 @@ import React, { useState, useMemo } from "react";
 import { Header } from "@/components/layout/header";
 import { ProductCard } from "@/components/products/product-card";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { getAllProducts } from "@/lib/products";
 import { toPersianDigits } from "@/lib/formatters";
 
@@ -98,7 +97,6 @@ export default function ProductsPage() {
       </main>
 
       <Footer />
-      <BottomNav />
     </div>
   );
 }

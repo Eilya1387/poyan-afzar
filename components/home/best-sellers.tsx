@@ -125,13 +125,13 @@ export function BestSellers() {
             </div>
 
             <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
-              <div className="flex items-center justify-between gap-1 sm:gap-2">
+              <div className="flex items-center justify-between max-sm:justify-center gap-1 sm:gap-2">
                 <Button
                   variant="secondary"
                   size="sm"
                   type="button"
                   onClick={(e) => handleAddToCart(e, product)}
-                  className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0"
+                  className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0 max-sm:hidden"
                 >
                   {addedId === product.id ? (
                     <Check className="w-3.5 h-3.5" />

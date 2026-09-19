@@ -2,7 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { CartView } from "@/components/cart/cart-view";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function CartPage() {
         <CartView />
       </main>
       <Footer />
-      <BottomNav />
     </div>
   );
 }

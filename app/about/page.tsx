@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -131,7 +130,6 @@ export default function AboutPage() {
       </main>
 
       <Footer />
-      <BottomNav />
     </div>
   );
 }

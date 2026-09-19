@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { UserPanelView } from "@/components/auth/user-panel-view";
 
 export const metadata: Metadata = {
@@ -24,7 +23,6 @@ export default function PanelPage() {
         </Suspense>
       </main>
       <Footer />
-      <BottomNav />
     </div>
   );
 }

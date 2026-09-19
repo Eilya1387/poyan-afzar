@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { ProductDetailView } from "@/components/product/product-detail-view";
 import { getAllProducts, getProductById } from "@/lib/products";
 
@@ -49,7 +48,6 @@ export default async function ProductPage({ params }: PageProps) {
         <ProductDetailView product={product} />
       </main>
       <Footer />
-      <BottomNav />
     </div>
   );
 }

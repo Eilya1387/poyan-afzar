@@ -167,11 +167,11 @@ export function CartView() {
                   className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all hover:border-slate-300"
                 >
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 shrink-0 border border-slate-200/80 overflow-hidden">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-50 shrink-0 border border-slate-200/80 p-2 flex items-center justify-center overflow-hidden">
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     </div>
 

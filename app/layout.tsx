@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/components/auth/auth-context";
+import { BottomNav } from "@/components/layout/bottom-nav";
 import "./globals.css";
 
 const vazir = Vazirmatn({
@@ -25,7 +26,10 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`${vazir.variable} font-sans`}>
       <body className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 antialiased selection:bg-blue-100 selection:text-blue-900">
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            <BottomNav />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import { products } from "@/lib/products";
 import { useCartStore } from "@/lib/store";
 
-const flashDeals = products.slice(0, 6);
+const flashDeals = [
+  products.find((p) => p.id === "airpods-pro-2") || products[0],
+  products.find((p) => p.id === "samsung-t7-shield-1tb") || products[9],
+  products.find((p) => p.id === "logitech-g512") || products[8],
+  products.find((p) => p.id === "razer-deathadder-v3-pro") || products[6],
+  products.find((p) => p.id === "anker-liberty-4-nc") || products[4],
+  products.find((p) => p.id === "xiaomi-watch-s1-active") || products[7],
+].filter(Boolean);
 
 export function FlashSale() {
   const addItem = useCartStore((state) => state.addItem);
@@ -93,9 +100,10 @@ export function FlashSale() {
 
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
           {flashDeals.map((deal) => (
-            <div
+            <Link
               key={deal.id}
-              className="relative w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group border border-transparent hover:border-blue-100"
+              href={`/products/${deal.id}`}
+              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100"
             >
               <div>
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 border border-slate-100 flex items-center justify-center p-0">
@@ -119,18 +127,18 @@ export function FlashSale() {
                 </h3>
               </div>
 
-              <div className="relative z-1 mt-2.5 pt-2 border-t border-slate-100">
-                <span className="block text-[10px] text-slate-400 line-through text-left">
+              <div className="mt-2.5 pt-2 border-t border-slate-100 ">
+                <span className="block text-[10px] text-slate-400 line-through text-left max-sm:text-center">
                   {deal.oldPrice}
                 </span>
 
-                <div className="flex items-center justify-between mt-1 gap-1">
+                <div className="flex items-center justify-between max-sm:justify-center mt-1 gap-1 ">
                   <Button
                     variant="secondary"
                     size="icon"
                     type="button"
                     onClick={(e) => handleAddToCart(e, deal)}
-                    className="rounded-lg w-7 h-7 sm:w-8 sm:h-8 cursor-pointer shadow-xs hover:shadow-sm shrink-0 relative z-10"
+                    className="rounded-lg w-7 h-7 sm:w-8 sm:h-8 cursor-pointer shadow-xs hover:shadow-sm shrink-0 relative z-10 max-sm:hidden"
                     aria-label="افزودن به سبد خرید"
                   >
                     {addedId === deal.id ? (
@@ -148,7 +156,7 @@ export function FlashSale() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
