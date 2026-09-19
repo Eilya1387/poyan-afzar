@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { Home, LayoutGrid, ShoppingBag, Flame, User } from "lucide-react";
+import { Home, LayoutGrid, ShoppingBag, Phone, User } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-context";
 import { useCartStore } from "@/lib/store";
 
@@ -19,13 +19,14 @@ const navItems: NavItem[] = [
   { id: "home", label: "خانه", href: "/", icon: Home },
   { id: "categories", label: "دسته‌بندی", href: "/products", icon: LayoutGrid },
   { id: "cart", label: "سبد خرید", href: "/cart", icon: ShoppingBag, isCart: true },
-  { id: "deals", label: "شگفت‌انگیز", href: "/#flash-sale", icon: Flame },
+  { id: "contact", label: "تماس با ما", href: "/contact", icon: Phone },
   { id: "profile", label: "پروفایل", href: "/panel", icon: User },
 ];
 
 function getActiveFromPath(path: string) {
   if (path === "/login" || path === "/panel") return "profile";
   if (path === "/cart") return "cart";
+  if (path === "/contact") return "contact";
   if (path === "/products" || path.startsWith("/products/")) return "categories";
   return "home";
 }
@@ -59,16 +60,6 @@ export function BottomNav() {
         router.push("/panel");
       } else {
         router.push("/login");
-      }
-    } else if (item.id === "deals") {
-      e.preventDefault();
-      if (pathname === "/") {
-        const el = document.getElementById("flash-sale");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        }
-      } else {
-        router.push("/#flash-sale");
       }
     }
   };

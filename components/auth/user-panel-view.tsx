@@ -10,6 +10,8 @@ import {
   Heart,
   Wallet,
   ShoppingBag,
+  ShoppingCart,
+  Package,
   MapPin,
   Bell,
   Lock,
@@ -38,9 +40,15 @@ export function UserPanelView() {
   const { favorites, removeFavorite } = useFavoritesStore();
   const { addresses, removeAddress, setDefaultAddress } = useAddressStore();
   const addItem = useCartStore((state) => state.addItem);
+  const cartCount = useCartStore((state) => state.getItemsCount());
 
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [addressModalOpen, setAddressModalOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab") as TabType | null;
@@ -71,11 +79,290 @@ export function UserPanelView() {
   const displayPhone = user?.phone || "۰۹۱۲۳۴۵۶۷۸۹";
 
   return (
-    <div className="space-y-6 text-right pt-4">
+    <div className="space-y-4 sm:space-y-6 text-right pt-2 sm:pt-4">
+      {/* Mobile User Header */}
+      <div className="lg:hidden bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#0b1528] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <User className="w-6 h-6 text-slate-200" />
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-sm font-black text-slate-900 truncate">
+                سلام، {displayName}
+              </h2>
+              <p className="text-[11px] text-slate-400 font-mono mt-0.5" dir="ltr">
+                {toPersianDigits(displayPhone)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/cart"
+              className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-[#2563eb] rounded-xl text-xs font-black transition-colors"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span>سبد خرید</span>
+              {mounted && cartCount > 0 && (
+                <span className="bg-[#2563eb] text-white text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
+                  {toPersianDigits(cartCount)}
+                </span>
+              )}
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+              title="خروج از حساب"
+              aria-label="خروج از حساب"
+            >
+              <LogOut className="w-4.5 h-4.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Scrollable Tabs */}
+      <div className="lg:hidden -mx-4 px-4 py-1.5 overflow-x-auto no-scrollbar border-b border-slate-200/80 bg-[#f8fafc]">
+        <div className="flex items-center gap-2 min-w-max pb-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab("dashboard")}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              activeTab === "dashboard"
+                ? "bg-[#0b1528] text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" />
+            <span>داشبورد</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("orders")}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              activeTab === "orders"
+                ? "bg-[#0b1528] text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <Package className="w-3.5 h-3.5" />
+            <span>سفارش‌های من</span>
+          </button>
+
+          <Link
+            href="/cart"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 bg-white text-slate-600 border border-slate-200/90 hover:bg-blue-50 hover:text-[#2563eb] transition-all cursor-pointer"
+          >
+            <ShoppingCart className="w-3.5 h-3.5" />
+            <span>سبد خرید</span>
+            {mounted && cartCount > 0 && (
+              <span className="bg-red-500 text-white text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
+                {toPersianDigits(cartCount)}
+              </span>
+            )}
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("favorites")}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              activeTab === "favorites"
+                ? "bg-[#0b1528] text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <Heart className="w-3.5 h-3.5" />
+            <span>علاقه‌مندی‌ها</span>
+            {mounted && favorites.length > 0 && (
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+              }`}>
+                {toPersianDigits(favorites.length)}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("addresses")}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              activeTab === "addresses"
+                ? "bg-[#0b1528] text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>آدرس‌های من</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("wallet")}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
+              activeTab === "wallet"
+                ? "bg-[#0b1528] text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+            }`}
+          >
+            <Wallet className="w-3.5 h-3.5" />
+            <span>کیف پول</span>
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div className="lg:col-span-8 xl:col-span-9 order-2 lg:order-1 space-y-6">
+        {/* Desktop Persistent Sidebar */}
+        <div className="hidden lg:block lg:col-span-4 xl:col-span-3">
+          <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-2xs space-y-5 sticky top-24">
+            <div className="flex flex-col items-center text-center pb-4 border-b border-slate-100">
+              <div className="w-16 h-16 rounded-full bg-[#0b1528] text-white flex items-center justify-center mb-3 shadow-sm">
+                <User className="w-8 h-8 text-slate-200" />
+              </div>
+
+              <h2 className="text-base font-black text-slate-900 mb-0.5">
+                سلام، {displayName}
+              </h2>
+
+              <p className="text-xs text-slate-400 font-mono mb-1" dir="ltr">
+                {toPersianDigits(displayPhone)}
+              </p>
+            </div>
+
+            <nav aria-label="منوی حساب کاربری" className="space-y-1">
+              <button
+                type="button"
+                onClick={() => setActiveTab("dashboard")}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "dashboard"
+                    ? "bg-[#0b1528] text-white shadow-sm"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <span>داشبورد</span>
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("orders")}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "orders"
+                    ? "bg-[#0b1528] text-white shadow-sm"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <span>سفارش‌های من</span>
+                <Package className="w-4 h-4" />
+              </button>
+
+              <Link
+                href="/cart"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#2563eb] transition-all cursor-pointer group"
+              >
+                <div className="flex items-center gap-2">
+                  <span>سبد خرید</span>
+                  {mounted && cartCount > 0 && (
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                      {toPersianDigits(cartCount)}
+                    </span>
+                  )}
+                </div>
+                <ShoppingCart className="w-4 h-4 text-slate-400 group-hover:text-[#2563eb] transition-colors" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("favorites")}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "favorites"
+                    ? "bg-[#0b1528] text-white shadow-sm"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span>علاقه‌مندی‌ها</span>
+                  {mounted && favorites.length > 0 && (
+                    <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                      activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {toPersianDigits(favorites.length)}
+                    </span>
+                  )}
+                </div>
+                <Heart className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("addresses")}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "addresses"
+                    ? "bg-[#0b1528] text-white shadow-sm"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <span>آدرس‌های من</span>
+                <MapPin className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("wallet")}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "wallet"
+                    ? "bg-[#0b1528] text-white shadow-sm"
+                    : "text-slate-700 hover:bg-slate-50"
+                }`}
+              >
+                <span>کیف پول</span>
+                <Wallet className="w-4 h-4" />
+              </button>
+
+              <div className="pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                >
+                  <span>خروج از حساب</span>
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="lg:col-span-8 xl:col-span-9 space-y-6">
           {activeTab === "dashboard" && (
             <>
+              {mounted && cartCount > 0 && (
+                <div className="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-[#2563eb] text-white flex items-center justify-center shrink-0">
+                      <ShoppingCart className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-900">
+                        شما {toPersianDigits(cartCount)} کالا در سبد خرید خود دارید
+                      </h3>
+                      <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                        برای تکمیل و نهایی‌سازی سفارش خود اقدام کنید
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/cart"
+                    className="shrink-0 text-xs font-black text-white bg-[#2563eb] hover:bg-[#1d4ed8] px-4 py-2 rounded-xl transition-colors shadow-xs w-full sm:w-auto text-center"
+                  >
+                    مشاهده سبد خرید
+                  </Link>
+                </div>
+              )}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
@@ -642,92 +929,6 @@ export function UserPanelView() {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="lg:col-span-4 xl:col-span-3 order-1 lg:order-2">
-          <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-2xs space-y-5 sticky top-24">
-            <div className="flex flex-col items-center text-center pb-4 border-b border-slate-100">
-              <div className="w-16 h-16 rounded-full bg-[#1e293b] text-white flex items-center justify-center mb-3 shadow-sm">
-                <User className="w-8 h-8 text-slate-200" />
-              </div>
-
-              <h2 className="text-base font-black text-slate-900 mb-0.5">
-                سلام، {displayName}
-              </h2>
-
-              <p className="text-xs text-slate-400 font-mono mb-3" dir="ltr">
-                {toPersianDigits(displayPhone)}
-              </p>
-
-  
-            </div>
-
-            <nav aria-label="منوی حساب کاربری" className="space-y-1">
-              <button
-                type="button"
-                onClick={() => setActiveTab("dashboard")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "dashboard"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>داشبورد</span>
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("orders")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "orders"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>سفارش‌های من</span>
-                <ShoppingBag className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("favorites")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "favorites"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>علاقه‌مندی‌ها</span>
-                <Heart className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("addresses")}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "addresses"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                <span>آدرس‌های من</span>
-                <MapPin className="w-4 h-4" />
-              </button>
-
-
-              <div className="pt-2 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-                >
-                  <span>خروج از حساب</span>
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            </nav>
-          </div>
         </div>
       </div>
 
