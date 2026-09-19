@@ -65,7 +65,7 @@ export function BlogSection() {
               </div>
 
               <div className="p-5">
-                <span className="inline-block text-[11px] font-bold text-[#0284c7] bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100/60 mb-3">
+                <span className="inline-block text-xs font-semibold text-slate-500 mb-2">
                   {article.badge}
                 </span>
 

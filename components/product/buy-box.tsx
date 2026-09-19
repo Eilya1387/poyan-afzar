@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ShoppingCart,
   Heart,
@@ -28,13 +28,18 @@ export function BuyBox({
   discount,
   product,
 }: BuyBoxProps) {
+  const [mounted, setMounted] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
 
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
 
-  const isFav = product ? isFavorite(product.id) : false;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isFav = mounted && product ? isFavorite(product.id) : false;
 
   const handleIncrement = () => setQuantity((q) => q + 1);
   const handleDecrement = () => setQuantity((q) => (q > 1 ? q - 1 : 1));

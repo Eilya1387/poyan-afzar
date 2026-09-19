@@ -88,7 +88,7 @@ export function BottomNav() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeId === item.id;
-          const badgeValue = item.isCart ? cartCount : undefined;
+          const badgeValue = mounted && item.isCart ? cartCount : undefined;
 
           return (
             <Link
