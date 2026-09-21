@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   ShoppingCart,
   Heart,
@@ -12,6 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
+import { useAuth } from "@/components/auth/auth-context";
+import { userApi } from "@/lib/api/user";
 
 interface BuyBoxProps {
   seller: string;
@@ -28,6 +31,8 @@ export function BuyBox({
   discount,
   product,
 }: BuyBoxProps) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
@@ -45,6 +50,11 @@ export function BuyBox({
   const handleDecrement = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
   const handleAddToCart = () => {
+    if (!isLoggedIn) {
+      router.push(`/login?redirect=/products/${product?.id || ""}`);
+      return;
+    }
+
     if (product) {
       addItem(
         {
@@ -69,6 +79,11 @@ export function BuyBox({
   };
 
   const handleToggleFavorite = () => {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
     if (product) {
       toggleFavorite({
         id: product.id,
@@ -79,6 +94,7 @@ export function BuyBox({
         brand: product.brand,
         rating: product.rating,
       });
+      userApi.toggleFavorite(product.id).catch(() => {});
     }
   };
 

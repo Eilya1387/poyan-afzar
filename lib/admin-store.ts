@@ -25,197 +25,7 @@ import { brandsApi } from "./api/brands";
 import { clearAdminTokens } from "./api/config";
 
 // Initial Demo Products
-const defaultProducts: AdminProduct[] = [
-  {
-    id: "samsung-s24-ultra",
-    title: "گوشی هوشمند سامسونگ S24 Ultra",
-    enTitle: "Samsung Galaxy S24 Ultra 5G",
-    category: "mobile",
-    categoryName: "گوشی موبایل",
-    brand: "samsung",
-    brandFa: "سامسونگ",
-    price: 64900000,
-    originalPrice: 68000000,
-    stock: 2,
-    minStockThreshold: 5,
-    image: "/images/products/asus-rog-4070ti.jpg",
-    inStock: true,
-    rating: 4.9,
-    reviewsCount: 38,
-    description: "پرچمدار قدرتمند سامسونگ با دوربین ۲۰۰ مگاپیکسلی و تراشه اسنپ‌دراگون ۸ نسل ۳ با هوش مصنوعی گلکسی AI.",
-    specs: [
-      { label: "حافظه داخلی", value: "۵۱۲ گیگابایت" },
-      { label: "حافظه رم", value: "۱۲ گیگابایت" },
-      { label: "اندازه صفحه", value: "۶.۸ اینچ Dynamic AMOLED 2X" },
-    ],
-    warranty: "۱۸ ماهه گارانتی شرکتی + کد رجیستری",
-    seller: "پویان افزار رسمی",
-    badge: { text: "٪۵ تخفیف", type: "discount" },
-    createdAt: "1403/08/10",
-  },
-  {
-    id: "macbook-pro-m3",
-    title: "لپ‌تاپ مک‌بوک پرو M3 Pro",
-    enTitle: "Apple MacBook Pro 14 M3 Pro",
-    category: "laptop",
-    categoryName: "لپ‌تاپ",
-    brand: "apple",
-    brandFa: "اپل",
-    price: 115000000,
-    originalPrice: 122000000,
-    stock: 1,
-    minStockThreshold: 4,
-    image: "/images/products/gigabyte-4080.jpg",
-    inStock: true,
-    rating: 5.0,
-    reviewsCount: 22,
-    description: "لپ‌تاپ فوق‌حرفه‌ای اپل با تراشه قدرتمند M3 Pro، ۱۸ گیگابایت رم یکپارچه و ۵۱۲ گیگابایت SSD فوق سریع.",
-    specs: [
-      { label: "پردازنده", value: "Apple M3 Pro (11-core CPU)" },
-      { label: "رم", value: "18GB Unified Memory" },
-      { label: "صفحه نمایش", value: "Liquid Retina XDR 14.2 inch" },
-    ],
-    warranty: "گارانتی ۱۸ ماهه بازرگانی سیب",
-    seller: "پویان افزار پریمیوم",
-    badge: { text: "موجودی محدود", type: "hot" },
-    createdAt: "1403/07/20",
-  },
-  {
-    id: "sony-wh-1000xm5",
-    title: "هدفون بی‌سیم سونی WH-1000XM5",
-    enTitle: "Sony WH-1000XM5 Wireless Headphones",
-    category: "audio",
-    categoryName: "هدفون و صوتی",
-    brand: "sony",
-    brandFa: "سونی",
-    price: 18400000,
-    originalPrice: 20500000,
-    stock: 4,
-    minStockThreshold: 6,
-    image: "/images/products/msi-4060ti.jpg",
-    inStock: true,
-    rating: 4.8,
-    reviewsCount: 54,
-    description: "بهترین هدفون نویز کنسلینگ بازار با باتری قدرتمند تا ۳۰ ساعت و کیفیت صدای بی‌نظیر Hi-Res Audio.",
-    specs: [
-      { label: "نوع اتصال", value: "بی‌سیم بلوتوث 5.2 / با سیم AUX" },
-      { label: "عمر باتری", value: "تا ۳۰ ساعت با نویز کنسلینگ روشن" },
-      { label: "حذف نویز فعال", value: "تراشه اختصاصی Integrated Processor V1" },
-    ],
-    warranty: "۱۲ ماهه گارانتی ایران سونی",
-    seller: "پویان افزار اکسپرس",
-    badge: { text: "٪۱۰ تخفیف", type: "discount" },
-    createdAt: "1403/06/15",
-  },
-  {
-    id: "asus-rog-4070ti",
-    title: "کارت گرافیک ایسوس مدل ROG Strix RTX 4070 Ti O12G",
-    enTitle: "ASUS ROG Strix GeForce RTX 4070 Ti 12GB GDDR6X",
-    category: "gpu",
-    categoryName: "کارت گرافیک",
-    brand: "asus",
-    brandFa: "ایسوس",
-    price: 42900000,
-    originalPrice: 48500000,
-    stock: 7,
-    minStockThreshold: 3,
-    image: "/images/products/asus-rog-4070ti.jpg",
-    inStock: true,
-    rating: 4.8,
-    reviewsCount: 24,
-    description: "کارت گرافیک قدرتمند ایسوس مناسب اجرای تمام بازی‌های روز با رزولوشن 4K و قابلیت رهگیری پرتو (Ray Tracing).",
-    specs: [
-      { label: "حافظه ویدیویی", value: "12GB GDDR6X" },
-      { label: "رابط حافظه", value: "192-bit" },
-      { label: "پاور پیشنهادی", value: "750W" },
-    ],
-    warranty: "۳۶ ماهه گارانتی اصلی سازگار / حامی",
-    seller: "پویان افزار گیمینگ",
-    badge: { text: "٪۱۲ تخفیف", type: "discount" },
-    createdAt: "1403/05/10",
-  },
-  {
-    id: "msi-4060ti",
-    title: "کارت گرافیک ام‌اس‌آی مدل RTX 4060 Ti Gaming X 8G",
-    enTitle: "MSI GeForce RTX 4060 Ti GAMING X 8G",
-    category: "gpu",
-    categoryName: "کارت گرافیک",
-    brand: "msi",
-    brandFa: "ام‌اس‌آی",
-    price: 26400000,
-    originalPrice: 28000000,
-    stock: 12,
-    minStockThreshold: 5,
-    image: "/images/products/msi-4060ti.jpg",
-    inStock: true,
-    rating: 4.6,
-    reviewsCount: 18,
-    description: "کارت گرافیک اقتصادی و پرتوان با سیستم خنک‌کننده Twin Frozr 9 و نورپردازی RGB چشم‌نواز.",
-    specs: [
-      { label: "حافظه ویدیویی", value: "8GB GDDR6" },
-      { label: "فرکانس بوست", value: "2640 MHz" },
-      { label: "پاور پیشنهادی", value: "550W" },
-    ],
-    warranty: "۳۰ ماهه ماتریس",
-    seller: "پویان افزار",
-    badge: { text: "موجود", type: "in-stock" },
-    createdAt: "1403/06/01",
-  },
-  {
-    id: "gigabyte-4080",
-    title: "کارت گرافیک گیگابایت مدل GeForce RTX 4080 EAGLE OC",
-    enTitle: "GIGABYTE GeForce RTX 4080 16GB EAGLE OC",
-    category: "gpu",
-    categoryName: "کارت گرافیک",
-    brand: "gigabyte",
-    brandFa: "گیگابایت",
-    price: 66200000,
-    originalPrice: 72000000,
-    stock: 5,
-    minStockThreshold: 3,
-    image: "/images/products/gigabyte-4080.jpg",
-    inStock: true,
-    rating: 4.9,
-    reviewsCount: 42,
-    description: "کارت گرافیک رده‌بالا با سیستم خنک‌کننده WINDFORCE و ۱۶ گیگابایت حافظه GDDR6X برای سنگین‌ترین پردازش‌های هوش مصنوعی و گیمینگ.",
-    specs: [
-      { label: "حافظه ویدیویی", value: "16GB GDDR6X" },
-      { label: "رابط حافظه", value: "256-bit" },
-      { label: "پاور پیشنهادی", value: "850W" },
-    ],
-    warranty: "۳۶ ماهه آواژنگ",
-    seller: "پویان افزار",
-    badge: { text: "٪۸ تخفیف", type: "discount" },
-    createdAt: "1403/05/14",
-  },
-  {
-    id: "nvidia-4090",
-    title: "کارت گرافیک ان‌ویدیا مدل RTX 4090 Founders Edition",
-    enTitle: "NVIDIA GeForce RTX 4090 24GB Founders Edition",
-    category: "gpu",
-    categoryName: "کارت گرافیک",
-    brand: "nvidia",
-    brandFa: "ان‌ویدیا",
-    price: 92000000,
-    originalPrice: 92000000,
-    stock: 3,
-    minStockThreshold: 2,
-    image: "/images/products/nvidia-4090.jpg",
-    inStock: true,
-    rating: 5.0,
-    reviewsCount: 59,
-    description: "غول بی‌رقیب پردازش گرافیکی دنیا با ۲۴ گیگابایت حافظه GDDR6X و معماری فوق‌پیشرفته Ada Lovelace.",
-    specs: [
-      { label: "حافظه ویدیویی", value: "24GB GDDR6X" },
-      { label: "هسته‌های CUDA", value: "16384" },
-      { label: "پاور پیشنهادی", value: "1000W" },
-    ],
-    warranty: "گارانتی طلایی ۱ ساله تعویض",
-    seller: "پویان افزار واردات مستقیم",
-    badge: { text: "موجود", type: "in-stock" },
-    createdAt: "1403/04/01",
-  },
-];
+const defaultProducts: AdminProduct[] = [];
 
 // Initial Demo Categories
 const defaultCategories: AdminCategory[] = [
@@ -244,325 +54,19 @@ const defaultBrands: AdminBrand[] = [
 ];
 
 // Initial Demo Orders (Matching Figma screenshot exactly + extras)
-const defaultOrders: AdminOrder[] = [
-  {
-    id: "#PA-9842",
-    customerName: "علی رضایی",
-    customerPhone: "۰۹۱۲۳۴۵۶۷۸۹",
-    customerEmail: "ali.rezaei@example.com",
-    customerAddress: "تهران، خیابان ولیعصر، نرسیده به میدان ونک، پلاک ۲۳، واحد ۴",
-    date: "۲۵ آذر ۱۴۰۳",
-    createdAt: "1403/09/25 14:30",
-    amount: 4250000,
-    paymentStatus: "paid",
-    shippingStatus: "shipping",
-    items: [
-      { productId: "tsco-th5345", title: "هدفون بی سیم تسکو مدل TH 5345", price: 1650000, quantity: 1, image: "/images/products/asus-rog-4070ti.jpg" },
-      { productId: "xiaomi-keyboard-mech", title: "کیبورد مکانیکال شیائومی", price: 2600000, quantity: 1, image: "/images/products/msi-4060ti.jpg" },
-    ],
-    trackingCode: "TRK-9842-8711",
-  },
-  {
-    id: "#PA-9841",
-    customerName: "سارا محمدی",
-    customerPhone: "۰۹۱۹۸۷۶۵۴۳۲",
-    customerEmail: "sara.mohammadi@example.com",
-    customerAddress: "اصفهان، خیابان چهارباغ بالا، مجتمع کوثر، طبقه ۳",
-    date: "۲۵ آذر ۱۴۰۳",
-    createdAt: "1403/09/25 11:15",
-    amount: 1800000,
-    paymentStatus: "paid",
-    shippingStatus: "preparing",
-    items: [
-      { productId: "sony-wh-1000xm5", title: "لوازم جانبی و کابل Type-C سونی", price: 1800000, quantity: 1, image: "/images/products/msi-4060ti.jpg" },
-    ],
-    trackingCode: "TRK-9841-4520",
-  },
-  {
-    id: "#PA-9840",
-    customerName: "رضا کریمی",
-    customerPhone: "۰۹۳۵۱۱۱۲۲۳۳",
-    customerEmail: "reza.karimi@example.com",
-    customerAddress: "شیراز، بلوار ارم، کوچه ۱۲، پلاک ۸",
-    date: "۲۴ آذر ۱۴۰۳",
-    createdAt: "1403/09/24 18:40",
-    amount: 12900000,
-    paymentStatus: "paid",
-    shippingStatus: "delivered",
-    items: [
-      { productId: "msi-4060ti", title: "کارت گرافیک ام‌اس‌آی RTX 4060 Ti", price: 12900000, quantity: 1, image: "/images/products/msi-4060ti.jpg" },
-    ],
-    trackingCode: "TRK-9840-9901",
-  },
-  {
-    id: "#PA-9839",
-    customerName: "زهرا احمدی",
-    customerPhone: "۰۹۱۲۹۹۹۸۸۷۷",
-    customerEmail: "zahra.ahmadi@example.com",
-    customerAddress: "مشهد، بلوار سجاد، خیابان بهار، ساختمان صبا",
-    date: "۲۴ آذر ۱۴۰۳",
-    createdAt: "1403/09/24 09:20",
-    amount: 650000,
-    paymentStatus: "failed",
-    shippingStatus: "cancelled",
-    items: [
-      { productId: "mouse-pad-gaming", title: "پد ماوس گیمینگ ضد آب سایز بزرگ", price: 650000, quantity: 1, image: "/images/products/gigabyte-4080.jpg" },
-    ],
-    notes: "تراکنش ناموفق از درگاه بانکی سامان - عدم تکمیل پرداخت",
-  },
-  {
-    id: "#PA-9838",
-    customerName: "محمدرضا اکبری",
-    customerPhone: "۰۹۱۸۴۴۴۵۵۶۶",
-    customerEmail: "m.akbari@example.com",
-    customerAddress: "تبریز، خیابان آزادی، کوچه گلستان، پلاک ۱۵",
-    date: "۲۳ آذر ۱۴۰۳",
-    createdAt: "1403/09/23 16:50",
-    amount: 42900000,
-    paymentStatus: "paid",
-    shippingStatus: "delivered",
-    items: [
-      { productId: "asus-rog-4070ti", title: "کارت گرافیک ایسوس ROG Strix RTX 4070 Ti", price: 42900000, quantity: 1, image: "/images/products/asus-rog-4070ti.jpg" },
-    ],
-    trackingCode: "TRK-9838-1209",
-  },
-  {
-    id: "#PA-9837",
-    customerName: "مریم حسینی",
-    customerPhone: "۰۹۳۳۷۷۷۸۸۹۹",
-    customerEmail: "maryam.hosseini@example.com",
-    customerAddress: "کرج، گوهردشت، بلوار رستاخیز، خیابان نهم",
-    date: "۲۳ آذر ۱۴۰۳",
-    createdAt: "1403/09/23 10:10",
-    amount: 18400000,
-    paymentStatus: "paid",
-    shippingStatus: "delivered",
-    items: [
-      { productId: "sony-wh-1000xm5", title: "هدفون بی‌سیم سونی WH-1000XM5", price: 18400000, quantity: 1, image: "/images/products/msi-4060ti.jpg" },
-    ],
-    trackingCode: "TRK-9837-7723",
-  },
-];
+const defaultOrders: AdminOrder[] = [];
 
 // Initial Demo Customers
-const defaultCustomers: AdminCustomer[] = [
-  {
-    id: "USR-1042",
-    firstName: "علی",
-    lastName: "رضایی",
-    phone: "۰۹۱۲۳۴۵۶۷۸۹",
-    email: "ali.rezaei@example.com",
-    ordersCount: 4,
-    totalSpent: 18450000,
-    registerDate: "۱۴۰۳/۰۴/۱۲",
-    status: "active",
-    city: "تهران",
-    address: "خیابان ولیعصر، نرسیده به میدان ونک، پلاک ۲۳، واحد ۴",
-  },
-  {
-    id: "USR-1041",
-    firstName: "سارا",
-    lastName: "محمدی",
-    phone: "۰۹۱۹۸۷۶۵۴۳۲",
-    email: "sara.mohammadi@example.com",
-    ordersCount: 2,
-    totalSpent: 4200000,
-    registerDate: "۱۴۰۳/۰۶/۰۱",
-    status: "active",
-    city: "اصفهان",
-    address: "خیابان چهارباغ بالا، مجتمع کوثر، طبقه ۳",
-  },
-  {
-    id: "USR-1040",
-    firstName: "رضا",
-    lastName: "کریمی",
-    phone: "۰۹۳۵۱۱۱۲۲۳۳",
-    email: "reza.karimi@example.com",
-    ordersCount: 6,
-    totalSpent: 84000000,
-    registerDate: "۱۴۰۲/۱۱/۱۵",
-    status: "active",
-    city: "شیراز",
-    address: "بلوار ارم، کوچه ۱۲، پلاک ۸",
-  },
-  {
-    id: "USR-1039",
-    firstName: "زهرا",
-    lastName: "احمدی",
-    phone: "۰۹۱۲۹۹۹۸۸۷۷",
-    email: "zahra.ahmadi@example.com",
-    ordersCount: 1,
-    totalSpent: 650000,
-    registerDate: "۱۴۰۳/۰۸/۲۲",
-    status: "active",
-    city: "مشهد",
-    address: "بلوار سجاد، خیابان بهار، ساختمان صبا",
-  },
-  {
-    id: "USR-1038",
-    firstName: "محمدرضا",
-    lastName: "اکبری",
-    phone: "۰۹۱۸۴۴۴۵۵۶۶",
-    email: "m.akbari@example.com",
-    ordersCount: 5,
-    totalSpent: 112000000,
-    registerDate: "۱۴۰۲/۰۹/۱۰",
-    status: "active",
-    city: "تبریز",
-    address: "خیابان آزادی، کوچه گلستان، پلاک ۱۵",
-  },
-  {
-    id: "USR-1037",
-    firstName: "مریم",
-    lastName: "حسینی",
-    phone: "۰۹۳۳۷۷۷۸۸۹۹",
-    email: "maryam.hosseini@example.com",
-    ordersCount: 3,
-    totalSpent: 26800000,
-    registerDate: "۱۴۰۳/۰۲/۱۸",
-    status: "active",
-    city: "کرج",
-    address: "گوهردشت، بلوار رستاخیز، خیابان نهم",
-  },
-  {
-    id: "USR-1036",
-    firstName: "امیرحسین",
-    lastName: "تقوی",
-    phone: "۰۹۱۰۵۵۵۲۲۱۱",
-    email: "amir.taghavi@example.com",
-    ordersCount: 8,
-    totalSpent: 165000000,
-    registerDate: "۱۴۰۲/۰۵/۰۵",
-    status: "active",
-    city: "تهران",
-    address: "سعادت‌آباد، میدان کاج، خیابان نهم شرقی",
-  },
-];
+const defaultCustomers: AdminCustomer[] = [];
 
 // Initial Demo Discounts
-const defaultDiscounts: AdminDiscount[] = [
-  {
-    id: "dsc-01",
-    title: "تخفیف ویژه کارت گرافیک ایسوس ۴۰۷۰تی",
-    productId: "asus-rog-4070ti",
-    productTitle: "کارت گرافیک ایسوس مدل ROG Strix RTX 4070 Ti O12G",
-    type: "percentage",
-    percent: 12,
-    amount: 5600000,
-    originalPrice: 48500000,
-    finalPrice: 42900000,
-    startDate: "1403/09/20",
-    endDate: "1403/09/30",
-    isActive: true,
-    usageCount: 14,
-  },
-  {
-    id: "dsc-02",
-    title: "تخفیف جشنواره زمستانه سونی XM5",
-    productId: "sony-wh-1000xm5",
-    productTitle: "هدفون بی‌سیم سونی WH-1000XM5",
-    type: "fixed",
-    percent: 10,
-    amount: 2100000,
-    originalPrice: 20500000,
-    finalPrice: 18400000,
-    startDate: "1403/09/15",
-    endDate: "1403/10/01",
-    isActive: true,
-    usageCount: 8,
-  },
-  {
-    id: "dsc-coupon-01",
-    title: "کد تخفیف اولین خرید فروشگاه",
-    code: "WELCOME1403",
-    type: "percentage",
-    percent: 10,
-    amount: 500000,
-    startDate: "1403/01/01",
-    endDate: "1403/12/29",
-    isActive: true,
-    usageCount: 142,
-    maxUsage: 500,
-  },
-  {
-    id: "dsc-coupon-02",
-    title: "کد تخفیف شب یلدا ویژه خرید بالای ۵ میلیون",
-    code: "YALDA-TECH",
-    type: "fixed",
-    percent: 15,
-    amount: 750000,
-    startDate: "1403/09/25",
-    endDate: "1403/10/05",
-    isActive: true,
-    usageCount: 29,
-    maxUsage: 100,
-  },
-];
+const defaultDiscounts: AdminDiscount[] = [];
 
 // Initial Demo Reviews (Matching Figma screenshot exactly + extras)
-const defaultReviews: AdminReview[] = [
-  {
-    id: "rev-01",
-    userName: "محمدرضا اکبری",
-    productId: "asus-rog-4070ti",
-    productTitle: "کارت گرافیک ایسوس ROG Strix RTX 4070 Ti",
-    rating: 5,
-    comment: "محصول بسیار باکیفیتی هست و دقیقا همون چیزی بود که سفارش داده بودم. ارسال هم به موقع انجام شد.",
-    date: "۲۵ آذر ۱۴۰۳",
-    status: "pending",
-  },
-  {
-    id: "rev-02",
-    userName: "مریم حسینی",
-    productId: "sony-wh-1000xm5",
-    productTitle: "هدفون بی‌سیم سونی WH-1000XM5",
-    rating: 5,
-    comment: "بسته‌بندی خیلی عالی بود و از خرید خودم از پویان افزار کاملا راضی هستم. پیشنهاد می‌کنم.",
-    date: "۲۴ آذر ۱۴۰۳",
-    status: "pending",
-  },
-  {
-    id: "rev-03",
-    userName: "امیرحسین تقوی",
-    productId: "macbook-pro-m3",
-    productTitle: "لپ‌تاپ مک‌بوک پرو M3 Pro",
-    rating: 4,
-    comment: "کیفیت دستگاه و عملکرد پردازنده فوق‌العاده‌ست. فقط گارانتی دیر در سامانه ثبت شد که با پشتیبانی تماس گرفتم و سریع حل کردند.",
-    date: "۲۴ آذر ۱۴۰۳",
-    status: "pending",
-  },
-  {
-    id: "rev-04",
-    userName: "رضا کریمی",
-    productId: "msi-4060ti",
-    productTitle: "کارت گرافیک ام‌اس‌آی RTX 4060 Ti",
-    rating: 5,
-    comment: "دما توی بازی‌ها فوق‌العاده پایینه و فن‌ها در حالت عادی اصلا صدا نمیدن. خرید این کارت رو توصیه می‌کنم.",
-    date: "۲۲ آذر ۱۴۰۳",
-    status: "approved",
-  },
-  {
-    id: "rev-05",
-    userName: "کامران مرادی",
-    productId: "gigabyte-4080",
-    productTitle: "کارت گرافیک گیگابایت RTX 4080",
-    rating: 2,
-    comment: "کالای نامربوط تبلیغاتی و اسپم.",
-    date: "۲۰ آذر ۱۴۰۳",
-    status: "rejected",
-  },
-];
+const defaultReviews: AdminReview[] = [];
 
 // Initial 7-day Sales Data matching screenshot
-const defaultSalesChart: SalesDayData[] = [
-  { dayName: "امروز", dateStr: "۲۵ آذر", amount: 48500000, ordersCount: 28, isToday: true },
-  { dayName: "۲۴ آذر", dateStr: "۲۴ آذر", amount: 42000000, ordersCount: 24 },
-  { dayName: "۲۳ آذر", dateStr: "۲۳ آذر", amount: 31000000, ordersCount: 18 },
-  { dayName: "۲۲ آذر", dateStr: "۲۲ آذر", amount: 39500000, ordersCount: 21 },
-  { dayName: "۲۱ آذر", dateStr: "۲۱ آذر", amount: 22000000, ordersCount: 14 },
-  { dayName: "۲۰ آذر", dateStr: "۲۰ آذر", amount: 27000000, ordersCount: 16 },
-  { dayName: "۱۹ آذر", dateStr: "۱۹ آذر", amount: 18500000, ordersCount: 11 },
-];
+const defaultSalesChart: SalesDayData[] = [];
 
 interface AdminState {
   // Auth
@@ -670,6 +174,9 @@ export const useAdminStore = create<AdminState>()(
 
         try {
           const res = await authApi.adminLogin({ username: trimmedUser, password: trimmedPass });
+          if (!res?.accessToken) {
+            return { success: false, message: "توکن دسترسی دریافت نشد" };
+          }
           const u = res.user;
           const user: AdminUser = {
             username: (u as any).username || u.phone || trimmedUser,
@@ -681,23 +188,9 @@ export const useAdminStore = create<AdminState>()(
             isAuthenticated: true,
             adminUser: user,
           });
-          get().fetchAdminData();
+          await get().fetchAdminData();
           return { success: true };
         } catch (err: any) {
-          if (trimmedUser.toLowerCase() === "admin" && (trimmedPass === "admin" || trimmedPass === "admin123")) {
-            const user: AdminUser = {
-              username: "admin",
-              name: "مدیر سیستم",
-              role: "مدیر ارشد",
-              avatar: "/images/admin-avatar.webp",
-            };
-            set({
-              isAuthenticated: true,
-              adminUser: user,
-            });
-            get().fetchAdminData();
-            return { success: true };
-          }
           return {
             success: false,
             message: err?.message || "نام کاربری یا رمز عبور اشتباه است",
@@ -711,10 +204,21 @@ export const useAdminStore = create<AdminState>()(
           isAuthenticated: false,
           adminUser: null,
           activeTab: "dashboard",
+          products: [],
+          orders: [],
+          customers: [],
+          discounts: [],
+          reviews: [],
+          salesChart: [],
         });
       },
 
       fetchAdminData: async () => {
+        const token = typeof window !== "undefined" ? localStorage.getItem("poyan_admin_token") : null;
+        if (!token) {
+          return;
+        }
+
         try {
           const [overview, inv, ords, custs, discs, revs, cats, brnds] = await Promise.allSettled([
             adminApi.getOverview(),
@@ -1093,7 +597,7 @@ export const useAdminStore = create<AdminState>()(
       },
     }),
     {
-      name: "poyan-admin-storage-v1",
+      name: "poyan-admin-storage-v2",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,

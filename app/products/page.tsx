@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { ProductCard } from "@/components/products/product-card";
 import { Footer } from "@/components/layout/footer";
@@ -10,18 +11,32 @@ import { Loader2 } from "lucide-react";
 
 type SortType = "best-seller" | "newest" | "cheapest" | "expensive";
 
-export default function ProductsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+function ProductsContent() {
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("search") || "";
+  const initialCategory = searchParams.get("category") || "";
+
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [currentSort, setCurrentSort] = useState<SortType>("best-seller");
   const [productsList, setProductsList] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q !== null) {
+      setSearchQuery(q);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let isMounted = true;
     async function loadProducts() {
       setLoading(true);
       try {
-        const res = await fetchProducts();
+        const res = await fetchProducts({
+          search: searchQuery.trim() || undefined,
+          category: initialCategory || undefined,
+        });
         if (isMounted) {
           setProductsList(res.items);
         }
@@ -35,7 +50,7 @@ export default function ProductsPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [searchQuery, initialCategory]);
 
   const displayedProducts = useMemo(() => {
     let list = [...productsList];
@@ -116,6 +131,11 @@ export default function ProductsPage() {
             <Loader2 className="w-8 h-8 animate-spin text-[#2563eb]" />
             <span className="text-sm font-medium">در حال دریافت جدیدترین لیست محصولات از سرور...</span>
           </div>
+        ) : displayedProducts.length === 0 ? (
+          <div className="py-20 text-center text-slate-400 space-y-2">
+            <p className="text-sm font-bold">محصولی مطابق با جستجوی شما یافت نشد.</p>
+            <p className="text-xs">عبارت دیگری را جستجو کنید یا فیلترها را حذف نمایید.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             {displayedProducts.map((product) => (
@@ -127,5 +147,13 @@ export default function ProductsPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#2563eb]" /></div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }

@@ -38,8 +38,10 @@ export interface Product {
   enTitle: string;
   brand: string;
   brandFa?: string;
+  brandSlug?: string;
   category: string;
   categoryName: string;
+  categorySlug?: string;
   code: string;
   price: string;
   priceNumber: number;

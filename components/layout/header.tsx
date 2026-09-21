@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Search,
   ShoppingCart,
@@ -53,7 +54,8 @@ export function Header({
   searchQuery: externalSearchQuery,
   onSearchChange,
 }: HeaderProps = {}) {
-  const {  isLoggedIn, isLoaded } = useAuth();
+  const router = useRouter();
+  const { user, isLoggedIn, isLoaded } = useAuth();
   const storeCartCount = useCartStore((state) => state.getItemsCount());
   const favoritesCount = useFavoritesStore((state) => state.favorites.length);
   const [mounted, setMounted] = useState(false);
@@ -77,6 +79,19 @@ export function Header({
     setInternalSearchQuery(val);
   };
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) return;
+    router.push(`/products?search=${encodeURIComponent(q)}`);
+  };
+
+  const userDisplayName = user
+    ? (user.firstName
+        ? `${user.firstName} ${user.lastName || ""}`.trim()
+        : user.name || user.phone || "حساب کاربری")
+    : "حساب کاربری";
+
   useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
@@ -94,8 +109,8 @@ export function Header({
   }, []);
 
   return (
-    <div className="hidden md:block w-full">
-      {isSticky && <div className="h-32 w-full pointer-events-none" aria-hidden="true" />}
+    <div className="w-full">
+      {isSticky && <div className="h-20 sm:h-32 w-full pointer-events-none" aria-hidden="true" />}
       <header
         className={`w-full ${
           isSticky
@@ -104,19 +119,19 @@ export function Header({
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 gap-4">
-            <div className="flex items-center gap-8">
+          <div className="flex items-center justify-between h-20 gap-3 sm:gap-4">
+            <div className="flex items-center gap-4 lg:gap-8 shrink-0">
               <Link href="/" className="flex items-center gap-2.5 group cursor-pointer shrink-0">
                 <img
                   src="/logo-poyan-afraz.webp"
                   alt="پویان افزار"
-                  className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
+                  className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
                 />
                 <div className="flex flex-col">
-                  <span className="text-xl font-black tracking-tight text-[#0b1528]">
+                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#0b1528]">
                     پویان <span className="text-[#2563eb]">افزار</span>
                   </span>
-                  <span className="text-[10px] text-slate-600 font-medium -mt-1">
+                  <span className="hidden sm:block text-[10px] text-slate-600 font-medium -mt-1">
                     مرجع تخصصی کالای دیجیتال
                   </span>
                 </div>
@@ -135,30 +150,37 @@ export function Header({
             </nav>
           </div>
 
-          <div className="flex flex-1 max-w-md mx-2 sm:mx-4">
-            <div className="relative w-full">
+          <div className="flex flex-1 max-w-md mx-1 sm:mx-4">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                placeholder="جستجوی در میان هزاران کالا..."
-                className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl py-2 sm:py-2.5 pr-10 sm:pr-11 pl-4 text-xs sm:text-sm text-slate-800 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                placeholder="جستجوی کالا، برند یا مدل..."
+                className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl py-2 sm:py-2.5 pr-9 sm:pr-11 pl-4 text-xs sm:text-sm text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
               />
-              <Search className="absolute right-3 sm:right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-            </div>
+              <button
+                type="submit"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-[#2563eb] transition-colors cursor-pointer"
+                title="جستجو"
+                aria-label="جستجو"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </form>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {isLoaded ? (
               isLoggedIn ? (
                 <Link href="/panel">
                   <Button
                     variant="primary"
                     size="md"
-                    className="rounded-xl font-semibold gap-2 cursor-pointer shadow-sm hover:shadow-md"
-                    leftIcon={<User className="w-4 h-4 text-blue-400" />}
+                    className="rounded-xl font-bold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md max-w-32 sm:max-w-44 text-xs sm:text-sm px-2.5 sm:px-4"
+                    leftIcon={<User className="w-4 h-4 text-blue-300 shrink-0" />}
                   >
-                    پنل کاربری
+                    <span className="truncate">{userDisplayName}</span>
                   </Button>
                 </Link>
               ) : (
@@ -166,18 +188,19 @@ export function Header({
                   <Button
                     variant="primary"
                     size="md"
-                    className="rounded-xl font-semibold gap-2 cursor-pointer shadow-sm hover:shadow-md"
-                    leftIcon={<LogIn className="w-4 h-4" />}
+                    className="rounded-xl font-semibold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md text-xs sm:text-sm px-2.5 sm:px-4"
+                    leftIcon={<LogIn className="w-4 h-4 shrink-0" />}
                   >
-                    ورود / ثبت‌نام
+                    <span className="hidden sm:inline">ورود / ثبت‌نام</span>
+                    <span className="sm:hidden">ورود</span>
                   </Button>
                 </Link>
               )
             ) : (
-              <div className="w-28 h-10 rounded-xl bg-slate-100 animate-pulse" />
+              <div className="w-20 sm:w-28 h-9 sm:h-10 rounded-xl bg-slate-100 animate-pulse" />
             )}
 
-            <Link href="/panel?tab=favorites">
+            <Link href={isLoggedIn ? "/panel?tab=favorites" : "/login?redirect=/panel?tab=favorites"}>
               <Button
                 variant="icon"
                 size="icon"
@@ -193,7 +216,7 @@ export function Header({
               </Button>
             </Link>
 
-            <Link href="/cart">
+            <Link href={isLoggedIn ? "/cart" : "/login?redirect=/cart"}>
               <Button
                 variant="icon"
                 size="icon"

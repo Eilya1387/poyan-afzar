@@ -146,6 +146,14 @@ export async function apiClient<T = any>(
     );
   }
 
+  // Handle 401 for admin token expiration
+  if (res.status === 401 && useAdminToken) {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("poyan_admin_token");
+      document.cookie = "poyan_admin_token=; path=/; max-age=0; SameSite=Lax";
+    }
+  }
+
   // Handle 401 for user token refresh
   if (res.status === 401 && !skipAuth && !useAdminToken && getRefreshToken()) {
     if (!isRefreshing) {

@@ -32,32 +32,7 @@ interface CartStore {
   getItemsCount: () => number;
 }
 
-const initialCartItems: CartItem[] = [
-  {
-    id: "tesco-th-5345",
-    title: "هدفون بی سیم تسکو مدل TH 5345",
-    price: 1650000,
-    oldPrice: 1850000,
-    discount: "۱۱٪",
-    color: "مشکی",
-    guarantee: "۱۸ ماهه",
-    seller: "پویان افزار اکسپرس",
-    inStockText: "موجود در انبار - ارسال فردا",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
-    quantity: 1,
-  },
-  {
-    id: "xiaomi-mechanical-kb",
-    title: "کیبورد مکانیکال مخصوص بازی شیائومی",
-    price: 2400000,
-    color: "سفید خاکستری",
-    guarantee: "۱۲ ماهه شرکتی",
-    seller: "پویان افزار اکسپرس",
-    inStockText: "موجود در انبار مرکزی",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
-    quantity: 2,
-  },
-];
+const initialCartItems: CartItem[] = [];
 
 export const useCartStore = create<CartStore>()(
   persist(
@@ -151,7 +126,7 @@ export const useCartStore = create<CartStore>()(
       },
     }),
     {
-      name: "poyan_cart_store",
+      name: "poyan_cart_store_v2",
     }
   )
 );
@@ -173,24 +148,7 @@ interface FavoritesStore {
   isFavorite: (id: string) => boolean;
 }
 
-const initialFavorites: FavoriteItem[] = [
-  {
-    id: "redragon-gaming-kb",
-    title: "کیبورد مکانیکال گیمینگ رداگون",
-    price: 2650000,
-    priceString: "۲,۶۵۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80",
-    brand: "رداگون",
-  },
-  {
-    id: "sony-wh-1000xm4",
-    title: "هدفون بلوتوثی سونی WH-1000XM4",
-    price: 9800000,
-    priceString: "۹,۸۰۰,۰۰۰",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
-    brand: "سونی",
-  },
-];
+const initialFavorites: FavoriteItem[] = [];
 
 export const useFavoritesStore = create<FavoritesStore>()(
   persist(
@@ -218,7 +176,7 @@ export const useFavoritesStore = create<FavoritesStore>()(
       },
     }),
     {
-      name: "poyan_favorites_store",
+      name: "poyan_favorites_store_v2",
     }
   )
 );
@@ -242,30 +200,7 @@ interface AddressStore {
   setDefaultAddress: (id: string) => void;
 }
 
-const initialAddresses: AddressItem[] = [
-  {
-    id: "addr-home",
-    title: "منزل (پیش‌فرض)",
-    province: "تهران",
-    city: "تهران",
-    fullAddress: "تهران، خیابان ولیعصر، تقاطع میرداماد، پلاک ۱۲، واحد ۴",
-    postalCode: "۱۲۳۴۵۶۷۸۹۰",
-    receiverName: "ایلیا محمدی",
-    receiverPhone: "۰۹۱۲۳۴۵۶۷۸۹",
-    isDefault: true,
-  },
-  {
-    id: "addr-work",
-    title: "محل کار",
-    province: "تهران",
-    city: "تهران",
-    fullAddress: "تهران، شهرک غرب، بلوار دادمان، ساختمان آریا، طبقه ۳",
-    postalCode: "۹۸۷۶۵۴۳۲۱۰",
-    receiverName: "ایلیا محمدی",
-    receiverPhone: "۰۹۱۲۳۴۵۶۷۸۹",
-    isDefault: false,
-  },
-];
+const initialAddresses: AddressItem[] = [];
 
 export const useAddressStore = create<AddressStore>()(
   persist(
@@ -298,7 +233,7 @@ export const useAddressStore = create<AddressStore>()(
       },
     }),
     {
-      name: "poyan_address_store",
+      name: "poyan_address_store_v2",
     }
   )
 );

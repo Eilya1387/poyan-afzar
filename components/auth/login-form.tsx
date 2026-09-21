@@ -124,16 +124,23 @@ export function LoginForm() {
       });
 
       const user = res.user;
-      if (!user.firstName && !user.lastName) {
-        setIsLoading(false);
-        setStep("name");
-      } else {
+      const isExistingUser =
+        user.isNewUser === false ||
+        Boolean(user.firstName) ||
+        Boolean(user.lastName) ||
+        Boolean(user.name);
+
+      if (isExistingUser) {
         login(
           {
             id: user.id,
             firstName: user.firstName || "",
             lastName: user.lastName || "",
-            name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+            name:
+              user.name ||
+              (user.firstName
+                ? `${user.firstName} ${user.lastName || ""}`.trim()
+                : user.phone || cleanPhone),
             phone: user.phone || cleanPhone,
             role: user.role,
             email: user.email,
@@ -143,7 +150,12 @@ export function LoginForm() {
           res.refreshToken
         );
         setIsLoading(false);
-        router.push("/");
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirectUrl = searchParams.get("redirect") || "/";
+        router.push(redirectUrl);
+      } else {
+        setIsLoading(false);
+        setStep("name");
       }
     } catch (err: any) {
       setIsLoading(false);
@@ -197,8 +209,10 @@ export function LoginForm() {
         email: updated.email,
       });
 
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirectUrl = searchParams.get("redirect") || "/";
       setIsLoading(false);
-      router.push("/");
+      router.push(redirectUrl);
     } catch {
       // If updateProfile had issue, still complete local login
       login({
@@ -206,8 +220,10 @@ export function LoginForm() {
         lastName: lastName.trim(),
         phone: phone.trim(),
       });
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirectUrl = searchParams.get("redirect") || "/";
       setIsLoading(false);
-      router.push("/");
+      router.push(redirectUrl);
     }
   };
 

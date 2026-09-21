@@ -7,8 +7,8 @@ import { Lock, User, ShieldCheck, ArrowLeft, Eye, EyeOff, Store } from "lucide-r
 import Link from "next/link";
 
 export function AdminLogin() {
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin");
+  const [username, setUsername] = useState("admin@poyanafzar.ir");
+  const [password, setPassword] = useState("admin123");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,7 @@ export function AdminLogin() {
   };
 
   const handleQuickFill = () => {
-    setUsername("admin");
+    setUsername("admin@poyanafzar.ir");
     setPassword("admin123");
     setError(null);
   };
@@ -88,7 +88,7 @@ export function AdminLogin() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin"
+                placeholder="admin@poyanafzar.ir"
                 required
                 className="w-full px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100/50 focus:bg-white border border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 rounded-xl text-slate-900 placeholder:text-slate-400 text-sm font-semibold transition-all"
                 dir="ltr"
@@ -107,7 +107,7 @@ export function AdminLogin() {
                   onClick={handleQuickFill}
                   className="text-[11px] text-blue-600 hover:text-blue-800 transition-colors font-bold cursor-pointer"
                 >
-                  تکمیل خودکار (admin)
+                  تکمیل خودکار (پیش‌فرض)
                 </button>
               </div>
               <div className="relative">
@@ -136,9 +136,9 @@ export function AdminLogin() {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>
-                  حساب پیش‌فرض:{" "}
-                  <strong className="font-mono text-blue-700">admin</strong> /{" "}
-                  <strong className="font-mono text-blue-700">admin</strong>
+                  حساب پیش‌فرض مدیر:{" "}
+                  <strong className="font-mono text-blue-700">admin@poyanafzar.ir</strong> /{" "}
+                  <strong className="font-mono text-blue-700">admin123</strong>
                 </span>
               </div>
             </div>

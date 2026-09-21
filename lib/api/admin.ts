@@ -176,7 +176,12 @@ export const adminApi = {
       trackingCode?: string;
     }
   ) => {
-    const res = await api.patch(`/api/admin/orders/${encodeURIComponent(id)}/status`, payload, {
+    const body: any = {};
+    if (payload.paymentStatus) body.paymentStatus = payload.paymentStatus.toUpperCase();
+    if (payload.shippingStatus) body.shippingStatus = payload.shippingStatus.toUpperCase();
+    if (payload.notes !== undefined) body.notes = payload.notes;
+    if (payload.trackingCode) body.trackingCode = payload.trackingCode;
+    const res = await api.patch(`/api/admin/orders/${encodeURIComponent(id)}/status`, body, {
       useAdminToken: true,
     });
     return res.data;
@@ -195,7 +200,7 @@ export const adminApi = {
   },
 
   // Customers
-  getCustomers: async (params?: { page?: number; limit?: number; search?: string }): Promise<AdminCustomersResponse> => {
+  getCustomers: async (params?: { page?: number; limit?: number; search?: string; status?: string }): Promise<AdminCustomersResponse> => {
     const res = await api.get<AdminCustomersResponse>("/api/admin/customers", {
       params,
       useAdminToken: true,
@@ -209,12 +214,17 @@ export const adminApi = {
   },
 
   createCustomer: async (payload: any): Promise<AdminCustomer> => {
-    const res = await api.post<AdminCustomer>("/api/admin/customers", payload, { useAdminToken: true });
+    const body = {
+      ...payload,
+      status: (payload.status || "ACTIVE").toUpperCase(),
+    };
+    const res = await api.post<AdminCustomer>("/api/admin/customers", body, { useAdminToken: true });
     return res.data;
   },
 
   updateCustomerStatus: async (id: string, isActive: boolean) => {
-    const res = await api.patch(`/api/admin/customers/${encodeURIComponent(id)}/status`, { isActive }, {
+    const status = isActive ? "ACTIVE" : "BLOCKED";
+    const res = await api.patch(`/api/admin/customers/${encodeURIComponent(id)}/status`, { status }, {
       useAdminToken: true,
     });
     return res.data;
@@ -227,7 +237,11 @@ export const adminApi = {
   },
 
   createDiscount: async (data: any): Promise<AdminDiscount> => {
-    const res = await api.post<AdminDiscount>("/api/discounts", data, { useAdminToken: true });
+    const body = {
+      ...data,
+      type: (data.type || "PERCENTAGE").toUpperCase(),
+    };
+    const res = await api.post<AdminDiscount>("/api/discounts", body, { useAdminToken: true });
     return res.data;
   },
 

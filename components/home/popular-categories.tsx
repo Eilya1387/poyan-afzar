@@ -1,29 +1,48 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Smartphone,
-  Shield,
-  Zap,
   Headphones,
-  Watch,
   Keyboard,
   Cpu,
   HardDrive,
+  Laptop,
+  CircuitBoard,
+  Layers,
+  MousePointer,
   ArrowLeft,
 } from "lucide-react";
+import { categoriesApi, Category } from "@/lib/api/categories";
 
-const categories = [
-  { name: "موبایل و تبلت", icon: Smartphone, href: "/products" },
-  { name: "قاب و محافظ", icon: Shield, href: "/products" },
-  { name: "شارژر و کابل", icon: Zap, href: "/products" },
-  { name: "هدفون و هندزفری", icon: Headphones, href: "/products" },
-  { name: "ساعت هوشمند", icon: Watch, href: "/products" },
-  { name: "کیبورد و ماوس", icon: Keyboard, href: "/products" },
-  { name: "قطعات کامپیوتر", icon: Cpu, href: "/products" },
-  { name: "ذخیره‌سازی", icon: HardDrive, href: "/products" },
-];
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  gpu: CircuitBoard,
+  cpu: Cpu,
+  motherboard: Layers,
+  ram: HardDrive,
+  ssd: HardDrive,
+  laptop: Laptop,
+  mobile: Smartphone,
+  audio: Headphones,
+  accessories: MousePointer,
+};
 
 export function PopularCategories() {
+  const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+    categoriesApi.getCategories().then((list) => {
+      if (mounted && list.length > 0) {
+        setCategoriesList(list);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
     <section className="py-6">
       <div className="flex items-center justify-between mb-5">
@@ -40,12 +59,12 @@ export function PopularCategories() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
-        {categories.map((cat) => {
-          const Icon = cat.icon;
+        {categoriesList.map((cat) => {
+          const Icon = iconMap[cat.id] || Cpu;
           return (
             <Link
-              key={cat.name}
-              href={cat.href}
+              key={cat.id}
+              href={`/products?category=${cat.id}`}
               className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col items-center justify-center gap-3.5 hover:border-[#2563eb] hover:shadow-md transition-all duration-200 group text-center cursor-pointer"
             >
               <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-700 group-hover:bg-blue-50 group-hover:text-[#2563eb] transition-colors">

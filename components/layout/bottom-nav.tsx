@@ -54,6 +54,15 @@ export function BottomNav() {
 
   const handleItemClick = (e: React.MouseEvent, item: NavItem) => {
     setActiveId(item.id);
+    if (item.id === "cart") {
+      e.preventDefault();
+      if (isLoggedIn) {
+        router.push("/cart");
+      } else {
+        router.push("/login?redirect=/cart");
+      }
+      return;
+    }
     if (item.id === "profile") {
       e.preventDefault();
       if (isLoggedIn) {
@@ -61,6 +70,7 @@ export function BottomNav() {
       } else {
         router.push("/login");
       }
+      return;
     }
   };
 

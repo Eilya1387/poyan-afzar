@@ -7,6 +7,8 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/products";
 import { useFavoritesStore } from "@/lib/store";
+import { useAuth } from "@/components/auth/auth-context";
+import { userApi } from "@/lib/api/user";
 
 interface ProductCardProps {
   product: Product;
@@ -14,12 +16,19 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
+  const { isLoggedIn } = useAuth();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const isFav = isFavorite(product.id);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
     toggleFavorite({
       id: product.id,
       title: product.title,
@@ -28,11 +37,18 @@ export function ProductCard({ product }: ProductCardProps) {
       image: product.image,
       brand: product.brand,
     });
+    userApi.toggleFavorite(product.id).catch(() => {});
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push("/login?redirect=/cart");
+      return;
+    }
+
     router.push(`/products/${product.id}`);
   };
 

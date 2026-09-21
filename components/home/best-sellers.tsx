@@ -2,16 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Heart, Star, Plus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Product, products, fetchProducts } from "@/lib/products";
+import { Product, fetchProducts } from "@/lib/products";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
+import { useAuth } from "@/components/auth/auth-context";
+import { userApi } from "@/lib/api/user";
 
 const tabs = ["همه", "موبایل", "لپ‌تاپ"];
 
 export function BestSellers() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
   const [activeTab, setActiveTab] = useState("همه");
-  const [itemsList, setItemsList] = useState<Product[]>(products);
+  const [itemsList, setItemsList] = useState<Product[]>([]);
   const addItem = useCartStore((state) => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const [addedId, setAddedId] = useState<string | null>(null);
@@ -37,11 +42,17 @@ export function BestSellers() {
   const filteredProducts =
     activeTab === "همه"
       ? itemsList.slice(0, 8)
-      : itemsList.filter((p) => p.category === activeTab);
+      : itemsList.filter((p) => p.category === activeTab || p.categorySlug === activeTab);
 
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push("/login?redirect=/cart");
+      return;
+    }
+
     addItem({
       id: product.id,
       title: product.title,
@@ -58,6 +69,12 @@ export function BestSellers() {
   const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
     toggleFavorite({
       id: product.id,
       title: product.title,
@@ -67,6 +84,7 @@ export function BestSellers() {
       brand: product.brand,
       rating: product.rating,
     });
+    userApi.toggleFavorite(product.id).catch(() => {});
   };
 
   return (

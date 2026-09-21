@@ -2,23 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Flame, ShoppingCart, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Flame, ShoppingCart, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Product, products, fetchFlashDeals } from "@/lib/products";
+import { Product, fetchFlashDeals } from "@/lib/products";
 import { useCartStore } from "@/lib/store";
-
-const initialDeals = [
-  products.find((p) => p.id === "airpods-pro-2") || products[0],
-  products.find((p) => p.id === "samsung-t7-shield-1tb") || products[9],
-  products.find((p) => p.id === "logitech-g512") || products[8],
-  products.find((p) => p.id === "razer-deathadder-v3-pro") || products[6],
-  products.find((p) => p.id === "anker-liberty-4-nc") || products[4],
-  products.find((p) => p.id === "xiaomi-watch-s1-active") || products[7],
-].filter(Boolean) as Product[];
+import { useAuth } from "@/components/auth/auth-context";
 
 export function FlashSale() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
   const addItem = useCartStore((state) => state.addItem);
-  const [deals, setDeals] = useState<Product[]>(initialDeals);
+  const [deals, setDeals] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [addedId, setAddedId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,11 +22,13 @@ export function FlashSale() {
     async function loadDeals() {
       try {
         const liveDeals = await fetchFlashDeals();
-        if (mounted && liveDeals.length > 0) {
+        if (mounted) {
           setDeals(liveDeals);
         }
       } catch (err) {
         console.error("Failed to load flash deals:", err);
+      } finally {
+        if (mounted) setLoading(false);
       }
     }
     loadDeals();
@@ -42,6 +40,12 @@ export function FlashSale() {
   const handleAddToCart = (e: React.MouseEvent, deal: Product) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isLoggedIn) {
+      router.push("/login?redirect=/cart");
+      return;
+    }
+
     addItem({
       id: deal.id,
       title: deal.title,

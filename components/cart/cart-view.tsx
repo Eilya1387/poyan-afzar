@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Trash2,
   Plus,
@@ -19,39 +20,19 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store";
 import { CheckoutModal } from "./checkout-modal";
 import { cartApi } from "@/lib/api/cart";
+import { useAuth } from "@/components/auth/auth-context";
 import { Loader2 } from "lucide-react";
 
-const suggestedProducts = [
-  {
-    id: "logitech-ergonomic-mouse",
-    title: "ماوس بی‌سیم ارگونومیک لاجیتک",
-    price: 450000,
-    priceString: "۴۵۰,۰۰۰",
-    image:
-      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80",
-    brand: "لاجیتک",
-  },
-  {
-    id: "usbc-braided-cable",
-    title: "کابل تبدیل USB به USB-C کنفی",
-    price: 180000,
-    priceString: "۱۸۰,۰۰۰",
-    image:
-      "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80",
-    brand: "انکر",
-  },
-  {
-    id: "gel-mouse-pad",
-    title: "پد ماوس طبی مدل ژله‌ای",
-    price: 125000,
-    priceString: "۱۲۵,۰۰۰",
-    image:
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&q=80",
-    brand: "تسکو",
-  },
-];
-
 export function CartView() {
+  const router = useRouter();
+  const { isLoggedIn, isLoaded } = useAuth();
+
+  useEffect(() => {
+    if (isLoaded && !isLoggedIn) {
+      router.push("/login?redirect=/cart");
+    }
+  }, [isLoaded, isLoggedIn, router]);
+
   const {
     items,
     updateQuantity,

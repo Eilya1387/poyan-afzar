@@ -15,16 +15,25 @@ import { CustomersView } from "@/components/admin/customers-view";
 import { DiscountsView } from "@/components/admin/discounts-view";
 import { ReviewsView } from "@/components/admin/reviews-view";
 import { ReportsView } from "@/components/admin/reports-view";
+import { getAdminToken } from "@/lib/api/config";
 
 export default function AdminPage() {
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const adminUser = useAdminStore((state) => state.adminUser);
   const activeTab = useAdminStore((state) => state.activeTab);
+  const fetchAdminData = useAdminStore((state) => state.fetchAdminData);
+  const logout = useAdminStore((state) => state.logout);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const token = getAdminToken();
+    if (!token && adminUser) {
+      logout();
+    } else if (token && adminUser) {
+      fetchAdminData();
+    }
+  }, [adminUser, fetchAdminData, logout]);
 
   if (!mounted) {
     return (
@@ -37,8 +46,9 @@ export default function AdminPage() {
     );
   }
 
-  // Not logged in -> Show login view
-  if (!adminUser) {
+  // Not logged in or token missing -> Show login view
+  const token = typeof window !== "undefined" ? getAdminToken() : null;
+  if (!adminUser || !token) {
     return <AdminLogin />;
   }
 

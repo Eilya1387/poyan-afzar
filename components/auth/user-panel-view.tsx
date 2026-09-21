@@ -517,7 +517,14 @@ export function UserPanelView() {
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
                       <span className="text-xl sm:text-2xl font-black text-slate-900">
-                        {toPersianDigits(2)}
+                        {toPersianDigits(
+                          liveOrders.filter(
+                            (o) =>
+                              o.paymentStatus !== "CANCELLED" &&
+                              o.paymentStatus !== "cancelled" &&
+                              o.shippingStatus !== "delivered"
+                          ).length
+                        )}
                       </span>
                       <span className="text-[11px] text-slate-400 font-medium">در جریان</span>
                     </div>
@@ -530,13 +537,13 @@ export function UserPanelView() {
                 <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
                     <span className="text-[11px] sm:text-xs font-bold text-slate-500">
-                      سفارش‌های تحویل شده
+                      کل سفارش‌ها
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
                       <span className="text-xl sm:text-2xl font-black text-slate-900">
-                        {toPersianDigits(14)}
+                        {toPersianDigits(liveOrders.length)}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">کل سفارش‌ها</span>
+                      <span className="text-[11px] text-slate-400 font-medium">سفارش ثبت‌شده</span>
                     </div>
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
@@ -551,7 +558,7 @@ export function UserPanelView() {
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
                       <span className="text-xl sm:text-2xl font-black text-slate-900">
-                        {toPersianDigits(favorites.length || 5)}
+                        {toPersianDigits(favorites.length)}
                       </span>
                       <span className="text-[11px] text-slate-400 font-medium">کالا</span>
                     </div>
@@ -568,7 +575,7 @@ export function UserPanelView() {
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
                       <span className="text-base sm:text-lg font-black text-slate-900">
-                        ۱,۲۵۰,۰۰۰
+                        {formatPrice(liveWallet?.balance ?? user?.walletBalance ?? 0)}
                       </span>
                       <span className="text-[10px] text-slate-400 font-medium">تومان</span>
                     </div>
@@ -579,75 +586,81 @@ export function UserPanelView() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-6">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs sm:text-sm font-bold text-slate-500">
-                      پیگیری آخرین سفارش
-                    </span>
-                    <span className="text-sm sm:text-base font-black text-slate-900" dir="ltr">
-                      #TK-89423
+              {liveOrders.length > 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-6">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs sm:text-sm font-bold text-slate-500">
+                        پیگیری آخرین سفارش
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-slate-900 font-mono" dir="ltr">
+                        #{liveOrders[0].trackingCode}
+                      </span>
+                    </div>
+
+                    <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full border border-blue-100/60 shadow-2xs">
+                      {liveOrders[0].statusFa || liveOrders[0].paymentStatusFa || liveOrders[0].paymentStatus}
                     </span>
                   </div>
 
-                  <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full border border-blue-100/60 shadow-2xs">
-                    در حال پردازش
-                  </span>
-                </div>
+                  <div className="relative pt-4 pb-2">
+                    <div className="absolute top-9 left-6 right-6 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden sm:block" />
 
-                <div className="relative pt-4 pb-2">
-                  <div className="absolute top-9 left-6 right-6 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden sm:block" />
-                  <div className="absolute top-9 right-6 w-1/2 h-0.5 bg-[#0b1528] -translate-y-1/2 z-0 hidden sm:block" />
-
-                  <div className="grid grid-cols-5 gap-2 text-center relative z-10">
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-[#0b1528] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-5 h-5 stroke-[2.5]" />
+                    <div className="grid grid-cols-4 gap-2 text-center relative z-10">
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="w-10 h-10 rounded-full bg-[#0b1528] text-white flex items-center justify-center shadow-xs">
+                          <Check className="w-5 h-5 stroke-[2.5]" />
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-800">ثبت سفارش</span>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-800">ثبت سفارش</span>
-                    </div>
 
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-[#0b1528] text-white flex items-center justify-center shadow-xs">
-                        <Check className="w-5 h-5 stroke-[2.5]" />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-xs ${
+                          liveOrders[0].paymentStatus === "PAID" || liveOrders[0].paymentStatus === "paid"
+                            ? "bg-[#0b1528] text-white"
+                            : "bg-slate-100 text-slate-400"
+                        }`}>
+                          <Check className="w-5 h-5 stroke-[2.5]" />
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-800">تایید پرداخت</span>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-800">تایید پرداخت</span>
-                    </div>
 
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-[#2563eb] text-white flex items-center justify-center shadow-md ring-4 ring-blue-100">
-                        <RotateCw className="w-5 h-5 animate-spin" />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
+                          liveOrders[0].shippingStatus === "shipping" || liveOrders[0].shippingStatus === "preparing"
+                            ? "bg-[#2563eb] text-white ring-4 ring-blue-100"
+                            : "bg-slate-100 text-slate-400"
+                        }`}>
+                          <Truck className="w-5 h-5" />
+                        </div>
+                        <span className="text-[11px] font-black text-[#2563eb]">آماده‌سازی و ارسال</span>
                       </div>
-                      <span className="text-[11px] font-black text-[#2563eb]">آماده‌سازی</span>
-                    </div>
 
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
-                        <Truck className="w-5 h-5" />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          liveOrders[0].shippingStatus === "delivered"
+                            ? "bg-emerald-600 text-white"
+                            : "bg-slate-100 text-slate-400"
+                        }`}>
+                          <Home className="w-5 h-5" />
+                        </div>
+                        <span className="text-[11px] font-medium text-slate-400">تحویل</span>
                       </div>
-                      <span className="text-[11px] font-medium text-slate-400">ارسال</span>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
-                        <Home className="w-5 h-5" />
-                      </div>
-                      <span className="text-[11px] font-medium text-slate-400">تحویل</span>
                     </div>
                   </div>
-                </div>
 
-                <div className="pt-3 border-t border-slate-100 flex justify-start">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("orders")}
-                    className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <span>مشاهده جزئیات کامل سفارش</span>
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
+                  <div className="pt-3 border-t border-slate-100 flex justify-start">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("orders")}
+                      className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <span>مشاهده جزئیات کامل سفارش</span>
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -663,97 +676,54 @@ export function UserPanelView() {
                   </button>
                 </div>
 
-                <div className="overflow-x-auto no-scrollbar">
-                  <table className="w-full text-xs text-right whitespace-nowrap">
-                    <thead>
-                      <tr className="text-slate-400 font-bold border-b border-slate-100">
-                        <th className="py-3 px-2 font-medium">شماره سفارش</th>
-                        <th className="py-3 px-2 font-medium">تاریخ</th>
-                        <th className="py-3 px-2 font-medium">مبلغ (تومان)</th>
-                        <th className="py-3 px-2 font-medium">وضعیت</th>
-                        <th className="py-3 px-2 font-medium text-center">عملیات</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      <tr>
-                        <td className="py-3.5 px-2 font-bold text-slate-900" dir="ltr">#TK-89423</td>
-                        <td className="py-3.5 px-2 text-slate-600 font-medium">۱۴ فروردین ۱۴۰۳</td>
-                        <td className="py-3.5 px-2 font-bold text-slate-900">۳,۴۵۰,۰۰۰</td>
-                        <td className="py-3.5 px-2">
-                          <span className="inline-block bg-blue-50 text-[#2563eb] text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                            در حال پردازش
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-2 text-center">
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab("orders")}
-                            className="font-bold text-[#2563eb] hover:underline cursor-pointer"
-                          >
-                            مشاهده جزئیات
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-2 font-bold text-slate-900" dir="ltr">#TK-88102</td>
-                        <td className="py-3.5 px-2 text-slate-600 font-medium">۲ فروردین ۱۴۰۳</td>
-                        <td className="py-3.5 px-2 font-bold text-slate-900">۸۹۰,۰۰۰</td>
-                        <td className="py-3.5 px-2">
-                          <span className="inline-block bg-emerald-50 text-emerald-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                            تحویل شده
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-2 text-center">
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab("orders")}
-                            className="font-bold text-[#2563eb] hover:underline cursor-pointer"
-                          >
-                            مشاهده جزئیات
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-2 font-bold text-slate-900" dir="ltr">#TK-87541</td>
-                        <td className="py-3.5 px-2 text-slate-600 font-medium">۲۸ اسفند ۱۴۰۲</td>
-                        <td className="py-3.5 px-2 font-bold text-slate-900">۱۲,۲۰۰,۰۰۰</td>
-                        <td className="py-3.5 px-2">
-                          <span className="inline-block bg-rose-50 text-rose-600 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                            لغو شده
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-2 text-center">
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab("orders")}
-                            className="font-bold text-[#2563eb] hover:underline cursor-pointer"
-                          >
-                            مشاهده جزئیات
-                          </button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-2 font-bold text-slate-900" dir="ltr">#TK-86930</td>
-                        <td className="py-3.5 px-2 text-slate-600 font-medium">۱۵ اسفند ۱۴۰۲</td>
-                        <td className="py-3.5 px-2 font-bold text-slate-900">۱,۴۵۰,۰۰۰</td>
-                        <td className="py-3.5 px-2">
-                          <span className="inline-block bg-indigo-50 text-indigo-600 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
-                            ارسال شده
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-2 text-center">
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab("orders")}
-                            className="font-bold text-[#2563eb] hover:underline cursor-pointer"
-                          >
-                            مشاهده جزئیات
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                {liveOrders.length === 0 ? (
+                  <div className="py-8 text-center text-xs text-slate-400">
+                    شما تاکنون سفارشی ثبت نکرده‌اید.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto no-scrollbar">
+                    <table className="w-full text-xs text-right whitespace-nowrap">
+                      <thead>
+                        <tr className="text-slate-400 font-bold border-b border-slate-100">
+                          <th className="py-3 px-2 font-medium">شماره سفارش</th>
+                          <th className="py-3 px-2 font-medium">تاریخ</th>
+                          <th className="py-3 px-2 font-medium">مبلغ (تومان)</th>
+                          <th className="py-3 px-2 font-medium">وضعیت</th>
+                          <th className="py-3 px-2 font-medium text-center">عملیات</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {liveOrders.slice(0, 4).map((ord) => (
+                          <tr key={ord.id}>
+                            <td className="py-3.5 px-2 font-bold text-slate-900 font-mono" dir="ltr">
+                              #{ord.trackingCode}
+                            </td>
+                            <td className="py-3.5 px-2 text-slate-600 font-medium">
+                              {ord.date || new Intl.DateTimeFormat("fa-IR").format(new Date(ord.createdAt))}
+                            </td>
+                            <td className="py-3.5 px-2 font-bold text-slate-900">
+                              {formatPrice(ord.finalAmount || ord.amount)}
+                            </td>
+                            <td className="py-3.5 px-2">
+                              <span className="inline-block bg-blue-50 text-[#2563eb] text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                                {ord.statusFa || ord.paymentStatusFa || ord.paymentStatus}
+                              </span>
+                            </td>
+                            <td className="py-3.5 px-2 text-center">
+                              <button
+                                type="button"
+                                onClick={() => setActiveTab("orders")}
+                                className="font-bold text-[#2563eb] hover:underline cursor-pointer"
+                              >
+                                مشاهده جزئیات
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
