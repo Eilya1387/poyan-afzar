@@ -30,8 +30,8 @@ export function BestSellers() {
     let mounted = true;
     async function loadBestSellers() {
       try {
-        const res = await fetchProducts({ limit: 20, sort: "best-seller" });
-        if (mounted && res.items.length > 0) {
+        const res = await fetchProducts({ limit: 20, sort: "best-seller", onlyInStock: true });
+        if (mounted) {
           setItemsList(res.items);
         }
       } catch (err) {
@@ -126,79 +126,99 @@ export function BestSellers() {
         </div>
       </div>
 
-      <div className="flex md:grid md:grid-cols-4 gap-3 md:gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
-        {filteredProducts.map((product) => (
-          <Link
-            key={product.id}
-            href={`/products/${product.id}`}
-            className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl border border-slate-200 p-2.5 sm:p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group cursor-pointer"
-          >
-            <div>
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 sm:mb-3 border border-slate-100 flex items-center justify-center p-0">
-                <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-10 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
-                  {product.discount}
-                </span>
-
-                <div className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1">
-                  <button
-                    type="button"
-                    onClick={(e) => handleToggleFavorite(e, product)}
-                    aria-label="افزودن به علاقه‌مندی‌ها"
-                    className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors cursor-pointer"
-                  >
-                    <Heart
-                      className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
-                        isFavorite(product.id) ? "fill-red-500 text-red-500" : ""
-                      }`}
-                    />
-                  </button>
-                </div>
-
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              </div>
-
-              <div className="text-[10px] sm:text-[11px] mb-1 font-medium text-slate-500 truncate">
-                {product.brand}
-              </div>
-
-              <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] transition-colors">
-                {product.title}
-              </h3>
-            </div>
-
-            <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
-              <div className="flex items-center justify-between max-sm:justify-center gap-1 sm:gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  type="button"
-                  onClick={(e) => handleAddToCart(e, product)}
-                  className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0 max-sm:hidden"
-                >
-                  {addedId === product.id ? (
-                    <Check className="w-3.5 h-3.5" />
-                  ) : (
-                    <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+      {itemsList.length === 0 ? (
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
+            <Plus className="w-6 h-6" />
+          </div>
+          <h3 className="text-sm sm:text-base font-black text-slate-800">
+            در حال حاضر محصولی در این بخش ثبت نشده است
+          </h3>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            محصولات به زودی توسط مدیریت فروشگاه اضافه و در دسترس قرار خواهند گرفت.
+          </p>
+        </div>
+      ) : filteredProducts.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center text-xs text-slate-500">
+          محصولی در این دسته‌بندی یافت نشد.
+        </div>
+      ) : (
+        <div className="flex md:grid md:grid-cols-4 gap-3 md:gap-4 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
+          {filteredProducts.map((product) => (
+            <Link
+              key={product.id}
+              href={`/products/${product.id}`}
+              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl border border-slate-200 p-2.5 sm:p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group cursor-pointer"
+            >
+              <div>
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 sm:mb-3 border border-slate-100 flex items-center justify-center p-0">
+                  {product.discount && (
+                    <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-10 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
+                      {product.discount}
+                    </span>
                   )}
-                  <span>{addedId === product.id ? "افزوده شد" : "خرید"}</span>
-                </Button>
 
-                <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] truncate">
-                  <span>{product.price}</span>
-                  <span className="text-[9px] sm:text-[10px] font-medium text-slate-600">
-                    تومان
-                  </span>
+                  <div className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1">
+                    <button
+                      type="button"
+                      onClick={(e) => handleToggleFavorite(e, product)}
+                      aria-label="افزودن به علاقه‌مندی‌ها"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors cursor-pointer"
+                    >
+                      <Heart
+                        className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
+                          isFavorite(product.id) ? "fill-red-500 text-red-500" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="text-[10px] sm:text-[11px] mb-1 font-medium text-slate-500 truncate">
+                  {product.brand}
+                </div>
+
+                <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] transition-colors">
+                  {product.title}
+                </h3>
+              </div>
+
+              <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between max-sm:justify-center gap-1 sm:gap-2">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    type="button"
+                    onClick={(e) => handleAddToCart(e, product)}
+                    className="rounded-lg sm:rounded-xl px-2 sm:px-4 py-1 text-xs font-bold gap-1 cursor-pointer shadow-xs hover:shadow-md shrink-0 max-sm:hidden"
+                  >
+                    {addedId === product.id ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    )}
+                    <span>{addedId === product.id ? "افزوده شد" : "خرید"}</span>
+                  </Button>
+
+                  <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] truncate">
+                    <span>{product.price}</span>
+                    <span className="text-[9px] sm:text-[10px] font-medium text-slate-600">
+                      تومان
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

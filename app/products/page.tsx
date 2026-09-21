@@ -36,6 +36,7 @@ function ProductsContent() {
         const res = await fetchProducts({
           search: searchQuery.trim() || undefined,
           category: initialCategory || undefined,
+          onlyInStock: true,
         });
         if (isMounted) {
           setProductsList(res.items);
@@ -132,9 +133,16 @@ function ProductsContent() {
             <span className="text-sm font-medium">در حال دریافت جدیدترین لیست محصولات از سرور...</span>
           </div>
         ) : displayedProducts.length === 0 ? (
-          <div className="py-20 text-center text-slate-400 space-y-2">
-            <p className="text-sm font-bold">محصولی مطابق با جستجوی شما یافت نشد.</p>
-            <p className="text-xs">عبارت دیگری را جستجو کنید یا فیلترها را حذف نمایید.</p>
+          <div className="bg-white rounded-3xl border border-slate-200/90 py-16 px-6 text-center text-slate-500 space-y-3">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
+              <Loader2 className="w-7 h-7" />
+            </div>
+            <p className="text-base font-black text-slate-800">
+              {searchQuery ? "محصولی مطابق با جستجوی شما یافت نشد." : "در حال حاضر هیچ محصولی در فروشگاه ثبت نشده است."}
+            </p>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+              {searchQuery ? "عبارت دیگری را جستجو کنید یا فیلترها را حذف نمایید." : "محصولات پس از ثبت در پنل مدیریت در این بخش نمایش داده خواهند شد."}
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">

@@ -94,6 +94,21 @@ export function FlashSale() {
       .join("");
   };
 
+  if (!loading && deals.length === 0) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <section id="flash-sale" className="py-4 scroll-mt-24">
+        <div className="bg-[#0b1528] rounded-3xl p-6 sm:p-8 text-white flex items-center justify-center gap-3">
+          <Loader2 className="w-5 h-5 animate-spin text-[#38bdf8]" />
+          <span className="text-xs text-slate-300">در حال دریافت پیشنهادات شگفت‌انگیز...</span>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="flash-sale" className="py-4 scroll-mt-24">
       <div className="bg-[#0b1528] rounded-3xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden shadow-xl">

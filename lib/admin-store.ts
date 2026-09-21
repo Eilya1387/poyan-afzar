@@ -112,7 +112,12 @@ interface AdminState {
   addOrder: (order: Omit<AdminOrder, "id" | "date" | "createdAt">) => AdminOrder;
   updateOrderStatus: (
     id: string,
-    status: { paymentStatus?: PaymentStatus; shippingStatus?: ShippingStatus; notes?: string }
+    status: {
+      paymentStatus?: PaymentStatus;
+      shippingStatus?: ShippingStatus;
+      notes?: string;
+      trackingCode?: string;
+    }
   ) => void;
   deleteOrder: (id: string) => void;
 
@@ -265,7 +270,10 @@ export const useAdminStore = create<AdminState>()(
 
       // Product Actions
       addProduct: (productData) => {
-        const id = `prod-${Date.now().toString(36)}`;
+        const slug = productData.enTitle
+          ? productData.enTitle.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+          : `prod-${Date.now().toString(36)}`;
+        const id = slug || `prod-${Date.now().toString(36)}`;
         const now = new Intl.DateTimeFormat("fa-IR").format(new Date());
         const newProduct: AdminProduct = {
           ...productData,
@@ -282,6 +290,39 @@ export const useAdminStore = create<AdminState>()(
               : c
           ),
         }));
+
+        const dto = {
+          id,
+          title: productData.title,
+          enTitle: productData.enTitle || productData.title,
+          code: `TK-${Math.floor(100000 + Math.random() * 900000)}`,
+          categorySlug: productData.category,
+          brandSlug: productData.brand,
+          price: Number(productData.price),
+          originalPrice: Number(productData.originalPrice || productData.price),
+          stock: Number(productData.stock || 0),
+          minStockThreshold: Number(productData.minStockThreshold || 3),
+          inStock: Number(productData.stock || 0) > 0,
+          stockText: Number(productData.stock || 0) > 0 ? "موجود در انبار پویان افزار" : "ناموجود",
+          seller: productData.seller || "پویان افزار",
+          guarantee: productData.warranty || "گارانتی ۱۸ ماهه شرکتی + ضمانت اصالت کالا",
+          image: productData.image,
+          images: [productData.image],
+          description: productData.description || "",
+          introTitle: productData.title,
+          introDesc: productData.description || "",
+          specs: productData.specs || [],
+          technicalSpecs: productData.specs || [],
+          colors: [{ name: "مشکی", hex: "#000000" }],
+          badges: productData.badge?.text ? [productData.badge.text] : ["ضمانت اصالت"],
+        };
+
+        productsApi.createProduct(dto).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating product on backend:", err);
+        });
+
         return newProduct;
       },
 
@@ -298,12 +339,24 @@ export const useAdminStore = create<AdminState>()(
             return p;
           }),
         }));
+
+        productsApi.updateProduct(id, updates).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating product on backend:", err);
+        });
       },
 
       deleteProduct: (id) => {
         set((state) => ({
           products: state.products.filter((p) => p.id !== id),
         }));
+
+        productsApi.deleteProduct(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting product on backend:", err);
+        });
       },
 
       updateStock: (id, newStock) => {
@@ -313,6 +366,12 @@ export const useAdminStore = create<AdminState>()(
             p.id === id ? { ...p, stock: stockVal, inStock: stockVal > 0 } : p
           ),
         }));
+
+        adminApi.updateStock(id, { stock: stockVal }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating stock on backend:", err);
+        });
       },
 
       quickAdjustStock: (id, delta) => {
@@ -325,11 +384,18 @@ export const useAdminStore = create<AdminState>()(
             return p;
           }),
         }));
+
+        adminApi.updateStock(id, { delta }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error adjusting stock on backend:", err);
+        });
       },
 
       // Category Actions
       addCategory: (categoryData) => {
-        const id = categoryData.nameEn.toLowerCase().replace(/\s+/g, "-") || `cat-${Date.now().toString(36)}`;
+        const slug = categoryData.nameEn?.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const id = slug || `cat-${Date.now().toString(36)}`;
         const newCategory: AdminCategory = {
           ...categoryData,
           id,
@@ -338,6 +404,18 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           categories: [...state.categories, newCategory],
         }));
+
+        categoriesApi.createCategory({
+          id,
+          name: categoryData.name,
+          nameEn: categoryData.nameEn,
+          description: categoryData.description,
+          icon: categoryData.icon,
+        }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating category on backend:", err);
+        });
       },
 
       updateCategory: (id, updates) => {
@@ -346,17 +424,30 @@ export const useAdminStore = create<AdminState>()(
             c.id === id ? { ...c, ...updates } : c
           ),
         }));
+
+        categoriesApi.updateCategory(id, updates).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating category on backend:", err);
+        });
       },
 
       deleteCategory: (id) => {
         set((state) => ({
           categories: state.categories.filter((c) => c.id !== id),
         }));
+
+        categoriesApi.deleteCategory(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting category on backend:", err);
+        });
       },
 
       // Brand Actions
       addBrand: (brandData) => {
-        const id = brandData.name.toLowerCase().replace(/\s+/g, "-") || `brand-${Date.now().toString(36)}`;
+        const slug = brandData.name?.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const id = slug || `brand-${Date.now().toString(36)}`;
         const newBrand: AdminBrand = {
           ...brandData,
           id,
@@ -365,6 +456,19 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           brands: [...state.brands, newBrand],
         }));
+
+        brandsApi.createBrand({
+          id,
+          name: brandData.name,
+          nameFa: brandData.nameFa,
+          logo: brandData.logo || "/brands/asus.svg",
+          country: brandData.country || "نامشخص",
+          description: brandData.description,
+        }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating brand on backend:", err);
+        });
       },
 
       updateBrand: (id, updates) => {
@@ -373,12 +477,24 @@ export const useAdminStore = create<AdminState>()(
             b.id === id ? { ...b, ...updates } : b
           ),
         }));
+
+        brandsApi.updateBrand(id, updates).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating brand on backend:", err);
+        });
       },
 
       deleteBrand: (id) => {
         set((state) => ({
           brands: state.brands.filter((b) => b.id !== id),
         }));
+
+        brandsApi.deleteBrand(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting brand on backend:", err);
+        });
       },
 
       // Order Actions
@@ -400,7 +516,7 @@ export const useAdminStore = create<AdminState>()(
         return newOrder;
       },
 
-      updateOrderStatus: (id, { paymentStatus, shippingStatus, notes }) => {
+      updateOrderStatus: (id, { paymentStatus, shippingStatus, notes, trackingCode }) => {
         set((state) => ({
           orders: state.orders.map((o) => {
             if (o.id === id) {
@@ -409,17 +525,30 @@ export const useAdminStore = create<AdminState>()(
                 ...(paymentStatus ? { paymentStatus } : {}),
                 ...(shippingStatus ? { shippingStatus } : {}),
                 ...(notes !== undefined ? { notes } : {}),
+                ...(trackingCode ? { trackingCode } : {}),
               };
             }
             return o;
           }),
         }));
+
+        adminApi.updateOrderStatus(id, { paymentStatus, shippingStatus, notes, trackingCode }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating order status on backend:", err);
+        });
       },
 
       deleteOrder: (id) => {
         set((state) => ({
           orders: state.orders.filter((o) => o.id !== id),
         }));
+
+        adminApi.deleteOrder(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting order on backend:", err);
+        });
       },
 
       // Customer Actions
@@ -436,6 +565,20 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           customers: [newCustomer, ...state.customers],
         }));
+
+        adminApi.createCustomer({
+          firstName: customerData.firstName,
+          lastName: customerData.lastName,
+          phone: customerData.phone,
+          email: customerData.email,
+          city: customerData.city || "تهران",
+          address: customerData.address,
+          status: customerData.status === "blocked" ? "BLOCKED" : "ACTIVE",
+        }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating customer on backend:", err);
+        });
       },
 
       updateCustomer: (id, updates) => {
@@ -447,13 +590,21 @@ export const useAdminStore = create<AdminState>()(
       },
 
       toggleCustomerStatus: (id) => {
+        const cust = get().customers.find((c) => c.id === id);
+        const newIsActive = cust?.status !== "active";
         set((state) => ({
           customers: state.customers.map((c) =>
             c.id === id
-              ? { ...c, status: c.status === "active" ? "blocked" : "active" }
+              ? { ...c, status: newIsActive ? "active" : "blocked" }
               : c
           ),
         }));
+
+        adminApi.updateCustomerStatus(id, newIsActive).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error toggling customer status on backend:", err);
+        });
       },
 
       // Discount Actions
@@ -467,6 +618,20 @@ export const useAdminStore = create<AdminState>()(
         set((state) => ({
           discounts: [newDiscount, ...state.discounts],
         }));
+
+        adminApi.createDiscount({
+          title: discountData.title,
+          code: discountData.code,
+          type: discountData.type === "fixed" ? "FIXED" : "PERCENTAGE",
+          percent: discountData.percent || 0,
+          amount: discountData.amount || 0,
+          productId: discountData.productId !== "all" ? discountData.productId : undefined,
+          isActive: discountData.isActive ?? true,
+        }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating discount on backend:", err);
+        });
       },
 
       updateDiscount: (id, updates) => {
@@ -475,6 +640,12 @@ export const useAdminStore = create<AdminState>()(
             d.id === id ? { ...d, ...updates } : d
           ),
         }));
+
+        adminApi.updateDiscount(id, updates).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error updating discount on backend:", err);
+        });
       },
 
       toggleDiscount: (id) => {
@@ -483,12 +654,24 @@ export const useAdminStore = create<AdminState>()(
             d.id === id ? { ...d, isActive: !d.isActive } : d
           ),
         }));
+
+        adminApi.toggleDiscount(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error toggling discount on backend:", err);
+        });
       },
 
       deleteDiscount: (id) => {
         set((state) => ({
           discounts: state.discounts.filter((d) => d.id !== id),
         }));
+
+        adminApi.deleteDiscount(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting discount on backend:", err);
+        });
       },
 
       applyDiscountToProduct: (productId, config) => {
@@ -509,12 +692,7 @@ export const useAdminStore = create<AdminState>()(
           finalPrice = originalPrice - amount;
         }
 
-        // 1. Create or update in discounts table
         const discountId = `dsc-prod-${productId}`;
-        const existingDiscountIndex = get().discounts.findIndex(
-          (d) => d.id === discountId || d.productId === productId
-        );
-
         const discountItem: AdminDiscount = {
           id: discountId,
           title: config.title || `تخفیف ویژه ${product.title}`,
@@ -532,13 +710,15 @@ export const useAdminStore = create<AdminState>()(
         };
 
         let updatedDiscounts = [...get().discounts];
+        const existingDiscountIndex = get().discounts.findIndex(
+          (d) => d.id === discountId || d.productId === productId
+        );
         if (existingDiscountIndex >= 0) {
           updatedDiscounts[existingDiscountIndex] = discountItem;
         } else {
           updatedDiscounts = [discountItem, ...updatedDiscounts];
         }
 
-        // 2. Update product price and badge
         const updatedProducts = get().products.map((p) => {
           if (p.id === productId) {
             return {
@@ -558,6 +738,19 @@ export const useAdminStore = create<AdminState>()(
           discounts: updatedDiscounts,
           products: updatedProducts,
         });
+
+        adminApi.createDiscount({
+          title: discountItem.title,
+          type: config.type === "fixed" ? "FIXED" : "PERCENTAGE",
+          percent: percent || 0,
+          amount: amount || 0,
+          productId: productId,
+          isActive: true,
+        }).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error creating product discount on backend:", err);
+        });
       },
 
       // Review Actions
@@ -567,6 +760,12 @@ export const useAdminStore = create<AdminState>()(
             r.id === id ? { ...r, status: "approved" } : r
           ),
         }));
+
+        adminApi.approveReview(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error approving review on backend:", err);
+        });
       },
 
       rejectReview: (id) => {
@@ -575,12 +774,24 @@ export const useAdminStore = create<AdminState>()(
             r.id === id ? { ...r, status: "rejected" } : r
           ),
         }));
+
+        adminApi.rejectReview(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error rejecting review on backend:", err);
+        });
       },
 
       deleteReview: (id) => {
         set((state) => ({
           reviews: state.reviews.filter((r) => r.id !== id),
         }));
+
+        adminApi.deleteReview(id).then(() => {
+          get().fetchAdminData();
+        }).catch((err) => {
+          console.error("Error deleting review on backend:", err);
+        });
       },
 
       resetToDefaults: () => {
