@@ -10,12 +10,17 @@ import { useCartStore, useFavoritesStore } from "@/lib/store";
 import { useAuth } from "@/components/auth/auth-context";
 import { userApi } from "@/lib/api/user";
 
-const tabs = ["همه", "موبایل", "لپ‌تاپ"];
+const tabs = [
+  { id: "all", label: "همه" },
+  { id: "mobile", label: "موبایل" },
+  { id: "laptop", label: "لپ‌تاپ" },
+  { id: "gpu", label: "کارت گرافیک" },
+];
 
 export function BestSellers() {
   const router = useRouter();
   const { isLoggedIn } = useAuth();
-  const [activeTab, setActiveTab] = useState("همه");
+  const [activeTab, setActiveTab] = useState("all");
   const [itemsList, setItemsList] = useState<Product[]>([]);
   const addItem = useCartStore((state) => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
@@ -25,7 +30,7 @@ export function BestSellers() {
     let mounted = true;
     async function loadBestSellers() {
       try {
-        const res = await fetchProducts({ limit: 12, sort: "best_seller" });
+        const res = await fetchProducts({ limit: 20, sort: "best-seller" });
         if (mounted && res.items.length > 0) {
           setItemsList(res.items);
         }
@@ -40,9 +45,14 @@ export function BestSellers() {
   }, []);
 
   const filteredProducts =
-    activeTab === "همه"
+    activeTab === "all"
       ? itemsList.slice(0, 8)
-      : itemsList.filter((p) => p.category === activeTab || p.categorySlug === activeTab);
+      : itemsList.filter(
+          (p) =>
+            p.category === activeTab ||
+            p.categorySlug === activeTab ||
+            p.categoryName?.toLowerCase().includes(activeTab)
+        ).slice(0, 8);
 
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
@@ -102,15 +112,15 @@ export function BestSellers() {
         <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
           {tabs.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === tab
+                activeTab === tab.id
                   ? "bg-white text-slate-900 shadow-xs"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              {tab}
+              {tab.label}
             </button>
           ))}
         </div>

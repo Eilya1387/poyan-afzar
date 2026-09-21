@@ -1,16 +1,19 @@
 import { api } from "./client";
-import { Product } from "@/lib/products";
+import { Product, fetchProducts, normalizeProduct } from "@/lib/products";
 
 export interface GetProductsParams {
   page?: number;
   limit?: number;
   search?: string;
+  q?: string;
   category?: string;
   brand?: string;
   minPrice?: number;
   maxPrice?: number;
   inStock?: boolean;
-  sort?: "newest" | "price_asc" | "price_desc" | "popular" | "best_seller" | "discount" | string;
+  onlyInStock?: boolean;
+  minRating?: number;
+  sort?: "newest" | "cheapest" | "expensive" | "best-seller" | "discount" | string;
 }
 
 export interface ProductReviewItem {
@@ -38,18 +41,7 @@ export interface ProductQaItem {
 export const productsApi = {
   // Get all / search / filter products
   getProducts: async (params?: GetProductsParams): Promise<{ items: Product[]; total: number }> => {
-    const res = await api.get<any>("/api/products", {
-      params: params as Record<string, any>,
-      skipAuth: true,
-    });
-    // Backend returns data as array or { items, total }
-    if (Array.isArray(res.data)) {
-      return { items: res.data, total: res.meta?.total || res.data.length };
-    }
-    if (res.data?.items) {
-      return { items: res.data.items, total: res.data.total || res.data.items.length };
-    }
-    return { items: [], total: 0 };
+    return fetchProducts(params);
   },
 
   // Get single product by id or slug
@@ -57,7 +49,7 @@ export const productsApi = {
     const res = await api.get<Product>(`/api/products/${encodeURIComponent(id)}`, {
       skipAuth: true,
     });
-    return res.data;
+    return normalizeProduct(res.data);
   },
 
   // Get flash deals
@@ -65,7 +57,7 @@ export const productsApi = {
     const res = await api.get<Product[]>("/api/products/flash-deals", {
       skipAuth: true,
     });
-    return Array.isArray(res.data) ? res.data : [];
+    return Array.isArray(res.data) ? res.data.map(normalizeProduct) : [];
   },
 
   // Get related products
@@ -73,7 +65,7 @@ export const productsApi = {
     const res = await api.get<Product[]>(`/api/products/${encodeURIComponent(id)}/related`, {
       skipAuth: true,
     });
-    return Array.isArray(res.data) ? res.data : [];
+    return Array.isArray(res.data) ? res.data.map(normalizeProduct) : [];
   },
 
   // Admin create product

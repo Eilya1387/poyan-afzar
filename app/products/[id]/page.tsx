@@ -4,17 +4,21 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ProductDetailView } from "@/components/product/product-detail-view";
-import { getAllProducts, fetchProductById } from "@/lib/products";
+import { fetchProducts, fetchProductById } from "@/lib/products";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
-  const allProducts = getAllProducts();
-  return allProducts.map((p) => ({
-    id: p.id,
-  }));
+  try {
+    const res = await fetchProducts({ limit: 100 });
+    return res.items.map((p) => ({
+      id: p.id,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
