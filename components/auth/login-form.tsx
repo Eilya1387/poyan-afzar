@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Smartphone, ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "./auth-context";
+import { authApi } from "@/lib/auth/better-auth";
+import { userApi } from "@/lib/api/user";
 
 type Step = "phone" | "otp" | "name";
 
@@ -24,6 +26,7 @@ export function LoginForm() {
   const [lastName, setLastName] = useState("");
   const [nameError, setNameError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [devCodeHint, setDevCodeHint] = useState<string | null>(null);
 
   const otpInputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -44,7 +47,7 @@ export function LoginForm() {
     return n.toString().replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const handlePhoneSubmit = (e: React.FormEvent) => {
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanPhone = phone.trim().replace(/[۰-۹]/g, (d) =>
       String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))
@@ -58,15 +61,22 @@ export function LoginForm() {
     setPhoneError("");
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const res = await authApi.sendOtp(cleanPhone);
+      if (res?.devCode) {
+        setDevCodeHint(res.devCode);
+      }
       setIsLoading(false);
       setStep("otp");
-      setTimer(120);
+      setTimer(res?.expiresInSeconds || 120);
       setCanResend(false);
       setTimeout(() => {
         otpInputsRef.current[0]?.focus();
       }, 100);
-    }, 400);
+    } catch (err: any) {
+      setIsLoading(false);
+      setPhoneError(err?.message || "خطا در ارسال کد تایید. لطفاً دوباره تلاش کنید.");
+    }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -92,7 +102,7 @@ export function LoginForm() {
     }
   };
 
-  const handleOtpSubmit = (e: React.FormEvent) => {
+  const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const enteredOtp = otp.join("");
 
@@ -102,22 +112,64 @@ export function LoginForm() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep("name");
-    }, 400);
-  };
-
-  const handleResendOtp = () => {
-    if (!canResend) return;
-    setTimer(120);
-    setCanResend(false);
-    setOtp(["", "", "", ""]);
     setOtpError("");
-    otpInputsRef.current[0]?.focus();
+
+    try {
+      const cleanPhone = phone.trim().replace(/[۰-۹]/g, (d) =>
+        String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+      );
+      const res = await authApi.verifyOtp({
+        phone: cleanPhone,
+        code: enteredOtp,
+      });
+
+      const user = res.user;
+      if (!user.firstName && !user.lastName) {
+        setIsLoading(false);
+        setStep("name");
+      } else {
+        login(
+          {
+            id: user.id,
+            firstName: user.firstName || "",
+            lastName: user.lastName || "",
+            name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+            phone: user.phone || cleanPhone,
+            role: user.role,
+            email: user.email,
+            walletBalance: user.walletBalance,
+          },
+          res.accessToken,
+          res.refreshToken
+        );
+        setIsLoading(false);
+        router.push("/");
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      setOtpError(err?.message || "کد تأیید نامعتبر یا منقضی شده است");
+    }
   };
 
-  const handleNameSubmit = (e: React.FormEvent) => {
+  const handleResendOtp = async () => {
+    if (!canResend) return;
+    const cleanPhone = phone.trim().replace(/[۰-۹]/g, (d) =>
+      String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+    );
+    try {
+      const res = await authApi.sendOtp(cleanPhone);
+      if (res?.devCode) setDevCodeHint(res.devCode);
+      setTimer(res?.expiresInSeconds || 120);
+      setCanResend(false);
+      setOtp(["", "", "", ""]);
+      setOtpError("");
+      otpInputsRef.current[0]?.focus();
+    } catch (err: any) {
+      setOtpError(err?.message || "خطا در ارسال مجدد کد");
+    }
+  };
+
+  const handleNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firstName.trim() || !lastName.trim()) {
       setNameError("لطفاً نام و نام خانوادگی خود را کامل وارد کنید");
@@ -125,7 +177,30 @@ export function LoginForm() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    setNameError("");
+
+    try {
+      const cleanPhone = phone.trim().replace(/[۰-۹]/g, (d) =>
+        String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+      );
+      const updated = await userApi.updateProfile({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+      });
+
+      login({
+        id: updated.id,
+        firstName: updated.firstName || firstName.trim(),
+        lastName: updated.lastName || lastName.trim(),
+        name: `${firstName.trim()} ${lastName.trim()}`,
+        phone: updated.phone || cleanPhone,
+        email: updated.email,
+      });
+
+      setIsLoading(false);
+      router.push("/");
+    } catch {
+      // If updateProfile had issue, still complete local login
       login({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
@@ -133,7 +208,7 @@ export function LoginForm() {
       });
       setIsLoading(false);
       router.push("/");
-    }, 400);
+    }
   };
 
   const formatTimer = () => {
@@ -245,6 +320,18 @@ export function LoginForm() {
 
         {step === "otp" && (
           <form onSubmit={handleOtpSubmit} className="space-y-6">
+            {devCodeHint && (
+              <div
+                onClick={() => {
+                  const digits = devCodeHint.split("").slice(0, 4);
+                  setOtp([digits[0] || "", digits[1] || "", digits[2] || "", digits[3] || ""]);
+                  setOtpError("");
+                }}
+                className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs text-center cursor-pointer hover:bg-blue-100 transition-colors"
+              >
+                کد ارسالی سرور: <span className="font-mono font-bold text-sm tracking-wider">{devCodeHint}</span> (برای درج کلیک کنید)
+              </div>
+            )}
             <div className="flex justify-center gap-3" dir="ltr">
               {otp.map((digit, idx) => (
                 <input

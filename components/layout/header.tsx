@@ -32,6 +32,7 @@ export interface HeaderProps {
 const navLinks = [
   { name: "خانه", href: "/" },
   { name: "محصولات", href: "/products" },
+  { name: "پیگیری سفارش", href: "/track" },
   { name: "درباره ما", href: "/about" },
   { name: "تماس با ما", href: "/contact" },
 ];

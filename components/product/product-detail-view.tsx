@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Product, getRelatedProducts } from "@/lib/products";
+import { Product, getRelatedProducts, fetchRelatedProducts } from "@/lib/products";
 import { ProductGallery } from "./product-gallery";
 import { ProductInfo } from "./product-info";
 import { BuyBox } from "./buy-box";
 import { ProductTabs } from "./product-tabs";
 import { ProductIntro } from "./product-intro";
 import { ProductSpecs } from "./product-specs";
+import { ProductReviews } from "./product-reviews";
+import { ProductQA } from "./product-qa";
 import { RelatedProducts } from "./related-products";
 
 interface ProductDetailViewProps {
@@ -16,7 +18,25 @@ interface ProductDetailViewProps {
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
   const [activeTab, setActiveTab] = useState("intro");
-  const relatedProducts = getRelatedProducts(product);
+  const [relatedList, setRelatedList] = useState<Product[]>(getRelatedProducts(product));
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadRelated() {
+      try {
+        const res = await fetchRelatedProducts(product.id);
+        if (mounted && res.length > 0) {
+          setRelatedList(res);
+        }
+      } catch (e) {
+        console.error("Failed to load related products:", e);
+      }
+    }
+    loadRelated();
+    return () => {
+      mounted = false;
+    };
+  }, [product.id]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
@@ -30,7 +50,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["intro", "specs"];
+      const sections = ["intro", "specs", "reviews", "qa"];
       const scrollPosition = window.scrollY + 200;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -97,10 +117,20 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
           />
 
           <ProductSpecs specs={product.technicalSpecs} />
+
+          <ProductReviews
+            productId={product.id}
+            rating={product.rating}
+            reviewsCount={product.reviewsCount}
+            distribution={product.ratingDistribution || []}
+            reviews={product.reviews || []}
+          />
+
+          <ProductQA productId={product.id} />
         </div>
       </div>
 
-      <RelatedProducts products={relatedProducts} />
+      <RelatedProducts products={relatedList} />
     </div>
   );
 }

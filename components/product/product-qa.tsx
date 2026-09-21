@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import { HelpCircle, ChevronDown, MessageSquarePlus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { HelpCircle, ChevronDown, MessageSquarePlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { productsApi } from "@/lib/api/products";
+import { useAuth } from "@/components/auth/auth-context";
 
 interface QAItem {
-  id: number;
+  id: number | string;
   question: string;
-  answer: string;
-  author: string;
+  answer?: string | null;
+  author?: string;
 }
 
 const defaultQA: QAItem[] = [
@@ -32,19 +34,64 @@ const defaultQA: QAItem[] = [
   }
 ];
 
-export function ProductQA() {
-  const [openId, setOpenId] = useState<number | null>(1);
+export function ProductQA({ productId }: { productId?: string }) {
+  const { user } = useAuth();
+  const [qaList, setQaList] = useState<QAItem[]>(defaultQA);
+  const [openId, setOpenId] = useState<number | string | null>(1);
   const [questionText, setQuestionText] = useState("");
+  const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!productId) return;
+    const currentProductId: string = productId;
+    let isMounted = true;
+    async function loadQa() {
+      try {
+        const list = await productsApi.getQa(currentProductId);
+        if (isMounted && list && list.length > 0) {
+          setQaList(
+            list.map((q) => ({
+              id: q.id,
+              question: q.question,
+              answer: q.answer || "کارشناسان پویان افزار به زودی به این پرسش پاسخ خواهند داد.",
+              author: q.author || "کارشناس فنی پویان افزار",
+            }))
+          );
+          if (list[0]) setOpenId(list[0].id);
+        }
+      } catch (err) {
+        console.error("Failed to load QA:", err);
+      }
+    }
+    loadQa();
+    return () => {
+      isMounted = false;
+    };
+  }, [productId]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (questionText.trim()) {
+    if (!questionText.trim()) return;
+
+    setLoading(true);
+    try {
+      if (productId) {
+        const authorName = user ? `${user.firstName} ${user.lastName}` : undefined;
+        await productsApi.createQa(productId, {
+          question: questionText.trim(),
+          userName: authorName,
+        });
+      }
       setSent(true);
+      setQuestionText("");
       setTimeout(() => {
         setSent(false);
-        setQuestionText("");
-      }, 2000);
+      }, 3000);
+    } catch (err) {
+      console.error("Failed to submit QA:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +109,7 @@ export function ProductQA() {
       </div>
 
       <div className="space-y-3">
-        {defaultQA.map((item) => {
+        {qaList.map((item) => {
           const isOpen = openId === item.id;
           return (
             <div
@@ -90,9 +137,11 @@ export function ProductQA() {
               {isOpen && (
                 <div className="p-4 bg-white border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed space-y-2">
                   <p>{item.answer}</p>
-                  <div className="text-[11px] text-[#2563eb] font-bold text-left">
-                    — {item.author}
-                  </div>
+                  {item.author && (
+                    <div className="text-[11px] text-[#2563eb] font-bold text-left">
+                      — {item.author}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -117,10 +166,11 @@ export function ProductQA() {
             type="submit"
             variant="primary"
             size="md"
+            disabled={loading}
             className="text-xs font-bold shrink-0"
-            rightIcon={<MessageSquarePlus className="w-4 h-4" />}
+            rightIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquarePlus className="w-4 h-4" />}
           >
-            {sent ? "ثبت شد" : "ارسال پرسش"}
+            {sent ? "ثبت شد (در انتظار تایید)" : "ارسال پرسش"}
           </Button>
         </div>
       </form>

@@ -1,26 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, Star, Plus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products } from "@/lib/products";
+import { Product, products, fetchProducts } from "@/lib/products";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
 
 const tabs = ["همه", "موبایل", "لپ‌تاپ"];
 
 export function BestSellers() {
   const [activeTab, setActiveTab] = useState("همه");
+  const [itemsList, setItemsList] = useState<Product[]>(products);
   const addItem = useCartStore((state) => state.addItem);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const [addedId, setAddedId] = useState<string | null>(null);
 
+  useEffect(() => {
+    let mounted = true;
+    async function loadBestSellers() {
+      try {
+        const res = await fetchProducts({ limit: 12, sort: "best_seller" });
+        if (mounted && res.items.length > 0) {
+          setItemsList(res.items);
+        }
+      } catch (err) {
+        console.error("Failed to load best sellers:", err);
+      }
+    }
+    loadBestSellers();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const filteredProducts =
     activeTab === "همه"
-      ? products.slice(0, 8)
-      : products.filter((p) => p.category === activeTab);
+      ? itemsList.slice(0, 8)
+      : itemsList.filter((p) => p.category === activeTab);
 
-  const handleAddToCart = (e: React.MouseEvent, product: (typeof products)[0]) => {
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
     addItem({
@@ -36,14 +55,14 @@ export function BestSellers() {
     setTimeout(() => setAddedId(null), 1500);
   };
 
-  const handleToggleFavorite = (e: React.MouseEvent, product: (typeof products)[0]) => {
+  const handleToggleFavorite = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
     e.stopPropagation();
     toggleFavorite({
       id: product.id,
       title: product.title,
       price: product.priceNumber,
-      priceString: product.price,
+      priceString: String(product.price),
       image: product.image,
       brand: product.brand,
       rating: product.rating,

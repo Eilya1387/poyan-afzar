@@ -1,12 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-
-interface ProductTabsProps {
-  reviewsCount: number;
-  activeTab: string;
-  onTabChange: (tabId: string) => void;
-}
+import React from "react";
 
 export function ProductTabs({
   activeTab,
@@ -18,6 +12,8 @@ export function ProductTabs({
   const tabs = [
     { id: "intro", label: "معرفی محصول" },
     { id: "specs", label: "مشخصات فنی" },
+    { id: "reviews", label: "نظرات کاربران" },
+    { id: "qa", label: "پرسش و پاسخ" },
   ];
 
   return (

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ProductDetailView } from "@/components/product/product-detail-view";
-import { getAllProducts, getProductById } from "@/lib/products";
+import { getAllProducts, fetchProductById } from "@/lib/products";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -19,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await fetchProductById(id);
 
   if (!product) {
     return {
@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${product.title} | پویان افزار`,
-    description: product.introDesc,
+    description: product.introDesc || product.description,
   };
 }
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await fetchProductById(id);
 
   if (!product) {
     notFound();

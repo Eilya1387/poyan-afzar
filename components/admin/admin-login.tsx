@@ -15,23 +15,26 @@ export function AdminLogin() {
 
   const login = useAdminStore((state) => state.login);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    setTimeout(() => {
-      const result = login(username, password);
+    try {
+      const result = await login(username, password);
       if (!result.success) {
         setError(result.message || "اطلاعات ورود اشتباه است.");
-        setIsLoading(false);
       }
-    }, 350);
+    } catch (err: any) {
+      setError(err?.message || "خطا در اتصال به سرور احراز هویت");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleQuickFill = () => {
     setUsername("admin");
-    setPassword("admin");
+    setPassword("admin123");
     setError(null);
   };
 

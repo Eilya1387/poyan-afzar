@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAdminStore } from "@/lib/admin-store";
 import { formatPriceFa, toPersianDigits, getPersianFullDate, getPersianTodayDate } from "@/lib/formatters";
 import { AdminOrder, AdminReview } from "@/types/admin";
@@ -34,6 +34,11 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
   const salesChart = useAdminStore((state) => state.salesChart);
   const approveReview = useAdminStore((state) => state.approveReview);
   const rejectReview = useAdminStore((state) => state.rejectReview);
+  const fetchAdminData = useAdminStore((state) => state.fetchAdminData);
+
+  useEffect(() => {
+    fetchAdminData();
+  }, [fetchAdminData]);
 
   // States
   const [rejectingReviewId, setRejectingReviewId] = useState<string | null>(null);

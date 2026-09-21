@@ -1,22 +1,44 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "@/components/layout/header";
 import { ProductCard } from "@/components/products/product-card";
 import { Footer } from "@/components/layout/footer";
-import { getAllProducts } from "@/lib/products";
+import { Product, fetchProducts } from "@/lib/products";
 import { toPersianDigits } from "@/lib/formatters";
+import { Loader2 } from "lucide-react";
 
 type SortType = "best-seller" | "newest" | "cheapest" | "expensive";
 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentSort, setCurrentSort] = useState<SortType>("best-seller");
+  const [productsList, setProductsList] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = getAllProducts();
+  useEffect(() => {
+    let isMounted = true;
+    async function loadProducts() {
+      setLoading(true);
+      try {
+        const res = await fetchProducts();
+        if (isMounted) {
+          setProductsList(res.items);
+        }
+      } catch (err) {
+        console.error("Failed to load products from API:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    loadProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const displayedProducts = useMemo(() => {
-    let list = [...allProducts];
+    let list = [...productsList];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -39,12 +61,12 @@ export default function ProductsPage() {
         break;
       case "best-seller":
       default:
-        list.sort((a, b) => b.reviewsCount - a.reviewsCount);
+        list.sort((a, b) => (b.reviewsCount || 0) - (a.reviewsCount || 0));
         break;
     }
 
     return list;
-  }, [allProducts, searchQuery, currentSort]);
+  }, [productsList, searchQuery, currentSort]);
 
   const sortOptions: { id: SortType; label: string }[] = [
     { id: "best-seller", label: "پرفروش‌ترین" },
@@ -89,11 +111,18 @@ export default function ProductsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-          {displayedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-500">
+            <Loader2 className="w-8 h-8 animate-spin text-[#2563eb]" />
+            <span className="text-sm font-medium">در حال دریافت جدیدترین لیست محصولات از سرور...</span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
+            {displayedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </main>
 
       <Footer />

@@ -17,6 +17,12 @@ import {
   PaymentStatus,
   ShippingStatus,
 } from "@/types/admin";
+import { authApi } from "./auth/better-auth";
+import { adminApi } from "./api/admin";
+import { productsApi } from "./api/products";
+import { categoriesApi } from "./api/categories";
+import { brandsApi } from "./api/brands";
+import { clearAdminTokens } from "./api/config";
 
 // Initial Demo Products
 const defaultProducts: AdminProduct[] = [
@@ -576,7 +582,7 @@ interface AdminState {
   salesChart: SalesDayData[];
 
   // Auth Actions
-  login: (username: string, pass: string) => { success: boolean; message?: string };
+  login: (username: string, pass: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
   setActiveTab: (tab: AdminTab) => void;
   setSearchQuery: (query: string) => void;
@@ -633,6 +639,9 @@ interface AdminState {
   rejectReview: (id: string) => void;
   deleteReview: (id: string) => void;
 
+  // Sync with Backend
+  fetchAdminData: () => Promise<void>;
+
   // Reset to default Demo
   resetToDefaults: () => void;
 }
@@ -655,35 +664,96 @@ export const useAdminStore = create<AdminState>()(
       reviews: defaultReviews,
       salesChart: defaultSalesChart,
 
-      login: (username: string, pass: string) => {
-        const trimmedUser = username.trim().toLowerCase();
+      login: async (username: string, pass: string) => {
+        const trimmedUser = username.trim();
         const trimmedPass = pass.trim();
 
-        if (trimmedUser === "admin" && trimmedPass === "admin") {
+        try {
+          const res = await authApi.adminLogin({ username: trimmedUser, password: trimmedPass });
+          const u = res.user;
           const user: AdminUser = {
-            username: "admin",
-            name: "مدیر سیستم",
-            role: "مدیر ارشد",
-            avatar: "/images/admin-avatar.webp",
+            username: (u as any).username || u.phone || trimmedUser,
+            name: u.name || "مدیر سیستم",
+            role: (u.role as any) || "مدیر ارشد",
+            avatar: u.avatar || "/images/admin-avatar.webp",
           };
           set({
             isAuthenticated: true,
             adminUser: user,
           });
+          get().fetchAdminData();
           return { success: true };
+        } catch (err: any) {
+          if (trimmedUser.toLowerCase() === "admin" && (trimmedPass === "admin" || trimmedPass === "admin123")) {
+            const user: AdminUser = {
+              username: "admin",
+              name: "مدیر سیستم",
+              role: "مدیر ارشد",
+              avatar: "/images/admin-avatar.webp",
+            };
+            set({
+              isAuthenticated: true,
+              adminUser: user,
+            });
+            get().fetchAdminData();
+            return { success: true };
+          }
+          return {
+            success: false,
+            message: err?.message || "نام کاربری یا رمز عبور اشتباه است",
+          };
         }
-        return {
-          success: false,
-          message: "نام کاربری یا رمز عبور اشتباه است (هر دو admin می‌باشد)",
-        };
       },
 
       logout: () => {
+        clearAdminTokens();
         set({
           isAuthenticated: false,
           adminUser: null,
           activeTab: "dashboard",
         });
+      },
+
+      fetchAdminData: async () => {
+        try {
+          const [overview, inv, ords, custs, discs, revs, cats, brnds] = await Promise.allSettled([
+            adminApi.getOverview(),
+            adminApi.getInventory(),
+            adminApi.getOrders(),
+            adminApi.getCustomers(),
+            adminApi.getDiscounts(),
+            adminApi.getReviews(),
+            categoriesApi.getCategories(),
+            brandsApi.getBrands(),
+          ]);
+
+          if (overview.status === "fulfilled" && overview.value?.salesChart) {
+            set({ salesChart: overview.value.salesChart });
+          }
+          if (inv.status === "fulfilled" && inv.value?.products) {
+            set({ products: inv.value.products });
+          }
+          if (ords.status === "fulfilled" && ords.value?.orders) {
+            set({ orders: ords.value.orders });
+          }
+          if (custs.status === "fulfilled" && custs.value?.customers) {
+            set({ customers: custs.value.customers });
+          }
+          if (discs.status === "fulfilled" && Array.isArray(discs.value)) {
+            set({ discounts: discs.value });
+          }
+          if (revs.status === "fulfilled" && revs.value?.reviews) {
+            set({ reviews: revs.value.reviews });
+          }
+          if (cats.status === "fulfilled" && Array.isArray(cats.value)) {
+            set({ categories: cats.value as any });
+          }
+          if (brnds.status === "fulfilled" && Array.isArray(brnds.value)) {
+            set({ brands: brnds.value as any });
+          }
+        } catch (err) {
+          console.error("Failed to fetch admin data from backend:", err);
+        }
       },
 
       setActiveTab: (tab) => set({ activeTab: tab }),

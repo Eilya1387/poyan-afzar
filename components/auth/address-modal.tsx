@@ -50,7 +50,7 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullAddress.trim() || !postalCode.trim() || !receiverName.trim() || !receiverPhone.trim()) {
       setError("لطفاً تمامی فیلدهای الزامی را تکمیل کنید");
@@ -58,7 +58,9 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    setError("");
+
+    try {
       const addressData = {
         title: title.trim(),
         province: selectedProvince,
@@ -70,13 +72,25 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
         isDefault,
       };
 
-      addAddress(addressData);
+      try {
+        const { userApi } = await import("@/lib/api/user");
+        const created = await userApi.createAddress(addressData);
+        addAddress({
+          ...addressData,
+          id: created.id || `addr-${Date.now()}`,
+        } as any);
+        if (onSuccess) onSuccess(created.id);
+      } catch {
+        addAddress(addressData);
+        if (onSuccess) onSuccess("new");
+      }
+
       setIsLoading(false);
       onClose();
-      if (onSuccess) {
-        onSuccess("new");
-      }
-    }, 300);
+    } catch {
+      setIsLoading(false);
+      setError("خطا در ثبت آدرس");
+    }
   };
 
   if (!isOpen) return null;

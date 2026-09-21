@@ -2,15 +2,28 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { newsletterApi } from "@/lib/api/newsletter";
+import { Loader2 } from "lucide-react";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      await newsletterApi.subscribe(email.trim());
       setSubscribed(true);
+    } catch (err: any) {
+      setError(err?.message || "خطا در ثبت ایمیل. لطفاً مجدداً تلاش نمایید.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,21 +49,27 @@ export function Newsletter() {
               onSubmit={handleSubmit}
               className="flex flex-col sm:flex-row items-stretch gap-2.5 w-full max-w-md"
             >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="آدرس ایمیل خود را وارد کنید..."
-                className="bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all min-w-60"
-              />
+              <div className="flex-1">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="آدرس ایمیل خود را وارد کنید..."
+                  className="w-full bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all min-w-60"
+                />
+                {error && (
+                  <p className="text-rose-600 text-xs mt-1 text-right">{error}</p>
+                )}
+              </div>
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
-                className="font-bold px-6 shrink-0"
+                disabled={loading}
+                className="font-bold px-6 shrink-0 h-10"
               >
-                عضویت
+                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "عضویت"}
               </Button>
             </form>
           )}

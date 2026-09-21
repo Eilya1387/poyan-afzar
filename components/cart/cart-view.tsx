@@ -18,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store";
 import { CheckoutModal } from "./checkout-modal";
+import { cartApi } from "@/lib/api/cart";
+import { Loader2 } from "lucide-react";
 
 const suggestedProducts = [
   {
@@ -83,18 +85,36 @@ export function CartView() {
       .replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputCoupon.trim()) return;
-    const success = applyCoupon(inputCoupon);
-    if (success) {
-      setCouponSuccess(true);
-      setCouponError("");
-    } else {
-      setCouponError(
-        "کد تخفیف وارد شده معتبر نیست (کدهای معتبر: off10, takhfif, wexun)",
-      );
-      setCouponSuccess(false);
+
+    setCouponLoading(true);
+    setCouponError("");
+    setCouponSuccess(false);
+
+    try {
+      const res = await cartApi.validateCoupon(inputCoupon.trim(), getRawTotal());
+      if (res.valid) {
+        setCouponSuccess(true);
+        setCouponError("");
+        applyCoupon(inputCoupon.trim());
+      } else {
+        setCouponError(res.message || "کد تخفیف وارد شده نامعتبر است");
+      }
+    } catch (err: any) {
+      // Fallback to local store coupon logic if server returns error
+      const localSuccess = applyCoupon(inputCoupon.trim());
+      if (localSuccess) {
+        setCouponSuccess(true);
+        setCouponError("");
+      } else {
+        setCouponError(err?.message || "کد تخفیف معتبر نیست");
+      }
+    } finally {
+      setCouponLoading(false);
     }
   };
 

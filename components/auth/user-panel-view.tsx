@@ -30,13 +30,16 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "./auth-context";
 import { useFavoritesStore, useAddressStore, useCartStore } from "@/lib/store";
 import { AddressModal } from "./address-modal";
+import { ordersApi, OrderDetail } from "@/lib/api/orders";
+import { userApi, UserAddress, WalletData } from "@/lib/api/user";
+import { Loader2 } from "lucide-react";
 
 type TabType = "dashboard" | "orders" | "favorites" | "addresses" | "wallet" | "notifications" | "profile" | "security";
 
 export function UserPanelView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, isLoggedIn, isLoaded, logout } = useAuth();
+  const { user, isLoggedIn, isLoaded, logout, refreshProfile } = useAuth();
   const { favorites, removeFavorite } = useFavoritesStore();
   const { addresses, removeAddress, setDefaultAddress } = useAddressStore();
   const addItem = useCartStore((state) => state.addItem);
@@ -46,9 +49,69 @@ export function UserPanelView() {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [addressModalOpen, setAddressModalOpen] = useState(false);
 
+  // Live Backend Data States
+  const [liveOrders, setLiveOrders] = useState<OrderDetail[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [liveAddresses, setLiveAddresses] = useState<UserAddress[]>([]);
+  const [liveWallet, setLiveWallet] = useState<WalletData | null>(null);
+
+  // Profile Form State
+  const [firstNameInput, setFirstNameInput] = useState(user?.firstName || "");
+  const [lastNameInput, setLastNameInput] = useState(user?.lastName || "");
+  const [emailInput, setEmailInput] = useState(user?.email || "");
+  const [nationalCodeInput, setNationalCodeInput] = useState(user?.nationalCode || "");
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
+
+  // Wallet Top-up Modal State
+  const [showTopUpModal, setShowTopUpModal] = useState(false);
+  const [topUpAmount, setTopUpAmount] = useState("500000");
+  const [topUpLoading, setTopUpLoading] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setFirstNameInput(user.firstName || "");
+      setLastNameInput(user.lastName || "");
+      setEmailInput(user.email || "");
+      setNationalCodeInput(user.nationalCode || "");
+    }
+  }, [user]);
+
+  // Load backend data
+  const fetchPanelData = async () => {
+    try {
+      setLoadingOrders(true);
+      const [ordersData, addressesData, walletData] = await Promise.allSettled([
+        ordersApi.getMyOrders(),
+        userApi.getAddresses(),
+        userApi.getWallet(),
+      ]);
+
+      if (ordersData.status === "fulfilled" && Array.isArray(ordersData.value)) {
+        setLiveOrders(ordersData.value);
+      }
+      if (addressesData.status === "fulfilled" && Array.isArray(addressesData.value)) {
+        setLiveAddresses(addressesData.value);
+      }
+      if (walletData.status === "fulfilled" && walletData.value) {
+        setLiveWallet(walletData.value);
+      }
+    } catch (err) {
+      console.error("Error fetching user panel data:", err);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchPanelData();
+    }
+  }, [isLoggedIn, activeTab]);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab") as TabType | null;
@@ -62,9 +125,92 @@ export function UserPanelView() {
     return n.toString().replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const handleLogout = () => {
-    logout();
+  const formatPrice = (num: number) => {
+    const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+    return num.toLocaleString("fa-IR").replace(/[0-9]/g, (w) => persianDigits[+w]);
+  };
+
+  const handleLogout = async () => {
+    await logout();
     router.push("/");
+  };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    setProfileSuccessMsg(null);
+    try {
+      await userApi.updateProfile({
+        firstName: firstNameInput.trim(),
+        lastName: lastNameInput.trim(),
+        email: emailInput.trim() || undefined,
+        nationalCode: nationalCodeInput.trim() || undefined,
+      });
+      await refreshProfile();
+      setProfileSuccessMsg("اطلاعات حساب کاربری با موفقیت به‌روزرسانی شد.");
+      setTimeout(() => setProfileSuccessMsg(null), 3000);
+    } catch (err: any) {
+      alert(err?.message || "خطا در ذخیره اطلاعات");
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handleTopUp = async () => {
+    const amt = parseInt(topUpAmount, 10);
+    if (!amt || amt < 10000) {
+      alert("حداقل مبلغ شارژ ۱۰,۰۰۰ تومان می‌باشد");
+      return;
+    }
+    setTopUpLoading(true);
+    try {
+      const res = await userApi.topUpWallet(amt);
+      if (res.paymentUrl) {
+        window.location.href = res.paymentUrl;
+      } else {
+        alert("درخواست شارژ با موفقیت ثبت شد");
+        setShowTopUpModal(false);
+        fetchPanelData();
+      }
+    } catch (err: any) {
+      alert(err?.message || "خطا در اتصال به درگاه پرداخت");
+    } finally {
+      setTopUpLoading(false);
+    }
+  };
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm("آیا از لغو این سفارش اطمینان دارید؟")) return;
+    try {
+      await ordersApi.cancelOrder(orderId);
+      alert("سفارش با موفقیت لغو شد.");
+      fetchPanelData();
+    } catch (err: any) {
+      alert(err?.message || "امکان لغو این سفارش وجود ندارد.");
+    }
+  };
+
+  const handleDeleteAddress = async (addrId: string) => {
+    if (!confirm("آیا از حذف این آدرس اطمینان دارید؟")) return;
+    try {
+      await userApi.deleteAddress(addrId);
+      removeAddress(addrId);
+      setLiveAddresses((prev) => prev.filter((a) => a.id !== addrId));
+    } catch {
+      removeAddress(addrId);
+    }
+  };
+
+  const handleSetDefaultAddress = async (addrId: string) => {
+    try {
+      await userApi.setDefaultAddress(addrId);
+      setDefaultAddress(addrId);
+      setLiveAddresses((prev) =>
+        prev.map((a) => ({ ...a, isDefault: a.id === addrId }))
+      );
+    } catch {
+      setDefaultAddress(addrId);
+    }
   };
 
   if (!isLoaded) {
@@ -726,7 +872,7 @@ export function UserPanelView() {
               </div>
 
               <div className="space-y-4">
-                {addresses.map((addr) => (
+                {(liveAddresses.length > 0 ? liveAddresses : addresses).map((addr) => (
                   <div
                     key={addr.id}
                     className={`p-4 rounded-2xl border transition-all ${
@@ -740,7 +886,7 @@ export function UserPanelView() {
                         {!addr.isDefault && (
                           <button
                             type="button"
-                            onClick={() => setDefaultAddress(addr.id)}
+                            onClick={() => handleSetDefaultAddress(addr.id)}
                             className="text-xs font-bold text-[#2563eb] hover:underline cursor-pointer"
                           >
                             انتخاب به عنوان پیش‌فرض
@@ -748,7 +894,7 @@ export function UserPanelView() {
                         )}
                         <button
                           type="button"
-                          onClick={() => removeAddress(addr.id)}
+                          onClick={() => handleDeleteAddress(addr.id)}
                           className="text-slate-400 hover:text-red-500 p-1 cursor-pointer transition-colors"
                           aria-label="حذف آدرس"
                         >
@@ -772,7 +918,7 @@ export function UserPanelView() {
 
                     <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500 pt-1">
                       <span>تحویل‌گیرنده: {addr.receiverName} ({toPersianDigits(addr.receiverPhone)})</span>
-                      <span className="font-mono">کد پستی: {toPersianDigits(addr.postalCode)}</span>
+                      <span className="font-mono">کد پستی: {toPersianDigits(addr.postalCode || "")}</span>
                     </div>
                   </div>
                 ))}
@@ -851,45 +997,62 @@ export function UserPanelView() {
 
           {activeTab === "orders" && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="pb-4 border-b border-slate-100">
-                <h2 className="text-base font-black text-slate-900">تاریخچه سفارش‌ها</h2>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  تمام سفارش‌های ثبت شده در فروشگاه پویان افزار
-                </p>
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div>
+                  <h2 className="text-base font-black text-slate-900">تاریخچه سفارش‌ها</h2>
+                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                    تمام سفارش‌های ثبت شده در فروشگاه پویان افزار
+                  </p>
+                </div>
+                {loadingOrders && <Loader2 className="w-4 h-4 animate-spin text-[#2563eb]" />}
               </div>
 
               <div className="space-y-4">
-                <div className="rounded-2xl border border-slate-200 p-4 space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full">
-                      در حال پردازش
-                    </span>
-                    <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                      <span>۱۴ فروردین ۱۴۰۳</span>
-                      <span className="font-mono text-slate-900" dir="ltr">#TK-89423</span>
-                    </div>
+                {liveOrders.length === 0 ? (
+                  <div className="py-12 text-center text-slate-400 text-xs">
+                    هنوز سفارشی ثبت نشده است.
                   </div>
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="font-bold text-slate-900">مبلغ کل: ۳,۴۵۰,۰۰۰ تومان</span>
-                    <span className="text-slate-500 font-medium">شامل ۲ کالا • تحویل اکسپرس</span>
-                  </div>
-                </div>
+                ) : (
+                  liveOrders.map((ord) => (
+                    <div key={ord.id} className="rounded-2xl border border-slate-200 p-4 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                        <span className={`text-xs font-black px-3 py-1 rounded-full ${
+                          ord.paymentStatus === "PAID" || ord.paymentStatus === "paid"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : ord.paymentStatus === "CANCELLED" || ord.paymentStatus === "cancelled"
+                            ? "bg-rose-50 text-rose-700"
+                            : "bg-blue-50 text-[#2563eb]"
+                        }`}>
+                          {ord.statusFa || ord.paymentStatusFa || ord.paymentStatus}
+                        </span>
+                        <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                          <span>{ord.date || new Intl.DateTimeFormat("fa-IR").format(new Date(ord.createdAt))}</span>
+                          <span className="font-mono text-slate-900" dir="ltr">#{ord.trackingCode}</span>
+                        </div>
+                      </div>
 
-                <div className="rounded-2xl border border-slate-200 p-4 space-y-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <span className="bg-emerald-50 text-emerald-700 text-xs font-black px-3 py-1 rounded-full">
-                      تحویل شده
-                    </span>
-                    <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                      <span>۲ فروردین ۱۴۰۳</span>
-                      <span className="font-mono text-slate-900" dir="ltr">#TK-88102</span>
+                      <div className="flex items-center justify-between text-xs pt-1">
+                        <span className="font-bold text-slate-900">
+                          مبلغ کل: {formatPrice(ord.finalAmount || ord.amount)} تومان
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-500 font-medium">
+                            {ord.items?.length || 1} کالا
+                          </span>
+                          {(ord.paymentStatus === "PENDING" || ord.paymentStatus === "pending") && (
+                            <button
+                              type="button"
+                              onClick={() => handleCancelOrder(ord.id)}
+                              className="text-xs text-rose-600 hover:underline font-bold mr-2"
+                            >
+                              لغو سفارش
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="font-bold text-slate-900">مبلغ کل: ۸۹۰,۰۰۰ تومان</span>
-                    <span className="text-slate-500 font-medium">شامل ۱ کالا • تحویل عادی</span>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -906,35 +1069,189 @@ export function UserPanelView() {
               <div className="bg-linear-to-tr from-[#0b1528] to-[#1e3a8a] text-white p-6 rounded-3xl space-y-4 shadow-lg">
                 <span className="text-xs text-blue-200 font-bold">موجودی فعلی</span>
                 <div className="text-3xl font-black tracking-tight">
-                  ۱,۲۵۰,۰۰۰ <span className="text-xs font-normal">تومان</span>
+                  {formatPrice(liveWallet?.balance ?? user?.walletBalance ?? 0)}{" "}
+                  <span className="text-xs font-normal">تومان</span>
                 </div>
                 <div className="pt-2">
-                  <Button variant="secondary" size="md" className="font-black text-xs">
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    onClick={() => setShowTopUpModal(true)}
+                    className="font-black text-xs"
+                  >
                     افزایش موجودی
                   </Button>
                 </div>
               </div>
+
+              {liveWallet?.transactions && liveWallet.transactions.length > 0 && (
+                <div className="space-y-3 pt-4 border-t border-slate-100">
+                  <h3 className="text-sm font-bold text-slate-800">گردش تراکنش‌های اخیر</h3>
+                  <div className="divide-y divide-slate-100">
+                    {liveWallet.transactions.map((tx) => (
+                      <div key={tx.id} className="py-3 flex items-center justify-between text-xs">
+                        <div>
+                          <p className="font-bold text-slate-800">{tx.description || tx.typeFa || tx.type}</p>
+                          <span className="text-slate-400 text-[10px]">
+                            {new Intl.DateTimeFormat("fa-IR").format(new Date(tx.createdAt))}
+                          </span>
+                        </div>
+                        <span className={`font-mono font-bold ${tx.amount > 0 ? "text-emerald-600" : "text-slate-700"}`}>
+                          {tx.amount > 0 ? "+" : ""}{formatPrice(tx.amount)} تومان
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
-          {(activeTab === "notifications" || activeTab === "profile" || activeTab === "security") && (
+          {activeTab === "profile" && (
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
+              <div className="pb-4 border-b border-slate-100">
+                <h2 className="text-base font-black text-slate-900">اطلاعات حساب کاربری</h2>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  مشاهده و ویرایش مشخصات فردی
+                </p>
+              </div>
+
+              {profileSuccessMsg && (
+                <div className="p-3 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+                  {profileSuccessMsg}
+                </div>
+              )}
+
+              <form onSubmit={handleSaveProfile} className="space-y-4 max-w-xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">نام</label>
+                    <input
+                      type="text"
+                      required
+                      value={firstNameInput}
+                      onChange={(e) => setFirstNameInput(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#2563eb]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">نام خانوادگی</label>
+                    <input
+                      type="text"
+                      required
+                      value={lastNameInput}
+                      onChange={(e) => setLastNameInput(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#2563eb]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">شماره موبایل</label>
+                    <input
+                      type="text"
+                      disabled
+                      value={toPersianDigits(user?.phone || "")}
+                      className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-500 font-mono"
+                      dir="ltr"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">کد ملی</label>
+                    <input
+                      type="text"
+                      value={nationalCodeInput}
+                      onChange={(e) => setNationalCodeInput(e.target.value)}
+                      placeholder="۱۰ رقمی"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-mono focus:outline-none focus:border-[#2563eb]"
+                      dir="ltr"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">ایمیل</label>
+                  <input
+                    type="email"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="example@mail.com"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-mono focus:outline-none focus:border-[#2563eb]"
+                    dir="ltr"
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="md"
+                    disabled={savingProfile}
+                    className="font-bold text-xs px-6"
+                  >
+                    {savingProfile ? <Loader2 className="w-4 h-4 animate-spin" /> : "ذخیره تغییرات"}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {(activeTab === "notifications" || activeTab === "security") && (
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-4">
               <h2 className="text-base font-black text-slate-900">
                 {activeTab === "notifications" && "اعلان‌ها"}
-                {activeTab === "profile" && "اطلاعات حساب کاربری"}
                 {activeTab === "security" && "امنیت و رمز عبور"}
               </h2>
               <div className="p-4 rounded-xl bg-slate-50 text-xs text-slate-600 leading-relaxed">
-                اطلاعات این بخش با حساب تایید شده شما فعال است.
+                حساب شما با تایید دو مرحله‌ای پیامکی فعال و امن است.
               </div>
             </div>
           )}
         </div>
       </div>
 
+      {showTopUpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-sm w-full shadow-2xl space-y-4 text-right">
+            <h3 className="text-base font-black text-slate-900">شارژ کیف پول</h3>
+            <p className="text-xs text-slate-500">مبلغ مورد نظر برای افزایش موجودی را وارد کنید:</p>
+            <input
+              type="number"
+              value={topUpAmount}
+              onChange={(e) => setTopUpAmount(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#2563eb]"
+            />
+            <div className="flex gap-2 text-xs">
+              {[200000, 500000, 1000000].map((amt) => (
+                <button
+                  key={amt}
+                  type="button"
+                  onClick={() => setTopUpAmount(String(amt))}
+                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 text-[11px] font-bold"
+                >
+                  {formatPrice(amt)}
+                </button>
+              ))}
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => setShowTopUpModal(false)}>
+                انصراف
+              </Button>
+              <Button type="button" variant="primary" size="sm" disabled={topUpLoading} onClick={handleTopUp}>
+                {topUpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "اتصال به درگاه"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <AddressModal
         isOpen={addressModalOpen}
-        onClose={() => setAddressModalOpen(false)}
+        onClose={() => {
+          setAddressModalOpen(false);
+          fetchPanelData();
+        }}
       />
     </div>
   );

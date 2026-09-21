@@ -81,14 +81,31 @@ export function ProductsView() {
     { label: "گیگابایت 4060", url: "/images/products/gigabyte-4060.jpg" },
   ];
 
-  // Process uploaded image file from device with canvas optimization
-  const processImageFile = (file: File) => {
+  // Process uploaded image file from device with server upload & canvas fallback
+  const processImageFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
       alert("لطفاً یک فایل تصویری معتبر (JPG, PNG, WEBP, ...) انتخاب نمایید.");
       return;
     }
 
     setIsProcessingImage(true);
+
+    try {
+      const { uploadApi } = await import("@/lib/api/upload");
+      const { API_BASE_URL } = await import("@/lib/api/config");
+      const uploadRes = await uploadApi.uploadProductImage(file);
+      if (uploadRes?.url) {
+        const fullUrl = uploadRes.url.startsWith("http")
+          ? uploadRes.url
+          : `${API_BASE_URL}${uploadRes.url}`;
+        setFormImage(fullUrl);
+        setIsProcessingImage(false);
+        return;
+      }
+    } catch {
+      // Fallback to local canvas base64 if offline
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
@@ -97,7 +114,6 @@ export function ProductsView() {
         return;
       }
 
-      // Optimize image dimensions via canvas so localStorage stays lightweight
       const img = new Image();
       img.onload = () => {
         const maxWidth = 800;

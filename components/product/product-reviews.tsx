@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import { Star, CheckCircle2, PenSquare } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Star, CheckCircle2, PenSquare, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductReview, RatingDistributionItem } from "@/lib/products";
+import { productsApi } from "@/lib/api/products";
+import { useAuth } from "@/components/auth/auth-context";
 
 interface ProductReviewsProps {
+  productId?: string;
   rating: number;
   reviewsCount: number;
   distribution: RatingDistributionItem[];
@@ -13,15 +16,59 @@ interface ProductReviewsProps {
 }
 
 export function ProductReviews({
-  rating,
-  reviewsCount,
-  distribution,
-  reviews,
+  productId,
+  rating: initialRating,
+  reviewsCount: initialCount,
+  distribution: initialDistribution,
+  reviews: initialReviews,
 }: ProductReviewsProps) {
+  const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [reviewsList, setReviewsList] = useState<ProductReview[]>(initialReviews);
+  const [ratingVal, setRatingVal] = useState(initialRating);
+  const [reviewsCountVal, setReviewsCountVal] = useState(initialCount);
+  const [distVal, setDistVal] = useState<RatingDistributionItem[]>(initialDistribution);
+
+  const [formRating, setFormRating] = useState(5);
+  const [userName, setUserName] = useState(user ? `${user.firstName} ${user.lastName}` : "");
   const [userComment, setUserComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!productId) return;
+    const currentProductId: string = productId;
+    let isMounted = true;
+    async function loadReviews() {
+      try {
+        const res = await productsApi.getReviews(currentProductId);
+        if (!isMounted) return;
+        if (res.reviews && res.reviews.length > 0) {
+          setReviewsList(
+            res.reviews.map((r: any) => ({
+              id: r.id,
+              user: r.userName || r.user || "کاربر پویان افزار",
+              verified: r.verified ?? true,
+              date: r.date || (r.createdAt ? new Intl.DateTimeFormat("fa-IR").format(new Date(r.createdAt)) : "۱۴۰۳/۰۹/۲۵"),
+              rating: r.rating || 5,
+              comment: r.comment || "",
+              avatar: r.avatar,
+            }))
+          );
+        }
+        if (res.rating) setRatingVal(res.rating);
+        if (res.reviewsCount) setReviewsCountVal(res.reviewsCount);
+        if (res.distribution) setDistVal(res.distribution);
+      } catch (err) {
+        console.error("Failed to load reviews:", err);
+      }
+    }
+    loadReviews();
+    return () => {
+      isMounted = false;
+    };
+  }, [productId]);
 
   const formatPersianNumber = (num: number) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -30,16 +77,31 @@ export function ProductReviews({
       .replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
+  const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (userName.trim() && userComment.trim()) {
+    if (!userComment.trim()) return;
+
+    setSubmitting(true);
+    setErrorMsg(null);
+    try {
+      if (productId) {
+        await productsApi.createReview(productId, {
+          rating: formRating,
+          comment: userComment.trim(),
+          userName: userName.trim() || undefined,
+        });
+      }
+
       setSubmitted(true);
       setTimeout(() => {
         setShowModal(false);
         setSubmitted(false);
-        setUserName("");
         setUserComment("");
       }, 1500);
+    } catch (err: any) {
+      setErrorMsg(err?.message || "خطا در ثبت دیدگاه.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -69,7 +131,7 @@ export function ProductReviews({
 
       <div className="rounded-2xl bg-slate-50/60 border border-slate-200/80 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
         <div className="md:col-span-8 space-y-2.5 px-2 order-2 md:order-1">
-          {distribution.map((item) => (
+          {distVal.map((item) => (
             <div key={item.stars} className="flex items-center gap-3 text-xs">
               <span className="w-12 text-slate-500 font-bold shrink-0">
                 {formatPersianNumber(item.stars)} ستاره
@@ -89,24 +151,28 @@ export function ProductReviews({
 
         <div className="md:col-span-4 flex flex-col items-center justify-center text-center p-2 border-b md:border-b-0 md:border-r border-slate-200 order-1 md:order-2">
           <div className="text-3xl sm:text-4xl font-black text-slate-900 mb-1.5 tracking-tight">
-            {formatPersianNumber(rating)} از ۵
+            {formatPersianNumber(ratingVal)} از ۵
           </div>
           <div className="flex items-center gap-1 mb-2">
             {[1, 2, 3, 4, 5].map((s) => (
               <Star
                 key={s}
-                className="w-4 h-4 fill-amber-400 text-amber-400"
+                className={`w-4 h-4 ${
+                  s <= Math.round(ratingVal)
+                    ? "fill-amber-400 text-amber-400"
+                    : "text-slate-200"
+                }`}
               />
             ))}
           </div>
           <span className="text-xs text-slate-400 font-medium">
-            از مجموع {formatPersianNumber(reviewsCount)} ثبت نظر
+            از مجموع {formatPersianNumber(reviewsCountVal)} ثبت نظر
           </span>
         </div>
       </div>
 
       <div className="divide-y divide-slate-100 pt-2">
-        {reviews.map((rev) => (
+        {reviewsList.map((rev) => (
           <div key={rev.id} className="py-5 first:pt-2 space-y-2.5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -144,9 +210,18 @@ export function ProductReviews({
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-4">
-            <h3 className="text-base font-black text-slate-900">
-              ثبت نظر درباره محصول
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-black text-slate-900">
+                ثبت نظر درباره محصول
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
             {submitted ? (
               <div className="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-center text-xs font-bold border border-emerald-200">
@@ -154,6 +229,39 @@ export function ProductReviews({
               </div>
             ) : (
               <form onSubmit={handleReviewSubmit} className="space-y-3.5">
+                {errorMsg && (
+                  <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+                    {errorMsg}
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    امتیاز شما
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setFormRating(s)}
+                        className="cursor-pointer"
+                      >
+                        <Star
+                          className={`w-5 h-5 ${
+                            s <= formRating
+                              ? "fill-amber-400 text-amber-400"
+                              : "text-slate-200"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                    <span className="text-xs font-bold text-slate-600 mr-2">
+                      {formatPersianNumber(formRating)} ستاره
+                    </span>
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     نام و نام خانوادگی
@@ -195,8 +303,9 @@ export function ProductReviews({
                     type="submit"
                     variant="primary"
                     size="sm"
+                    disabled={submitting}
                   >
-                    ارسال نظر
+                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "ارسال نظر"}
                   </Button>
                 </div>
               </form>

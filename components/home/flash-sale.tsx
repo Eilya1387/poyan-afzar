@@ -4,23 +4,42 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Flame, ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products } from "@/lib/products";
+import { Product, products, fetchFlashDeals } from "@/lib/products";
 import { useCartStore } from "@/lib/store";
 
-const flashDeals = [
+const initialDeals = [
   products.find((p) => p.id === "airpods-pro-2") || products[0],
   products.find((p) => p.id === "samsung-t7-shield-1tb") || products[9],
   products.find((p) => p.id === "logitech-g512") || products[8],
   products.find((p) => p.id === "razer-deathadder-v3-pro") || products[6],
   products.find((p) => p.id === "anker-liberty-4-nc") || products[4],
   products.find((p) => p.id === "xiaomi-watch-s1-active") || products[7],
-].filter(Boolean);
+].filter(Boolean) as Product[];
 
 export function FlashSale() {
   const addItem = useCartStore((state) => state.addItem);
+  const [deals, setDeals] = useState<Product[]>(initialDeals);
   const [addedId, setAddedId] = useState<string | null>(null);
 
-  const handleAddToCart = (e: React.MouseEvent, deal: (typeof products)[0]) => {
+  useEffect(() => {
+    let mounted = true;
+    async function loadDeals() {
+      try {
+        const liveDeals = await fetchFlashDeals();
+        if (mounted && liveDeals.length > 0) {
+          setDeals(liveDeals);
+        }
+      } catch (err) {
+        console.error("Failed to load flash deals:", err);
+      }
+    }
+    loadDeals();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleAddToCart = (e: React.MouseEvent, deal: Product) => {
     e.preventDefault();
     e.stopPropagation();
     addItem({
@@ -99,7 +118,7 @@ export function FlashSale() {
         </div>
 
         <div className="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar">
-          {flashDeals.map((deal) => (
+          {deals.map((deal) => (
             <Link
               key={deal.id}
               href={`/products/${deal.id}`}

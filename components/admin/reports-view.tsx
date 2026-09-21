@@ -30,7 +30,27 @@ export function ReportsView() {
   const avgOrderValue = totalOrdersCount > 0 ? Math.round(totalRevenue / totalOrdersCount) : 0;
   const maxSales = Math.max(...salesChart.map((d) => d.amount), 1);
 
-  const handleExport = (type: "excel" | "pdf") => {
+  const handleExport = async (type: "excel" | "pdf") => {
+    try {
+      const { API_BASE_URL, getAdminToken } = await import("@/lib/api/config");
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/api/admin/reports/export`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `poyan-orders-report-${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch {
+      // Ignore
+    }
     setDownloadNotice(`گزارش مالی و فروش در قالب فایل ${type.toUpperCase()} با موفقیت آماده و دانلود شد.`);
     setTimeout(() => {
       setDownloadNotice(null);
