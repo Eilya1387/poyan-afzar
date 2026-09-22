@@ -6,6 +6,7 @@ import { formatPriceFa, toPersianDigits } from "@/lib/formatters";
 import { AdminDiscount, DiscountType } from "@/types/admin";
 import { ConfirmModal } from "./confirm-modal";
 import { Button } from "@/components/ui/button";
+import { PersianDatePicker } from "@/components/ui/persian-date-picker";
 import {
   Tag,
   Plus,
@@ -445,28 +446,20 @@ export function DiscountsView() {
                 </>
               )}
 
-              {/* Dates */}
+              {/* Dates with Persian Calendar */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1.5">تاریخ شروع</label>
-                  <input
-                    type="text"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    placeholder="۱۴۰۴/۰۱/۰۱"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono text-center"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1.5">تاریخ انقضا</label>
-                  <input
-                    type="text"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    placeholder="۱۴۰۴/۰۱/۳۰"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono text-center"
-                  />
-                </div>
+                <PersianDatePicker
+                  label="تاریخ شروع"
+                  value={startDate}
+                  onChange={setStartDate}
+                  placeholder="۱۴۰۵/۰۱/۰۱"
+                />
+                <PersianDatePicker
+                  label="تاریخ انقضا"
+                  value={endDate}
+                  onChange={setEndDate}
+                  placeholder="۱۴۰۵/۰۱/۳۰"
+                />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3">

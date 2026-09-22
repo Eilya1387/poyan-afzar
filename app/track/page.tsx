@@ -127,48 +127,89 @@ function TrackOrderContent() {
               </div>
             </div>
 
-            {/* Progress Steps */}
-            <div className="grid grid-cols-4 gap-2 text-center pt-2">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-[#0b1528] text-white flex items-center justify-center shadow-xs">
-                  <Check className="w-4 h-4 stroke-[2.5]" />
-                </div>
-                <span className="text-[11px] font-bold text-slate-800">ثبت سفارش</span>
-              </div>
+            {/* Cohesive 5-Step Progress Bar */}
+            {(() => {
+              const payStatus = (order.paymentStatus || "").toUpperCase();
+              const shipStatus = (order.shippingStatus || "").toUpperCase();
 
-              <div className="flex flex-col items-center gap-2">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-xs ${
-                  order.paymentStatus === "PAID" || order.paymentStatus === "paid"
-                    ? "bg-[#0b1528] text-white"
-                    : "bg-slate-100 text-slate-400"
-                }`}>
-                  <Check className="w-4 h-4 stroke-[2.5]" />
-                </div>
-                <span className="text-[11px] font-bold text-slate-800">تایید پرداخت</span>
-              </div>
+              const isDelivered = shipStatus === "DELIVERED";
+              const isShipping = shipStatus === "SHIPPING";
+              const isPreparing = shipStatus === "PREPARING" || shipStatus === "PROCESSING";
+              const isPaid = payStatus === "PAID" || isPreparing || isShipping || isDelivered;
 
-              <div className="flex flex-col items-center gap-2">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md ${
-                  order.shippingStatus === "shipping" || order.shippingStatus === "preparing"
-                    ? "bg-[#2563eb] text-white ring-4 ring-blue-100"
-                    : "bg-slate-100 text-slate-400"
-                }`}>
-                  <Truck className="w-4 h-4" />
-                </div>
-                <span className="text-[11px] font-black text-[#2563eb]">آماده‌سازی و ارسال</span>
-              </div>
+              // Step active calculation: If delivered, ALL 5 steps are true
+              const step1Done = true; // Order Placed
+              const step2Done = isDelivered || isPaid; // Payment Confirmed
+              const step3Done = isDelivered || isPreparing || isShipping; // Order Processing
+              const step4Done = isDelivered || isShipping; // Preparing & Shipping
+              const step5Done = isDelivered; // Delivered
 
-              <div className="flex flex-col items-center gap-2">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center ${
-                  order.shippingStatus === "delivered"
-                    ? "bg-emerald-600 text-white"
-                    : "bg-slate-100 text-slate-400"
-                }`}>
-                  <Home className="w-4 h-4" />
+              const steps = [
+                { id: 1, label: "ثبت سفارش", done: step1Done, current: !isPaid },
+                { id: 2, label: "تایید پرداخت", done: step2Done, current: isPaid && !isPreparing && !isShipping && !isDelivered },
+                { id: 3, label: "پردازش سفارش", done: step3Done, current: isPreparing && !isShipping && !isDelivered },
+                { id: 4, label: "آماده‌سازی و ارسال", done: step4Done, current: isShipping && !isDelivered },
+                { id: 5, label: "تحویل مرسوله", done: step5Done, current: isDelivered },
+              ];
+
+              return (
+                <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-100">
+                  <div className="relative">
+                    {/* Horizontal Connector Line */}
+                    <div className="absolute top-4 sm:top-5 left-6 right-6 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                      <div
+                        className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
+                        style={{
+                          width: isDelivered
+                            ? "100%"
+                            : isShipping
+                            ? "75%"
+                            : isPreparing
+                            ? "50%"
+                            : isPaid
+                            ? "25%"
+                            : "0%",
+                        }}
+                      />
+                    </div>
+
+                    {/* Step Nodes */}
+                    <div className="grid grid-cols-5 gap-1 sm:gap-2 text-center relative z-10">
+                      {steps.map((s) => (
+                        <div key={s.id} className="flex flex-col items-center gap-2">
+                          <div
+                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                              s.done
+                                ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50"
+                                : s.current
+                                ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 animate-pulse"
+                                : "bg-white border-2 border-slate-200 text-slate-400"
+                            }`}
+                          >
+                            {s.done ? (
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-3" />
+                            ) : (
+                              <span className="text-xs font-bold font-mono">{toPersianDigits(s.id)}</span>
+                            )}
+                          </div>
+                          <span
+                            className={`text-[10px] sm:text-xs font-bold leading-tight ${
+                              s.done
+                                ? "text-emerald-700"
+                                : s.current
+                                ? "text-[#2563eb] font-black"
+                                : "text-slate-400"
+                            }`}
+                          >
+                            {s.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <span className="text-[11px] font-medium text-slate-400">تحویل مرسوله</span>
-              </div>
-            </div>
+              );
+            })()}
 
             {order.items && order.items.length > 0 && (
               <div className="space-y-3 pt-4 border-t border-slate-100">

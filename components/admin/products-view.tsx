@@ -278,6 +278,12 @@ export function ProductsView() {
       }
       badgeText = badgeText || `٪${toPersianDigits(flashDiscountPercent)} تخفیف`;
       badgeType = "discount";
+    } else {
+      origPrice = finalPrice;
+      if (badgeType === "discount") {
+        badgeType = "in-stock";
+        badgeText = "";
+      }
     }
 
     const productPayload = {
@@ -288,7 +294,7 @@ export function ProductsView() {
       brand: formBrand,
       brandFa: brandObj?.nameFa || formBrand,
       price: finalPrice,
-      originalPrice: origPrice,
+      originalPrice: isFlashDeal ? origPrice : finalPrice,
       stock: Number(formStock),
       minStockThreshold: Number(formMinStock),
       image: mainImg,
@@ -300,9 +306,12 @@ export function ProductsView() {
       warranty: formWarranty,
       seller: formSeller,
       specs: formSpecs.filter((s) => s.label.trim() !== ""),
-      badge: badgeText
+      badges: isFlashDeal && badgeText ? [badgeText, "ضمانت اصالت"] : ["ضمانت اصالت"],
+      badge: isFlashDeal && badgeText
+        ? { text: badgeText, type: "discount" as const }
+        : badgeText && badgeType !== "discount"
         ? { text: badgeText, type: badgeType }
-        : undefined,
+        : { text: "موجود در انبار", type: "in-stock" as const },
     };
 
     if (editingProduct) {

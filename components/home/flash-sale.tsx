@@ -59,41 +59,6 @@ export function FlashSale() {
     setTimeout(() => setAddedId(null), 1500);
   };
 
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 6,
-    minutes: 42,
-    seconds: 18,
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        }
-        if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        }
-        if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatNumber = (n: number) => {
-    const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-    return n
-      .toString()
-      .padStart(2, "0")
-      .split("")
-      .map((d) => persianDigits[parseInt(d, 10)])
-      .join("");
-  };
-
   if (!loading && deals.length === 0) {
     return null;
   }
@@ -112,8 +77,11 @@ export function FlashSale() {
   return (
     <section id="flash-sale" className="py-4 scroll-mt-24">
       <div className="bg-[#0b1528] rounded-3xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-800/80 mb-4 sm:mb-6">
+        <div className="flex items-center justify-between gap-3 pb-4 sm:pb-6 border-b border-slate-800/80 mb-4 sm:mb-6">
           <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0 shadow-xs">
+              <Flame className="w-5 h-5 fill-red-400" />
+            </div>
             <div>
               <h2 className="text-base sm:text-xl font-black text-white">
                 پیشنهاد شگفت‌انگیز پویان افزار
@@ -124,15 +92,8 @@ export function FlashSale() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto bg-slate-900/90 border border-slate-700/80 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold text-slate-300">
-            <span className="text-[11px] sm:text-xs">زمان باقی‌مانده:</span>
-            <div className="flex items-center gap-1 font-mono text-xs sm:text-sm font-bold text-white tracking-widest dir-ltr">
-              <span>{formatNumber(timeLeft.seconds)}</span>
-              <span className="text-slate-500">:</span>
-              <span>{formatNumber(timeLeft.minutes)}</span>
-              <span className="text-slate-500">:</span>
-              <span>{formatNumber(timeLeft.hours)}</span>
-            </div>
+          <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-xl text-xs font-black text-red-400">
+            <span>تخفیف شگفت‌انگیز</span>
           </div>
         </div>
 

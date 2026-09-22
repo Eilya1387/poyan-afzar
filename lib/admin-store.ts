@@ -237,9 +237,10 @@ export const useAdminStore = create<AdminState>()(
         }
 
         try {
-          const [overview, inv, ords, custs, discs, revs, qaRes, reportsRes, cats, brnds] = await Promise.allSettled([
+          const [overview, inv, allProds, ords, custs, discs, revs, qaRes, reportsRes, cats, brnds] = await Promise.allSettled([
             adminApi.getOverview(),
             adminApi.getInventory(),
+            productsApi.getProducts({ limit: 100 }),
             adminApi.getOrders(),
             adminApi.getCustomers(),
             adminApi.getDiscounts(),
@@ -254,7 +255,33 @@ export const useAdminStore = create<AdminState>()(
             if (overview.value.salesChart) set({ salesChart: overview.value.salesChart });
             if (overview.value.kpis) set({ kpis: overview.value.kpis });
           }
-          if (inv.status === "fulfilled" && inv.value?.products) {
+          if (allProds.status === "fulfilled" && allProds.value?.items && allProds.value.items.length > 0) {
+            const mappedProds: AdminProduct[] = allProds.value.items.map((p) => ({
+              id: p.id,
+              title: p.title,
+              enTitle: p.enTitle,
+              category: p.categorySlug || p.category,
+              categoryName: p.categoryName,
+              brand: p.brandSlug || p.brand,
+              brandFa: p.brandFa,
+              price: p.priceNumber || Number(p.price) || 0,
+              originalPrice: p.originalPrice || undefined,
+              stock: p.stock ?? (p.inStock ? 10 : 0),
+              minStockThreshold: p.minStockThreshold ?? 3,
+              image: p.image,
+              images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [p.image],
+              inStock: p.inStock,
+              rating: p.rating || 5,
+              reviewsCount: p.reviewsCount || 0,
+              description: p.description || p.introDesc || "",
+              specs: (p.technicalSpecs || []).map((s) => ({ label: s.label, value: s.value })),
+              warranty: p.warranty || p.guarantee,
+              seller: p.seller,
+              badge: p.discount ? { text: p.discount, type: "discount" } : undefined,
+              createdAt: p.createdAt || new Intl.DateTimeFormat("fa-IR").format(new Date()),
+            }));
+            set({ products: mappedProds });
+          } else if (inv.status === "fulfilled" && inv.value?.products) {
             set({ products: inv.value.products });
           }
           if (ords.status === "fulfilled" && ords.value?.orders) {
@@ -296,10 +323,12 @@ export const useAdminStore = create<AdminState>()(
           : `prod-${Date.now().toString(36)}`;
         const id = slug || `prod-${Date.now().toString(36)}`;
         const now = new Intl.DateTimeFormat("fa-IR").format(new Date());
+        const prodImages = Array.isArray(productData.images) && productData.images.length > 0 ? productData.images : [productData.image];
         const newProduct: AdminProduct = {
           ...productData,
           id,
           createdAt: now,
+          images: prodImages,
           inStock: productData.stock > 0,
         };
 
@@ -328,7 +357,7 @@ export const useAdminStore = create<AdminState>()(
           seller: productData.seller || "پویان افزار",
           guarantee: productData.warranty || "گارانتی ۱۸ ماهه شرکتی + ضمانت اصالت کالا",
           image: productData.image,
-          images: [productData.image],
+          images: prodImages,
           description: productData.description || "",
           introTitle: productData.title,
           introDesc: productData.description || "",
@@ -354,6 +383,9 @@ export const useAdminStore = create<AdminState>()(
               const updated = { ...p, ...updates };
               if (updates.stock !== undefined) {
                 updated.inStock = updates.stock > 0;
+              }
+              if (updates.images) {
+                updated.images = updates.images;
               }
               return updated;
             }

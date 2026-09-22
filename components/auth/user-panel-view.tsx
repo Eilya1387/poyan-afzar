@@ -149,18 +149,6 @@ export function UserPanelView() {
     }
   };
 
-  const handleCancelOrder = async (orderId: string) => {
-    if (!confirm("آیا از لغو این سفارش اطمینان دارید؟")) return;
-    try {
-      await ordersApi.cancelOrder(orderId);
-      alert("سفارش با موفقیت لغو شد.");
-      fetchPanelData();
-      setSelectedOrderModal(null);
-    } catch (err: any) {
-      alert(err?.message || "امکان لغو این سفارش وجود ندارد.");
-    }
-  };
-
   const handleDeleteAddress = async (addrId: string) => {
     if (!confirm("آیا از حذف این آدرس اطمینان دارید؟")) return;
     try {
@@ -576,51 +564,87 @@ export function UserPanelView() {
                     </span>
                   </div>
 
-                  <div className="relative pt-4 pb-2">
-                    <div className="absolute top-9 left-6 right-6 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden sm:block" />
+                  {(() => {
+                    const payStatus = (liveOrders[0].paymentStatus || "").toUpperCase();
+                    const shipStatus = (liveOrders[0].shippingStatus || "").toUpperCase();
 
-                    <div className="grid grid-cols-4 gap-2 text-center relative z-10">
-                      <div className="flex flex-col items-center gap-2">
-                        <div className="w-10 h-10 rounded-full bg-[#0b1528] text-white flex items-center justify-center shadow-xs">
-                          <Check className="w-5 h-5 stroke-[2.5]" />
-                        </div>
-                        <span className="text-[11px] font-bold text-slate-800">ثبت سفارش</span>
-                      </div>
+                    const isDelivered = shipStatus === "DELIVERED";
+                    const isShipping = shipStatus === "SHIPPING";
+                    const isPreparing = shipStatus === "PREPARING" || shipStatus === "PROCESSING";
+                    const isPaid = payStatus === "PAID" || isPreparing || isShipping || isDelivered;
 
-                      <div className="flex flex-col items-center gap-2">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-xs ${
-                          liveOrders[0].paymentStatus === "PAID" || liveOrders[0].paymentStatus === "paid"
-                            ? "bg-[#0b1528] text-white"
-                            : "bg-slate-100 text-slate-400"
-                        }`}>
-                          <Check className="w-5 h-5 stroke-[2.5]" />
-                        </div>
-                        <span className="text-[11px] font-bold text-slate-800">تایید پرداخت</span>
-                      </div>
+                    const step1Done = true;
+                    const step2Done = isDelivered || isPaid;
+                    const step3Done = isDelivered || isPreparing || isShipping;
+                    const step4Done = isDelivered || isShipping;
+                    const step5Done = isDelivered;
 
-                      <div className="flex flex-col items-center gap-2">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
-                          liveOrders[0].shippingStatus === "shipping" || liveOrders[0].shippingStatus === "preparing"
-                            ? "bg-[#2563eb] text-white ring-4 ring-blue-100"
-                            : "bg-slate-100 text-slate-400"
-                        }`}>
-                          <Truck className="w-5 h-5" />
-                        </div>
-                        <span className="text-[11px] font-black text-[#2563eb]">آماده‌سازی و ارسال</span>
-                      </div>
+                    const steps = [
+                      { id: 1, label: "ثبت سفارش", done: step1Done, current: !isPaid },
+                      { id: 2, label: "تایید پرداخت", done: step2Done, current: isPaid && !isPreparing && !isShipping && !isDelivered },
+                      { id: 3, label: "پردازش سفارش", done: step3Done, current: isPreparing && !isShipping && !isDelivered },
+                      { id: 4, label: "آماده‌سازی و ارسال", done: step4Done, current: isShipping && !isDelivered },
+                      { id: 5, label: "تحویل مرسوله", done: step5Done, current: isDelivered },
+                    ];
 
-                      <div className="flex flex-col items-center gap-2">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          liveOrders[0].shippingStatus === "delivered"
-                            ? "bg-emerald-600 text-white"
-                            : "bg-slate-100 text-slate-400"
-                        }`}>
-                          <Home className="w-5 h-5" />
+                    return (
+                      <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-5 border border-slate-100">
+                        <div className="relative">
+                          {/* Horizontal Connector Line */}
+                          <div className="absolute top-4 sm:top-5 left-6 right-6 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                            <div
+                              className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
+                              style={{
+                                width: isDelivered
+                                  ? "100%"
+                                  : isShipping
+                                  ? "75%"
+                                  : isPreparing
+                                  ? "50%"
+                                  : isPaid
+                                  ? "25%"
+                                  : "0%",
+                              }}
+                            />
+                          </div>
+
+                          {/* Step Nodes */}
+                          <div className="grid grid-cols-5 gap-1 sm:gap-2 text-center relative z-10">
+                            {steps.map((s) => (
+                              <div key={s.id} className="flex flex-col items-center gap-1.5 sm:gap-2">
+                                <div
+                                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                    s.done
+                                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50"
+                                      : s.current
+                                      ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 animate-pulse"
+                                      : "bg-white border-2 border-slate-200 text-slate-400"
+                                  }`}
+                                >
+                                  {s.done ? (
+                                    <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-3" />
+                                  ) : (
+                                    <span className="text-xs font-bold font-mono">{toPersianDigits(s.id)}</span>
+                                  )}
+                                </div>
+                                <span
+                                  className={`text-[10px] sm:text-xs font-bold leading-tight ${
+                                    s.done
+                                      ? "text-emerald-700"
+                                      : s.current
+                                      ? "text-[#2563eb] font-black"
+                                      : "text-slate-400"
+                                  }`}
+                                >
+                                  {s.label}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <span className="text-[11px] font-medium text-slate-400">تحویل</span>
                       </div>
-                    </div>
-                  </div>
+                    );
+                  })()}
 
                   <div className="pt-3 border-t border-slate-100 flex justify-start">
                     <button
@@ -1159,6 +1183,87 @@ export function UserPanelView() {
               </div>
             </div>
 
+            {/* Modal Progress Tracker */}
+            {(() => {
+              const payStatus = (selectedOrderModal.paymentStatus || "").toUpperCase();
+              const shipStatus = (selectedOrderModal.shippingStatus || "").toUpperCase();
+
+              const isDelivered = shipStatus === "DELIVERED";
+              const isShipping = shipStatus === "SHIPPING";
+              const isPreparing = shipStatus === "PREPARING" || shipStatus === "PROCESSING";
+              const isPaid = payStatus === "PAID" || isPreparing || isShipping || isDelivered;
+
+              const step1Done = true;
+              const step2Done = isDelivered || isPaid;
+              const step3Done = isDelivered || isPreparing || isShipping;
+              const step4Done = isDelivered || isShipping;
+              const step5Done = isDelivered;
+
+              const modalSteps = [
+                { id: 1, label: "ثبت سفارش", done: step1Done, current: !isPaid },
+                { id: 2, label: "تایید پرداخت", done: step2Done, current: isPaid && !isPreparing && !isShipping && !isDelivered },
+                { id: 3, label: "پردازش سفارش", done: step3Done, current: isPreparing && !isShipping && !isDelivered },
+                { id: 4, label: "آماده‌سازی و ارسال", done: step4Done, current: isShipping && !isDelivered },
+                { id: 5, label: "تحویل مرسوله", done: step5Done, current: isDelivered },
+              ];
+
+              return (
+                <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-100">
+                  <div className="relative">
+                    <div className="absolute top-4 sm:top-4.5 left-6 right-6 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                      <div
+                        className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
+                        style={{
+                          width: isDelivered
+                            ? "100%"
+                            : isShipping
+                            ? "75%"
+                            : isPreparing
+                            ? "50%"
+                            : isPaid
+                            ? "25%"
+                            : "0%",
+                        }}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-5 gap-1 text-center relative z-10">
+                      {modalSteps.map((s) => (
+                        <div key={s.id} className="flex flex-col items-center gap-1.5">
+                          <div
+                            className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
+                              s.done
+                                ? "bg-emerald-600 text-white shadow-sm ring-4 ring-emerald-50"
+                                : s.current
+                                ? "bg-[#2563eb] text-white shadow-sm ring-4 ring-blue-100"
+                                : "bg-white border-2 border-slate-200 text-slate-400"
+                            }`}
+                          >
+                            {s.done ? (
+                              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-3" />
+                            ) : (
+                              <span className="text-[11px] font-bold font-mono">{toPersianDigits(s.id)}</span>
+                            )}
+                          </div>
+                          <span
+                            className={`text-[9px] sm:text-[11px] font-bold leading-tight ${
+                              s.done
+                                ? "text-emerald-700"
+                                : s.current
+                                ? "text-[#2563eb] font-black"
+                                : "text-slate-400"
+                            }`}
+                          >
+                            {s.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             {selectedOrderModal.shippingAddress && (
               <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100 text-xs space-y-1">
                 <span className="font-bold text-slate-700 block mb-1">نشانی تحویل گیرنده:</span>
@@ -1198,25 +1303,14 @@ export function UserPanelView() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2">
-              {(selectedOrderModal.paymentStatus === "PENDING" || selectedOrderModal.paymentStatus === "pending") ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleCancelOrder(selectedOrderModal.id)}
-                  className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 font-bold"
-                >
-                  لغو سفارش
-                </Button>
-              ) : <div />}
-
+            <div className="flex items-center justify-end pt-2">
               <Button
                 variant="primary"
                 size="sm"
                 onClick={() => setSelectedOrderModal(null)}
-                className="text-xs font-bold px-6"
+                className="text-xs font-bold px-8"
               >
-                بستن
+                بستن فاکتور
               </Button>
             </div>
           </div>

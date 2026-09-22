@@ -134,6 +134,8 @@ export function sanitizeProductDto(raw: any): Record<string, any> {
       text: String(raw.badge.text).trim(),
       type: ["discount", "in-stock", "hot"].includes(raw.badge.type) ? raw.badge.type : "in-stock",
     };
+  } else if (raw.badge === null || raw.badge === false || (raw.badge && !raw.badge.text)) {
+    dto.badge = { text: "موجود در انبار", type: "in-stock" };
   }
 
   if (Array.isArray(raw.badges) && raw.badges.length > 0) {
@@ -176,7 +178,13 @@ export const productsApi = {
     const res = await api.get<Product[]>("/api/products/flash-deals", {
       skipAuth: true,
     });
-    return Array.isArray(res.data) ? res.data.map(normalizeProduct) : [];
+    const items = Array.isArray(res.data) ? res.data.map(normalizeProduct) : [];
+    return items.filter(
+      (p) =>
+        (p.originalPrice && p.originalPrice > p.priceNumber) ||
+        (p.discountPercent && p.discountPercent > 0) ||
+        Boolean(p.discount && p.discount.trim() !== "")
+    );
   },
 
   // Get related products

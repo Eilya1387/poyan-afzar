@@ -206,11 +206,18 @@ export async function fetchProductById(id: string): Promise<Product | null> {
 export async function fetchFlashDeals(): Promise<Product[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/products/flash-deals`, {
-      next: { revalidate: 30 },
+      cache: "no-store",
     });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     const json = await res.json();
-    return Array.isArray(json.data) ? json.data.map(normalizeProduct) : [];
+    const rawList: any[] = Array.isArray(json.data) ? json.data : (Array.isArray(json) ? json : []);
+    const items: Product[] = rawList.map(normalizeProduct);
+    return items.filter(
+      (p: Product) =>
+        (p.originalPrice && p.originalPrice > p.priceNumber) ||
+        (p.discountPercent && p.discountPercent > 0) ||
+        Boolean(p.discount && p.discount.trim() !== "")
+    );
   } catch (err) {
     console.error("fetchFlashDeals error:", err);
     return [];
