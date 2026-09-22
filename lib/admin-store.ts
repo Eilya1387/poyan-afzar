@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { getPersianFullDate, getPersianTodayDate } from "@/lib/formatters";
+import { getPersianFullDate, getPersianTodayDate, jalaliToGregorianISO } from "@/lib/formatters";
 import {
   AdminUser,
   AdminOrder,
@@ -678,6 +678,9 @@ export const useAdminStore = create<AdminState>()(
           type: discountData.type === "fixed" ? "FIXED" : "PERCENTAGE",
           percent: discountData.percent || 0,
           amount: discountData.amount || 0,
+          maxUsage: discountData.maxUsage,
+          startDate: jalaliToGregorianISO(discountData.startDate),
+          endDate: jalaliToGregorianISO(discountData.endDate),
           productId: discountData.productId !== "all" ? discountData.productId : undefined,
           isActive: discountData.isActive ?? true,
         }).then(() => {
@@ -694,7 +697,21 @@ export const useAdminStore = create<AdminState>()(
           ),
         }));
 
-        adminApi.updateDiscount(id, updates).then(() => {
+        const dto: any = { ...updates };
+        if (updates.type) {
+          dto.type = updates.type === "fixed" ? "FIXED" : "PERCENTAGE";
+        }
+        if (updates.startDate !== undefined) {
+          dto.startDate = jalaliToGregorianISO(updates.startDate);
+        }
+        if (updates.endDate !== undefined) {
+          dto.endDate = jalaliToGregorianISO(updates.endDate);
+        }
+        if (updates.productId === "all") {
+          dto.productId = null;
+        }
+
+        adminApi.updateDiscount(id, dto).then(() => {
           get().fetchAdminData();
         }).catch((err) => {
           console.error("Error updating discount on backend:", err);

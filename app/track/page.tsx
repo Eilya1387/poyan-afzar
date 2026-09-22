@@ -156,7 +156,7 @@ function TrackOrderContent() {
                 <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-100">
                   <div className="relative">
                     {/* Horizontal Connector Line */}
-                    <div className="absolute top-4 sm:top-5 left-6 right-6 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                    <div className="absolute top-4 sm:top-5 left-13 right-13 h-1 bg-slate-200 -translate-y-1/2 z-0">
                       <div
                         className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
                         style={{

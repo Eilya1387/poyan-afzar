@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAdminStore } from "@/lib/admin-store";
-import { formatPriceFa, toPersianDigits } from "@/lib/formatters";
+import { formatPriceFa, toPersianDigits, formatPersianDate } from "@/lib/formatters";
 import { AdminDiscount, DiscountType } from "@/types/admin";
 import { ConfirmModal } from "./confirm-modal";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
   Tag,
   Plus,
   Trash2,
+  Edit2,
   Calendar,
   Sparkles,
   ShoppingBag,
@@ -23,12 +24,14 @@ export function DiscountsView() {
   const discounts = useAdminStore((state) => state.discounts);
   const products = useAdminStore((state) => state.products);
   const addDiscount = useAdminStore((state) => state.addDiscount);
+  const updateDiscount = useAdminStore((state) => state.updateDiscount);
   const deleteDiscount = useAdminStore((state) => state.deleteDiscount);
   const toggleDiscount = useAdminStore((state) => state.toggleDiscount);
 
   // States
   const [activeTab, setActiveTab] = useState<"product" | "coupon">("product");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingDiscount, setEditingDiscount] = useState<AdminDiscount | null>(null);
   const [deletingDiscountId, setDeletingDiscountId] = useState<string | null>(null);
 
   // Form State
@@ -39,8 +42,8 @@ export function DiscountsView() {
   const [percent, setPercent] = useState<number>(10);
   const [amount, setAmount] = useState<number>(0);
   const [maxUsage, setMaxUsage] = useState<number>(100);
-  const [startDate, setStartDate] = useState("۱۴۰۴/۰۱/۰۱");
-  const [endDate, setEndDate] = useState("۱۴۰۴/۰۱/۱۵");
+  const [startDate, setStartDate] = useState("۱۴۰۵/۰۱/۰۱");
+  const [endDate, setEndDate] = useState("۱۴۰۵/۰۱/۳۰");
 
   // Current selected product for calculations
   const currentProduct = products.find((p) => p.id === selectedProductId) || products[0];
@@ -77,6 +80,7 @@ export function DiscountsView() {
 
   // Open modal for Product Discount
   const handleOpenProductDiscount = () => {
+    setEditingDiscount(null);
     setDiscountType("product");
     setTitle("تخفیف شگفت‌انگیز");
     setSelectedProductId(products[0]?.id || "");
@@ -85,21 +89,38 @@ export function DiscountsView() {
     if (products[0]) {
       setAmount(Math.round((products[0].price * initialPercent) / 100));
     }
-    setStartDate("۱۴۰۴/۰۱/۰۱");
-    setEndDate("۱۴۰۴/۰۱/۲۵");
+    setStartDate("۱۴۰۵/۰۱/۰۱");
+    setEndDate("۱۴۰۵/۰۱/۳۰");
     setIsModalOpen(true);
   };
 
   // Open modal for Coupon Code
   const handleOpenCouponDiscount = () => {
+    setEditingDiscount(null);
     setDiscountType("coupon");
     setTitle("کد تخفیف ویژه عید");
     setCode("TAK1404");
     setPercent(10);
     setAmount(100000);
     setMaxUsage(50);
-    setStartDate("۱۴۰۴/۰۱/۰۱");
-    setEndDate("۱۴۰۴/۰۱/۳۰");
+    setStartDate("۱۴۰۵/۰۱/۰۱");
+    setEndDate("۱۴۰۵/۰۱/۳۰");
+    setIsModalOpen(true);
+  };
+
+  // Open modal for Edit
+  const handleOpenEditModal = (discount: AdminDiscount) => {
+    setEditingDiscount(discount);
+    const isCoupon = Boolean(discount.code);
+    setDiscountType(isCoupon ? "coupon" : "product");
+    setTitle(discount.title);
+    setCode(discount.code || "");
+    setSelectedProductId(discount.productId || products[0]?.id || "");
+    setPercent(discount.percent || 10);
+    setAmount(discount.amount || 0);
+    setMaxUsage(discount.maxUsage || 100);
+    setStartDate(formatPersianDate(discount.startDate) || "۱۴۰۵/۰۱/۰۱");
+    setEndDate(formatPersianDate(discount.endDate) || "۱۴۰۵/۰۱/۳۰");
     setIsModalOpen(true);
   };
 
@@ -109,7 +130,7 @@ export function DiscountsView() {
 
     const dType: DiscountType = percent > 0 ? "percentage" : "fixed";
 
-    addDiscount({
+    const payload = {
       title,
       type: dType,
       code: discountType === "coupon" ? code.toUpperCase() : undefined,
@@ -122,8 +143,14 @@ export function DiscountsView() {
       maxUsage: discountType === "coupon" ? maxUsage : undefined,
       startDate,
       endDate,
-      isActive: true,
-    });
+      isActive: editingDiscount ? editingDiscount.isActive : true,
+    };
+
+    if (editingDiscount) {
+      updateDiscount(editingDiscount.id, payload);
+    } else {
+      addDiscount(payload);
+    }
 
     setIsModalOpen(false);
   };
@@ -242,12 +269,24 @@ export function DiscountsView() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setDeletingDiscountId(discount.id)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditModal(discount)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-[#2563eb] hover:bg-blue-50 transition-colors cursor-pointer"
+                      title="ویرایش تخفیف"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeletingDiscountId(discount.id)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                      title="حذف تخفیف"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Target Product / Rules */}
@@ -266,10 +305,10 @@ export function DiscountsView() {
                   </p>
                 )}
 
-                <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
+                <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-500">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    <span>انقضا: {discount.endDate}</span>
+                    <span>انقضا: {formatPersianDate(discount.endDate)}</span>
                   </div>
                   {discount.maxUsage && (
                     <span>
@@ -298,7 +337,7 @@ export function DiscountsView() {
         )}
       </div>
 
-      {/* Add Discount Modal (with 2-Way Realtime Calculation) */}
+      {/* Add / Edit Discount Modal (with 2-Way Realtime Calculation) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
           <div
@@ -309,7 +348,13 @@ export function DiscountsView() {
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-blue-600" />
                 <h3 className="text-base font-black text-slate-900">
-                  {discountType === "product" ? "تعریف تخفیف روی محصول" : "تعریف کد تخفیف سبد خرید"}
+                  {editingDiscount
+                    ? discountType === "product"
+                      ? "ویرایش تخفیف روی محصول"
+                      : "ویرایش کد تخفیف"
+                    : discountType === "product"
+                    ? "تعریف تخفیف روی محصول"
+                    : "تعریف کد تخفیف سبد خرید"}
                 </h3>
               </div>
               <button
@@ -476,7 +521,7 @@ export function DiscountsView() {
                   variant="secondary"
                   size="md"
                 >
-                  ثبت و اعمال تخفیف
+                  {editingDiscount ? "ذخیره تغییرات" : "ثبت و اعمال تخفیف"}
                 </Button>
               </div>
             </form>

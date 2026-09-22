@@ -5,7 +5,7 @@ import { PopularCategories } from "@/components/home/popular-categories";
 import { FlashSale } from "@/components/home/flash-sale";
 import { BestSellers } from "@/components/home/best-sellers";
 import { Brands } from "@/components/home/brands";
-import { BlogSection } from "@/components/home/blog-section";
+// import { BlogSection } from "@/components/home/blog-section";
 import { Footer } from "@/components/layout/footer";
 
 export default function Home() {
@@ -28,9 +28,9 @@ export default function Home() {
         <div className="animate-fade-in-up">
           <Brands />
         </div>
-        <div className="animate-fade-in-up">
+        {/* <div className="animate-fade-in-up">
           <BlogSection />
-        </div>
+        </div> */}
       </main>
       <Footer />
     </div>
