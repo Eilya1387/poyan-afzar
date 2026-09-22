@@ -171,34 +171,35 @@ export function Header({
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {isLoaded ? (
-              isLoggedIn ? (
-                <Link href="/panel">
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className="rounded-xl font-bold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md max-w-32 sm:max-w-44 text-xs sm:text-sm px-2.5 sm:px-4"
-                    leftIcon={<User className="w-4 h-4 text-blue-300 shrink-0" />}
-                  >
-                    <span className="truncate">{userDisplayName}</span>
-                  </Button>
-                </Link>
+            <div className="hidden md:flex items-center">
+              {isLoaded ? (
+                isLoggedIn ? (
+                  <Link href="/panel">
+                    <Button
+                      variant="primary"
+                      size="md"
+                      className="rounded-xl font-bold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md max-w-32 sm:max-w-44 text-xs sm:text-sm px-2.5 sm:px-4"
+                      leftIcon={<User className="w-4 h-4 text-blue-300 shrink-0" />}
+                    >
+                      <span className="truncate">{userDisplayName}</span>
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <Button
+                      variant="primary"
+                      size="md"
+                      className="rounded-xl font-semibold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md text-xs sm:text-sm px-2.5 sm:px-4"
+                      leftIcon={<LogIn className="w-4 h-4 shrink-0" />}
+                    >
+                      <span>ورود / ثبت‌نام</span>
+                    </Button>
+                  </Link>
+                )
               ) : (
-                <Link href="/login">
-                  <Button
-                    variant="primary"
-                    size="md"
-                    className="rounded-xl font-semibold gap-1.5 sm:gap-2 cursor-pointer shadow-sm hover:shadow-md text-xs sm:text-sm px-2.5 sm:px-4"
-                    leftIcon={<LogIn className="w-4 h-4 shrink-0" />}
-                  >
-                    <span className="hidden sm:inline">ورود / ثبت‌نام</span>
-                    <span className="sm:hidden">ورود</span>
-                  </Button>
-                </Link>
-              )
-            ) : (
-              <div className="w-20 sm:w-28 h-9 sm:h-10 rounded-xl bg-slate-100 animate-pulse" />
-            )}
+                <div className="w-20 sm:w-28 h-9 sm:h-10 rounded-xl bg-slate-100 animate-pulse" />
+              )}
+            </div>
 
             <Link href={isLoggedIn ? "/panel?tab=favorites" : "/login?redirect=/panel?tab=favorites"}>
               <Button
@@ -216,7 +217,10 @@ export function Header({
               </Button>
             </Link>
 
-            <Link href={isLoggedIn ? "/cart" : "/login?redirect=/cart"}>
+            <Link
+              href={isLoggedIn ? "/cart" : "/login?redirect=/cart"}
+              className="hidden md:inline-flex"
+            >
               <Button
                 variant="icon"
                 size="icon"
