@@ -299,11 +299,6 @@ export function DiscountsView() {
                   </div>
                 )}
 
-                {discount.amount > 0 && (
-                  <p className="text-xs text-slate-600 font-medium mt-2">
-                    مبلغ تخفیف: <span className="font-bold text-slate-900">{formatPriceFa(discount.amount)} تومان</span>
-                  </p>
-                )}
 
                 <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-slate-500">
                   <div className="flex items-center gap-1">
