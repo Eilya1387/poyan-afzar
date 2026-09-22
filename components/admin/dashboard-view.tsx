@@ -32,6 +32,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
   const orders = useAdminStore((state) => state.orders);
   const reviews = useAdminStore((state) => state.reviews);
   const salesChart = useAdminStore((state) => state.salesChart);
+  const kpis = useAdminStore((state) => state.kpis);
   const approveReview = useAdminStore((state) => state.approveReview);
   const rejectReview = useAdminStore((state) => state.rejectReview);
   const fetchAdminData = useAdminStore((state) => state.fetchAdminData);
@@ -46,15 +47,21 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
 
+  // Dynamic KPIs from Backend
+  const todaySales = kpis?.todaySales || 0;
+  const todayOrdersCount = kpis?.todayOrdersCount || 0;
+  const monthRevenue = kpis?.monthRevenue || kpis?.totalRevenue || 0;
+  const totalCustomers = kpis?.totalCustomers || 0;
+
   // Filter low-stock items
   const lowStockProducts = products
-    .filter((p) => p.stock <= p.minStockThreshold || p.stock <= 5)
+    .filter((p) => p.stock <= p.minStockThreshold || p.stock === 0)
     .slice(0, 4);
 
   // Pending reviews
   const pendingReviews = reviews
     .filter((r) => r.status === "pending")
-    .slice(0, 2);
+    .slice(0, 3);
 
   const pendingCount = reviews.filter((r) => r.status === "pending").length;
 
@@ -62,15 +69,34 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
   const recentOrders = orders.slice(0, 4);
 
   // Max sales amount for chart scale
-  const maxSales = Math.max(...salesChart.map((d) => d.amount), 50000000);
+  const maxSales = Math.max(...salesChart.map((d) => d.amount), 1000000);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     setIsExporting(true);
-    setTimeout(() => {
+    try {
+      const { API_BASE_URL, getAdminToken } = await import("@/lib/api/config");
+      const token = getAdminToken();
+      const res = await fetch(`${API_BASE_URL}/api/admin/reports/export`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `poyan-dashboard-report-${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+        setExportSuccess(true);
+        setTimeout(() => setExportSuccess(false), 3000);
+      }
+    } catch {
+      // Ignore
+    } finally {
       setIsExporting(false);
-      setExportSuccess(true);
-      setTimeout(() => setExportSuccess(false), 3000);
-    }, 800);
+    }
   };
 
   const handleConfirmReject = () => {
@@ -153,14 +179,13 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {formatPriceFa(48500000)}
+                {formatPriceFa(todaySales)}
               </span>
               <span className="text-xs font-bold text-slate-400">تومان</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>۱۲٪+ افزایش نسبت به دیروز</span>
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+              <span>گزارش رسمی سرور</span>
             </div>
           </div>
         </div>
@@ -171,20 +196,19 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
             <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
               <ShoppingCart className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">تعداد سفارش امروز</p>
+            <p className="text-xs font-bold text-slate-500">سفارشات امروز</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {toPersianDigits(28)}
+                {toPersianDigits(todayOrdersCount)}
               </span>
               <span className="text-xs font-bold text-slate-400">سفارش</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>۴+ سفارش جدید در ساعت گذشته</span>
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+              <span>ثبت شده در سیستم</span>
             </div>
           </div>
         </div>
@@ -201,38 +225,36 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {formatPriceFa(1240000000)}
+                {formatPriceFa(monthRevenue)}
               </span>
               <span className="text-xs font-bold text-slate-400">تومان</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>۸٪+ بیشتر از ماه گذشته</span>
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+              <span>گردش مالی کل</span>
             </div>
           </div>
         </div>
 
-        {/* Card 4: مشتریان جدید */}
+        {/* Card 4: مشتریان */}
         <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="flex items-start justify-between">
             <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
               <UserPlus className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">مشتریان جدید</p>
+            <p className="text-xs font-bold text-slate-500">کل خریداران</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                {toPersianDigits(342)}
+                {toPersianDigits(totalCustomers)}
               </span>
-              <span className="text-xs font-bold text-slate-400">نفر</span>
+              <span className="text-xs font-bold text-slate-400">مشتری</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>۵٪+ رشد جذب مشتری</span>
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+              <span>کاربران فعال سامانه</span>
             </div>
           </div>
         </div>
@@ -280,7 +302,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                     )}
 
                     {/* Bar Pill */}
-                    <div className="w-full max-w-[52px] bg-slate-100 rounded-t-xl h-full flex items-end overflow-hidden">
+                    <div className="w-full max-w-13 bg-slate-100 rounded-t-xl h-full flex items-end overflow-hidden">
                       <div
                         style={{ height: `${heightPercent}%` }}
                         className={`w-full rounded-t-xl transition-all duration-300 ${

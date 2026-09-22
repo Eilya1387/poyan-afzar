@@ -14,6 +14,7 @@ import { InventoryView } from "@/components/admin/inventory-view";
 import { CustomersView } from "@/components/admin/customers-view";
 import { DiscountsView } from "@/components/admin/discounts-view";
 import { ReviewsView } from "@/components/admin/reviews-view";
+import { QaView } from "@/components/admin/qa-view";
 import { ReportsView } from "@/components/admin/reports-view";
 import { getAdminToken } from "@/lib/api/config";
 
@@ -77,6 +78,7 @@ export default function AdminPage() {
           {activeTab === "customers" && <CustomersView />}
           {activeTab === "discounts" && <DiscountsView />}
           {activeTab === "reviews" && <ReviewsView />}
+          {activeTab === "qa" && <QaView />}
           {activeTab === "reports" && <ReportsView />}
         </main>
       </div>

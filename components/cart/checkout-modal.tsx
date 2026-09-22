@@ -35,11 +35,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [selectedAddressId, setSelectedAddressId] = useState<string>(
     addresses.find((a) => a.isDefault)?.id || addresses[0]?.id || ""
   );
-  const [paymentMethod, setPaymentMethod] = useState<"gateway" | "wallet" | "cod">("gateway");
+  const [paymentMethod, setPaymentMethod] = useState<"gateway" | "wallet">("gateway");
   const [addressModalOpen, setAddressModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [trackingCode, setTrackingCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const toPersianDigits = (n: number | string) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -51,8 +52,6 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     return num.toLocaleString("fa-IR").replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const handlePay = async () => {
     if (addresses.length === 0 || !selectedAddressId) {
       setAddressModalOpen(true);
@@ -60,6 +59,10 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     }
 
     const selectedAddr = addresses.find((a) => a.id === selectedAddressId) || addresses[0];
+    if (!selectedAddr) {
+      setErrorMessage("لطفاً آدرس تحویل سفارش را انتخاب کنید.");
+      return;
+    }
 
     setIsProcessing(true);
     setErrorMessage(null);
@@ -69,46 +72,45 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         items: items.map((it) => ({
           productId: it.id,
           quantity: it.quantity,
-          price: it.price,
           color: it.color,
         })),
-        customerName: user ? `${user.firstName} ${user.lastName}` : (selectedAddr?.receiverName || "کاربر خریدار"),
-        customerPhone: user?.phone || selectedAddr?.receiverPhone || "09120000000",
-        shippingAddress: selectedAddr ? {
-          province: selectedAddr.province,
-          city: selectedAddr.city,
+        customerName: user ? `${user.firstName} ${user.lastName}`.trim() : (selectedAddr.receiverName || "کاربر خریدار"),
+        customerPhone: user?.phone || selectedAddr.receiverPhone || "09123456789",
+        customerEmail: user?.email || undefined,
+        shippingAddress: {
+          province: selectedAddr.province || "تهران",
+          city: selectedAddr.city || "تهران",
           fullAddress: selectedAddr.fullAddress,
-          postalCode: selectedAddr.postalCode,
-          receiverName: selectedAddr.receiverName,
-          receiverPhone: selectedAddr.receiverPhone,
-        } : undefined,
+          postalCode: selectedAddr.postalCode || "1234567890",
+          receiverName: selectedAddr.receiverName || (user ? `${user.firstName} ${user.lastName}`.trim() : "کاربر"),
+          receiverPhone: selectedAddr.receiverPhone || (user?.phone || "09123456789"),
+        },
         paymentMethod: paymentMethod,
       });
 
       const orderData: any = res.data || res;
-      const code = orderData.trackingCode || orderData.order?.trackingCode || `TK-${Math.floor(10000 + Math.random() * 90000)}`;
+      const code = orderData.trackingCode || orderData.order?.trackingCode;
+
+      if (!code) {
+        throw new Error(orderData.message || "خطا در دریافت کد رهگیری سفارش");
+      }
+
+      setTrackingCode(code);
+      clearCart();
 
       if (paymentMethod === "gateway" && orderData.paymentUrl) {
-        // If payment gateway url is mock/local, we can redirect or show confirmation
-        if (orderData.paymentUrl.includes("verify") || orderData.paymentUrl.includes("localhost")) {
-          // Verify automatically or redirect
-          setTrackingCode(code);
-          setOrderComplete(true);
-          clearCart();
+        if (orderData.paymentUrl.startsWith("http://localhost") || orderData.paymentUrl.includes("/payment/verify")) {
+          window.location.href = orderData.paymentUrl;
+          return;
         } else {
           window.location.href = orderData.paymentUrl;
+          return;
         }
-      } else {
-        setTrackingCode(code);
-        setOrderComplete(true);
-        clearCart();
       }
-    } catch (err: any) {
-      // Fallback
-      const code = `TK-${Math.floor(10000 + Math.random() * 90000)}`;
-      setTrackingCode(code);
+
       setOrderComplete(true);
-      clearCart();
+    } catch (err: any) {
+      setErrorMessage(err?.message || "خطا در ثبت و پرداخت سفارش. لطفاً دوباره تلاش کنید.");
     } finally {
       setIsProcessing(false);
     }
@@ -260,7 +262,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   <span>انتخاب شیوه پرداخت</span>
                 </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <label
                     className={`p-3 rounded-2xl border cursor-pointer flex items-center gap-2.5 transition-all ${
                       paymentMethod === "gateway"
@@ -276,7 +278,10 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       onChange={() => setPaymentMethod("gateway")}
                       className="text-[#2563eb] focus:ring-blue-500"
                     />
-                    <span className="font-bold text-slate-800">درگاه اینترنتی شاپرک</span>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-slate-800">درگاه پرداخت اینترنتی</span>
+                      <span className="text-[10px] text-slate-400">اتصال به کلیه کارت‌های عضو شتاب</span>
+                    </div>
                   </label>
 
                   <label
@@ -294,28 +299,19 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       onChange={() => setPaymentMethod("wallet")}
                       className="text-[#2563eb] focus:ring-blue-500"
                     />
-                    <span className="font-bold text-slate-800">کیف پول اعتباری</span>
-                  </label>
-
-                  <label
-                    className={`p-3 rounded-2xl border cursor-pointer flex items-center gap-2.5 transition-all ${
-                      paymentMethod === "cod"
-                        ? "border-[#2563eb] bg-blue-50/40 ring-1 ring-[#2563eb]"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="payment-method"
-                      value="cod"
-                      checked={paymentMethod === "cod"}
-                      onChange={() => setPaymentMethod("cod")}
-                      className="text-[#2563eb] focus:ring-blue-500"
-                    />
-                    <span className="font-bold text-slate-800">پرداخت در محل</span>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-slate-800">کیف پول کاربری</span>
+                      <span className="text-[10px] text-slate-400">پرداخت سریع از موجودی حساب</span>
+                    </div>
                   </label>
                 </div>
               </div>
+
+              {errorMessage && (
+                <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl text-center">
+                  {errorMessage}
+                </div>
+              )}
 
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                 <Button

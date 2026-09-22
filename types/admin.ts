@@ -152,4 +152,21 @@ export type AdminTab =
   | "customers"
   | "discounts"
   | "reviews"
+  | "qa"
   | "reports";
+
+export interface AdminQaItem {
+  id: string;
+  productId: string;
+  productTitle?: string;
+  productImage?: string;
+  userName?: string;
+  userPhone?: string;
+  question: string;
+  answer?: string | null;
+  answeredBy?: string | null;
+  isPublished: boolean;
+  hasAnswer?: boolean;
+  date?: string;
+  createdAt: string;
+}

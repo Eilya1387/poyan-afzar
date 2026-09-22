@@ -26,6 +26,11 @@ import { Loader2 } from "lucide-react";
 export function CartView() {
   const router = useRouter();
   const { isLoggedIn, isLoaded } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isLoaded && !isLoggedIn) {
@@ -39,6 +44,7 @@ export function CartView() {
     removeItem,
     clearCart,
     applyCoupon,
+    setCouponDiscount,
     couponCode,
     couponDiscount,
     removeCoupon,
@@ -51,8 +57,9 @@ export function CartView() {
 
   const [inputCoupon, setInputCoupon] = useState("");
   const [couponError, setCouponError] = useState("");
-  const [couponSuccess, setCouponSuccess] = useState(false);
+  const [couponSuccessMessage, setCouponSuccessMessage] = useState<string | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [couponLoading, setCouponLoading] = useState(false);
 
   const toPersianDigits = (n: number | string) => {
     const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -66,40 +73,48 @@ export function CartView() {
       .replace(/[0-9]/g, (w) => persianDigits[+w]);
   };
 
-  const [couponLoading, setCouponLoading] = useState(false);
+  const rawTotal = getRawTotal();
+  const FREE_SHIPPING_THRESHOLD = 2000000;
+  const remainingForFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - rawTotal);
+  const freeShippingPercent = Math.min(100, Math.round((rawTotal / FREE_SHIPPING_THRESHOLD) * 100));
+  const isFreeShipping = rawTotal >= FREE_SHIPPING_THRESHOLD;
 
   const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputCoupon.trim()) return;
+    const cleanCode = inputCoupon.trim();
+    if (!cleanCode) return;
 
     setCouponLoading(true);
     setCouponError("");
-    setCouponSuccess(false);
+    setCouponSuccessMessage(null);
 
     try {
-      const res = await cartApi.validateCoupon(inputCoupon.trim(), getRawTotal());
+      const res = await cartApi.validateCoupon(cleanCode, rawTotal);
       if (res.valid) {
-        setCouponSuccess(true);
-        setCouponError("");
-        applyCoupon(inputCoupon.trim());
+        const discountAmt = res.discountAmount || 0;
+        setCouponDiscount(cleanCode, discountAmt);
+        setCouponSuccessMessage(
+          res.message ||
+          `کد تخفیف ${res.code} به مبلغ ${formatPrice(discountAmt)} تومان با موفقیت اعمال شد.`
+        );
+        setInputCoupon("");
       } else {
         setCouponError(res.message || "کد تخفیف وارد شده نامعتبر است");
       }
     } catch (err: any) {
-      // Fallback to local store coupon logic if server returns error
-      const localSuccess = applyCoupon(inputCoupon.trim());
+      const localSuccess = applyCoupon(cleanCode);
       if (localSuccess) {
-        setCouponSuccess(true);
-        setCouponError("");
+        setCouponSuccessMessage(`کد تخفیف ${cleanCode} با موفقیت اعمال شد.`);
+        setInputCoupon("");
       } else {
-        setCouponError(err?.message || "کد تخفیف معتبر نیست");
+        setCouponError(err?.message || "کد تخفیف وارد شده معتبر نیست");
       }
     } finally {
       setCouponLoading(false);
     }
   };
 
-  const itemsCount = getItemsCount();
+  const itemsCount = mounted ? getItemsCount() : 0;
 
   return (
     <div className="space-y-6 text-right pt-4">
@@ -108,14 +123,14 @@ export function CartView() {
           <h1 className="text-xl sm:text-2xl font-black text-slate-900">
             سبد خرید شما
           </h1>
-          {itemsCount > 0 && (
+          {mounted && itemsCount > 0 && (
             <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full border border-blue-100/60 shadow-2xs">
               {toPersianDigits(itemsCount)} کالا در سبد خرید
             </span>
           )}
         </div>
 
-        {items.length > 0 && (
+        {mounted && items.length > 0 && (
           <button
             type="button"
             onClick={clearCart}
@@ -127,7 +142,11 @@ export function CartView() {
         )}
       </div>
 
-      {items.length === 0 ? (
+      {!mounted ? (
+        <div className="py-20 text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-[#2563eb] mx-auto" />
+        </div>
+      ) : items.length === 0 ? (
         <div className="bg-white rounded-3xl border border-slate-200/90 p-12 text-center space-y-4 shadow-xs">
           <div className="w-16 h-16 rounded-3xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
             <ShoppingBag className="w-8 h-8" />
@@ -139,7 +158,7 @@ export function CartView() {
             می‌توانید برای مشاهده محصولات و کالاهای دیجیتال به صفحه فروشگاه
             مراجعه کنید.
           </p>
-          <Link href="/" className="inline-block pt-2">
+          <Link href="/products" className="inline-block pt-2">
             <Button variant="primary" size="lg" className="font-bold px-8">
               مشاهده محصولات
             </Button>
@@ -148,16 +167,24 @@ export function CartView() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           <div className="lg:col-span-8 order-2 lg:order-1 space-y-5">
+            {/* Free Shipping Progress Bar */}
             <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-3">
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2 text-slate-700 font-bold">
                   <Truck className="w-4 h-4 text-[#2563eb]" />
-                  <span>فقط ۲۰۰,۰۰۰ تومان تا ارسال رایگان فاصله دارید</span>
+                  {isFreeShipping ? (
+                    <span className="text-emerald-600">ارسال برای این سفارش کاملاً رایگان است! 🎉</span>
+                  ) : (
+                    <span>فقط {formatPrice(remainingForFreeShipping)} تومان تا ارسال رایگان فاصله دارید</span>
+                  )}
                 </div>
-                <span className="font-black text-slate-800">۷۵٪</span>
+                <span className="font-black text-slate-800">{toPersianDigits(freeShippingPercent)}٪</span>
               </div>
-              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                <div className="bg-[#0b1528] h-full rounded-full transition-all duration-500 w-3/4" />
+              <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-500 ${isFreeShipping ? "bg-emerald-500" : "bg-[#2563eb]"}`}
+                  style={{ width: `${freeShippingPercent}%` }}
+                />
               </div>
             </div>
 
@@ -168,18 +195,24 @@ export function CartView() {
                   className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all hover:border-slate-300"
                 >
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-50 shrink-0 border border-slate-200/80 p-2 flex items-center justify-center overflow-hidden">
+                    <Link
+                      href={`/products/${item.id}`}
+                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-50 shrink-0 border border-slate-200/80 p-2 flex items-center justify-center overflow-hidden group/img hover:opacity-90 transition-opacity cursor-pointer"
+                    >
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-contain group-hover/img:scale-105 transition-transform"
                       />
-                    </div>
+                    </Link>
 
                     <div className="space-y-1.5 flex-1 text-right">
-                      <h3 className="text-xs sm:text-sm font-black text-slate-900 leading-snug">
+                      <Link
+                        href={`/products/${item.id}`}
+                        className="text-xs sm:text-sm font-black text-slate-900 leading-snug hover:text-[#2563eb] transition-colors cursor-pointer inline-block"
+                      >
                         {item.title}
-                      </h3>
+                      </Link>
 
                       <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500 font-medium">
                         {item.color && <span>رنگ: {item.color}</span>}
@@ -194,7 +227,7 @@ export function CartView() {
                       <div className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span>
-                          {item.inStockText || "موجود در انبار - ارسال فردا"}
+                          {item.inStockText || "موجود در انبار - ارسال سریع"}
                         </span>
                       </div>
                     </div>
@@ -265,8 +298,9 @@ export function CartView() {
                   type="submit"
                   variant="secondary"
                   size="md"
+                  disabled={couponLoading}
                   className="font-bold text-xs shrink-0 gap-1.5"
-                  rightIcon={<Tag className="w-4 h-4" />}
+                  rightIcon={couponLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4" />}
                 >
                   اعمال تخفیف
                 </Button>
@@ -277,10 +311,20 @@ export function CartView() {
                   {couponError}
                 </p>
               )}
-              {couponSuccess && (
-                <p className="text-[11px] text-emerald-600 font-bold">
-                  کد تخفیف ۲۰۰,۰۰۰ تومانی با موفقیت اعمال شد!
-                </p>
+              {couponSuccessMessage && (
+                <div className="flex items-center justify-between bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl p-2.5 text-xs font-bold">
+                  <span>{couponSuccessMessage}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      removeCoupon();
+                      setCouponSuccessMessage(null);
+                    }}
+                    className="text-xs text-red-500 hover:underline cursor-pointer"
+                  >
+                    حذف کوپن
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -295,20 +339,22 @@ export function CartView() {
                 <div className="flex items-center justify-between text-slate-600">
                   <span>مبلغ کالاها ({toPersianDigits(itemsCount)} کالا)</span>
                   <span className="font-bold text-slate-800">
-                    {formatPrice(getRawTotal())} تومان
+                    {formatPrice(rawTotal)} تومان
                   </span>
                 </div>
 
                 {getDiscountTotal() > 0 && (
                   <div className="flex items-center justify-between text-emerald-600 font-bold">
-                    <span>تخفیف محصولات</span>
+                    <span>تخفیف</span>
                     <span>{formatPrice(getDiscountTotal())}- تومان</span>
                   </div>
                 )}
 
                 <div className="flex items-center justify-between text-slate-600">
                   <span>هزینه ارسال</span>
-                  <span className="font-bold text-emerald-600">رایگان</span>
+                  <span className={`font-bold ${isFreeShipping ? "text-emerald-600" : "text-slate-800"}`}>
+                    {isFreeShipping ? "رایگان" : `${formatPrice(45000)} تومان`}
+                  </span>
                 </div>
 
                 <div className="border-t border-slate-100 pt-3 flex items-baseline justify-between text-slate-900">
@@ -317,21 +363,19 @@ export function CartView() {
                   </span>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl sm:text-2xl font-black text-slate-900">
-                      {formatPrice(getFinalTotal())}
+                      {formatPrice(getFinalTotal() + (isFreeShipping ? 0 : 45000))}
                     </span>
-                    <span className="text-xs font-medium text-slate-500">
-                      تومان
-                    </span>
+                    <span className="text-xs font-medium text-slate-500">تومان</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2 pt-2">
                 <Button
-                  variant="secondary"
+                  variant="primary"
                   size="lg"
                   onClick={() => setCheckoutOpen(true)}
-                  className="w-full font-black text-sm shadow-md"
+                  className="w-full font-black text-sm py-3.5 shadow-md hover:shadow-lg rounded-2xl"
                 >
                   ادامه و ثبت سفارش
                 </Button>

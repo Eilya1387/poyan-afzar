@@ -58,6 +58,9 @@ export function ProductsView() {
   const [formStock, setFormStock] = useState<number>(10);
   const [formMinStock, setFormMinStock] = useState<number>(3);
   const [formImage, setFormImage] = useState("/images/products/asus-rog-4070ti.jpg");
+  const [formImages, setFormImages] = useState<string[]>(["/images/products/asus-rog-4070ti.jpg"]);
+  const [isFlashDeal, setIsFlashDeal] = useState(false);
+  const [flashDiscountPercent, setFlashDiscountPercent] = useState(15);
   const [formDescription, setFormDescription] = useState("");
   const [formWarranty, setFormWarranty] = useState("۱۸ ماهه گارانتی اصلی");
   const [formSeller, setFormSeller] = useState("پویان افزار");
@@ -81,84 +84,64 @@ export function ProductsView() {
     { label: "گیگابایت 4060", url: "/images/products/gigabyte-4060.jpg" },
   ];
 
-  // Process uploaded image file from device with server upload & canvas fallback
-  const processImageFile = async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      alert("لطفاً یک فایل تصویری معتبر (JPG, PNG, WEBP, ...) انتخاب نمایید.");
-      return;
-    }
-
+  // Process uploaded image files (up to 4 for gallery)
+  const processImageFiles = async (files: File[]) => {
+    if (!files || files.length === 0) return;
     setIsProcessingImage(true);
 
     try {
       const { uploadApi } = await import("@/lib/api/upload");
       const { API_BASE_URL } = await import("@/lib/api/config");
-      const uploadRes = await uploadApi.uploadProductImage(file);
-      if (uploadRes?.url) {
-        const fullUrl = uploadRes.url.startsWith("http")
-          ? uploadRes.url
-          : `${API_BASE_URL}${uploadRes.url}`;
-        setFormImage(fullUrl);
+
+      const validFiles = files.filter((f) => f.type.startsWith("image/")).slice(0, 4);
+      if (validFiles.length === 0) {
+        alert("لطفاً فایل‌های تصویری معتبر (JPG, PNG, WEBP) انتخاب نمایید.");
         setIsProcessingImage(false);
         return;
       }
+
+      if (validFiles.length === 1) {
+        const res = await uploadApi.uploadProductImage(validFiles[0]);
+        if (res?.url) {
+          const fullUrl = res.url.startsWith("http") ? res.url : `${API_BASE_URL}${res.url}`;
+          setFormImages((prev) => Array.from(new Set([...prev, fullUrl])).slice(0, 4));
+          setFormImage(fullUrl);
+          setIsProcessingImage(false);
+          return;
+        }
+      } else {
+        const uploadRes = await uploadApi.uploadImages(validFiles, "products");
+        if (Array.isArray(uploadRes) && uploadRes.length > 0) {
+          const fullUrls = uploadRes.map((r) => r.url.startsWith("http") ? r.url : `${API_BASE_URL}${r.url}`);
+          setFormImages((prev) => Array.from(new Set([...prev, ...fullUrls])).slice(0, 4));
+          if (fullUrls[0]) setFormImage(fullUrls[0]);
+          setIsProcessingImage(false);
+          return;
+        }
+      }
     } catch {
-      // Fallback to local canvas base64 if offline
+      // Fallback
     }
 
+    // Fallback local reader for first file
+    const file = files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
-      if (!dataUrl) {
-        setIsProcessingImage(false);
-        return;
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        const maxWidth = 800;
-        const maxHeight = 800;
-        let { width, height } = img;
-
-        if (width > maxWidth || height > maxHeight) {
-          if (width > height) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          } else {
-            width = Math.round((width * maxHeight) / height);
-            height = maxHeight;
-          }
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          const optimizedUrl = canvas.toDataURL("image/jpeg", 0.85);
-          setFormImage(optimizedUrl);
-        } else {
-          setFormImage(dataUrl);
-        }
-        setIsProcessingImage(false);
-      };
-      img.onerror = () => {
+      if (dataUrl) {
         setFormImage(dataUrl);
-        setIsProcessingImage(false);
-      };
-      img.src = dataUrl;
-    };
-    reader.onerror = () => {
+        setFormImages((prev) => Array.from(new Set([...prev, dataUrl])).slice(0, 4));
+      }
       setIsProcessingImage(false);
     };
+    reader.onerror = () => setIsProcessingImage(false);
     reader.readAsDataURL(file);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      processImageFile(file);
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    if (files.length > 0) {
+      processImageFiles(files);
     }
     if (e.target) {
       e.target.value = "";
@@ -168,9 +151,9 @@ export function ProductsView() {
   const handleDropFile = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDraggingFile(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      processImageFile(file);
+    const files = e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+    if (files.length > 0) {
+      processImageFiles(files);
     }
   };
 
@@ -184,6 +167,25 @@ export function ProductsView() {
     setIsDraggingFile(false);
   };
 
+  const handleRemoveGalleryImage = (indexToRemove: number) => {
+    const updated = formImages.filter((_, idx) => idx !== indexToRemove);
+    setFormImages(updated);
+    if (updated.length > 0) {
+      setFormImage(updated[0]);
+    } else {
+      setFormImage("");
+    }
+  };
+
+  const handleSetPrimaryImage = (indexToPrimary: number) => {
+    const selected = formImages[indexToPrimary];
+    if (!selected) return;
+    const remaining = formImages.filter((_, idx) => idx !== indexToPrimary);
+    const updated = [selected, ...remaining];
+    setFormImages(updated);
+    setFormImage(selected);
+  };
+
   // Open Create Modal
   const handleOpenCreateModal = () => {
     setEditingProduct(null);
@@ -193,9 +195,12 @@ export function ProductsView() {
     setFormBrand(brands[0]?.id || "asus");
     setFormPrice(15000000);
     setFormOriginalPrice(15000000);
+    setIsFlashDeal(false);
+    setFlashDiscountPercent(15);
     setFormStock(10);
     setFormMinStock(3);
     setFormImage(presetImages[0].url);
+    setFormImages([presetImages[0].url]);
     setFormDescription("");
     setFormWarranty("۱۸ ماهه گارانتی اصلی");
     setFormSeller("پویان افزار");
@@ -216,15 +221,22 @@ export function ProductsView() {
     setFormCategory(product.category);
     setFormBrand(product.brand);
     setFormPrice(product.price);
-    setFormOriginalPrice(product.originalPrice || product.price);
+    const origPrice = product.originalPrice || product.price;
+    setFormOriginalPrice(origPrice);
+    const hasDiscount = Boolean(origPrice > product.price || product.badge?.type === "discount");
+    setIsFlashDeal(hasDiscount);
+    const discountCalc = origPrice > product.price ? Math.round(((origPrice - product.price) / origPrice) * 100) : 15;
+    setFlashDiscountPercent(discountCalc);
     setFormStock(product.stock);
     setFormMinStock(product.minStockThreshold);
     setFormImage(product.image);
+    const prodImages = Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.image];
+    setFormImages(prodImages.slice(0, 4));
     setFormDescription(product.description || "");
     setFormWarranty(product.warranty || "۱۸ ماهه گارانتی اصلی");
     setFormSeller(product.seller || "پویان افزار");
     setFormBadgeText(product.badge?.text || "");
-    setFormBadgeType(product.badge?.type || "in-stock");
+    setFormBadgeType(product.badge?.type || (hasDiscount ? "discount" : "in-stock"));
     setFormSpecs(product.specs && product.specs.length > 0 ? product.specs : [{ label: "", value: "" }]);
     setIsFormModalOpen(true);
   };
@@ -252,6 +264,22 @@ export function ProductsView() {
     const catObj = categories.find((c) => c.id === formCategory);
     const brandObj = brands.find((b) => b.id === formBrand);
 
+    const mainImg = formImages[0] || formImage || "/images/products/asus-rog-4070ti.jpg";
+    const allImgs = formImages.length > 0 ? formImages : [mainImg];
+
+    const finalPrice = Number(formPrice);
+    let origPrice = Number(formOriginalPrice);
+    let badgeText = formBadgeText.trim();
+    let badgeType = formBadgeType;
+
+    if (isFlashDeal) {
+      if (origPrice <= finalPrice && flashDiscountPercent > 0) {
+        origPrice = Math.round(finalPrice / (1 - flashDiscountPercent / 100));
+      }
+      badgeText = badgeText || `٪${toPersianDigits(flashDiscountPercent)} تخفیف`;
+      badgeType = "discount";
+    }
+
     const productPayload = {
       title: formTitle,
       enTitle: formEnTitle,
@@ -259,11 +287,12 @@ export function ProductsView() {
       categoryName: catObj?.name || formCategory,
       brand: formBrand,
       brandFa: brandObj?.nameFa || formBrand,
-      price: Number(formPrice),
-      originalPrice: Number(formOriginalPrice),
+      price: finalPrice,
+      originalPrice: origPrice,
       stock: Number(formStock),
       minStockThreshold: Number(formMinStock),
-      image: formImage,
+      image: mainImg,
+      images: allImgs,
       inStock: Number(formStock) > 0,
       rating: editingProduct?.rating || 5.0,
       reviewsCount: editingProduct?.reviewsCount || 0,
@@ -271,8 +300,8 @@ export function ProductsView() {
       warranty: formWarranty,
       seller: formSeller,
       specs: formSpecs.filter((s) => s.label.trim() !== ""),
-      badge: formBadgeText.trim()
-        ? { text: formBadgeText, type: formBadgeType }
+      badge: badgeText
+        ? { text: badgeText, type: badgeType }
         : undefined,
     };
 
@@ -746,125 +775,206 @@ export function ProductsView() {
                 </div>
               </div>
 
-              {/* Image Picker with Device Upload, Drag & Drop, Presets & Direct URL */}
+              {/* Flash Deal / Special Offer Setting */}
+              <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isFlashDeal}
+                      onChange={(e) => setIsFlashDeal(e.target.checked)}
+                      className="w-4 h-4 text-amber-600 rounded-md focus:ring-amber-500"
+                    />
+                    <span className="font-bold text-amber-900 text-xs">
+                      نمایش در اسلایدر پیشنهاد شگفت‌انگیز (تخفیف ویژه صفحه اصلی)
+                    </span>
+                  </label>
+                  {isFlashDeal && (
+                    <span className="text-[11px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">
+                      فعال در شگفت‌انگیز
+                    </span>
+                  )}
+                </div>
+
+                {isFlashDeal && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-amber-200/60">
+                    <div>
+                      <label className="block text-amber-900 font-bold mb-1">
+                        درصد تخفیف شگفت‌انگیز (٪)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="99"
+                        value={flashDiscountPercent}
+                        onChange={(e) => {
+                          const pct = Number(e.target.value);
+                          setFlashDiscountPercent(pct);
+                          if (formPrice > 0) {
+                            setFormOriginalPrice(Math.round(formPrice / (1 - pct / 100)));
+                          }
+                        }}
+                        className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-amber-900 font-bold mb-1">
+                        متن نشان تخفیف
+                      </label>
+                      <input
+                        type="text"
+                        value={formBadgeText || `٪${toPersianDigits(flashDiscountPercent)} تخفیف`}
+                        onChange={(e) => setFormBadgeText(e.target.value)}
+                        placeholder={`٪${toPersianDigits(flashDiscountPercent)} تخفیف`}
+                        className="w-full px-3 py-2 bg-white border border-amber-300 rounded-xl font-bold text-amber-900"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Multi-Image Gallery Picker (Up to 4 images) */}
               <div className="space-y-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200">
                 <div className="flex items-center justify-between">
                   <label className="block text-slate-800 font-bold">
-                    تصویر محصول *
+                    گالری تصاویر محصول (تا ۴ تصویر) *
                   </label>
                   <span className="text-[11px] text-slate-500 font-medium">
-                    آپلود از دستگاه یا انتخاب از تصاویر آماده
+                    {toPersianDigits(formImages.length)} از ۴ تصویر انتخاب شده
                   </span>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 items-start">
-                  {/* Preview Box */}
-                  <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white border-2 border-dashed border-slate-200 overflow-hidden shrink-0 flex items-center justify-center p-2 shadow-xs group">
-                    {isProcessingImage ? (
-                      <div className="flex flex-col items-center justify-center text-blue-600 gap-1.5">
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                        <span className="text-[10px] font-bold">پردازش...</span>
-                      </div>
-                    ) : formImage ? (
-                      <>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={formImage}
-                          alt="پیش‌نمایش تصویر کالا"
-                          className="w-full h-full object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/images/products/asus-rog-4070ti.jpg";
-                          }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setFormImage("")}
-                          title="حذف تصویر"
-                          className="absolute top-1.5 left-1.5 p-1 rounded-lg bg-rose-600 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-xs"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </>
-                    ) : (
-                      <div className="text-center text-slate-400">
-                        <FileImage className="w-8 h-8 mx-auto mb-1 opacity-50" />
-                        <span className="text-[10px] font-bold">بدون تصویر</span>
-                      </div>
-                    )}
+                {/* Upload & Dropzone */}
+                <div className="space-y-2.5">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    multiple
+                    onChange={handleFileInputChange}
+                    accept="image/png, image/jpeg, image/webp, image/svg+xml, image/gif"
+                    className="hidden"
+                  />
+
+                  <div
+                    onDragOver={handleDragOverFile}
+                    onDragLeave={handleDragLeaveFile}
+                    onDrop={handleDropFile}
+                    onClick={() => {
+                      if (formImages.length < 4) fileInputRef.current?.click();
+                    }}
+                    className={`w-full p-3 rounded-xl border-2 border-dashed transition-all cursor-pointer flex items-center justify-center gap-3 text-right select-none ${
+                      formImages.length >= 4
+                        ? "opacity-60 cursor-not-allowed border-slate-200 bg-slate-100"
+                        : isDraggingFile
+                        ? "border-blue-500 bg-blue-50/80 text-blue-700 scale-[0.99]"
+                        : "border-slate-300 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-slate-700"
+                    }`}
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      {isProcessingImage ? <Loader2 className="w-5 h-5 animate-spin" /> : <UploadCloud className="w-5 h-5" />}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-slate-800">
+                        {formImages.length >= 4
+                          ? "سقف ۴ تصویر تکمیل شده است"
+                          : "انتخاب تصاویر گالری (تا ۴ تصویر همزمان) یا رها کردن اینجا"}
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        فرمت‌های JPG, PNG, WEBP با بارگذاری مستقیم روی سرور
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Actions: Upload & Presets & URL */}
-                  <div className="flex-1 w-full space-y-2.5">
-                    {/* Hidden Native File Input */}
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileInputChange}
-                      accept="image/png, image/jpeg, image/webp, image/svg+xml, image/gif"
-                      className="hidden"
-                    />
+                  {/* 4 Image Thumbnails Grid */}
+                  {formImages.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                      {formImages.map((imgUrl, idx) => (
+                        <div
+                          key={idx}
+                          className="relative aspect-square rounded-2xl bg-white border-2 border-slate-200 overflow-hidden group shadow-xs p-1 flex items-center justify-center"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={imgUrl}
+                            alt={`تصویر ${idx + 1}`}
+                            className="w-full h-full object-contain"
+                          />
 
-                    {/* Upload Dropzone */}
-                    <div
-                      onDragOver={handleDragOverFile}
-                      onDragLeave={handleDragLeaveFile}
-                      onDrop={handleDropFile}
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`w-full p-3 rounded-xl border-2 border-dashed transition-all cursor-pointer flex items-center justify-center gap-3 text-right select-none ${
-                        isDraggingFile
-                          ? "border-blue-500 bg-blue-50/80 text-blue-700 scale-[0.99]"
-                          : "border-slate-300 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-slate-700"
-                      }`}
-                    >
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                        <UploadCloud className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-bold text-slate-800">
-                          انتخاب عکس از گوشی / کامپیوتر یا رها کردن اینجا (Drag & Drop)
-                        </p>
-                        <p className="text-[11px] text-slate-500 mt-0.5">
-                          فرمت‌های JPG, PNG, WEBP با بهینه‌سازی خودکار حجم
-                        </p>
-                      </div>
-                    </div>
+                          {/* Primary Badge */}
+                          {idx === 0 ? (
+                            <span className="absolute top-1.5 right-1.5 bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
+                              تصویر اصلی
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleSetPrimaryImage(idx)}
+                              className="absolute top-1.5 right-1.5 bg-slate-900/80 hover:bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                            >
+                              انتخاب به عنوان اصلی
+                            </button>
+                          )}
 
-                    {/* Preset Quick Images */}
-                    <div>
-                      <span className="text-[11px] font-bold text-slate-500 block mb-1">
-                        یا انتخاب سریع تصویر نمونه:
-                      </span>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {presetImages.map((img) => (
+                          {/* Delete Button */}
                           <button
                             type="button"
-                            key={img.url}
-                            onClick={() => setFormImage(img.url)}
-                            className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer ${
-                              formImage === img.url
-                                ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
-                            }`}
+                            onClick={() => handleRemoveGalleryImage(idx)}
+                            className="absolute top-1.5 left-1.5 p-1 rounded-lg bg-rose-600 text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shadow-xs"
+                            title="حذف این تصویر"
                           >
-                            {img.label}
+                            <X className="w-3 h-3" />
                           </button>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
+                  )}
 
-                    {/* Manual URL Input */}
-                    <div className="relative">
-                      <input
-                        type="text"
-                        required
-                        value={formImage}
-                        onChange={(e) => setFormImage(e.target.value)}
-                        placeholder="آدرس تصویر (URL مستقیم یا مسیر وب)"
-                        className="w-full pl-8 pr-3 py-2 bg-white border border-slate-200 rounded-xl font-mono text-[11px] text-slate-800 placeholder:text-slate-400"
-                        dir="ltr"
-                      />
-                      <LinkIcon className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  {/* Preset Quick Images */}
+                  <div className="pt-2 border-t border-slate-200/60">
+                    <span className="text-[11px] font-bold text-slate-500 block mb-1">
+                      یا انتخاب سریع تصویر نمونه:
+                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {presetImages.map((img) => (
+                        <button
+                          type="button"
+                          key={img.url}
+                          onClick={() => {
+                            setFormImages((prev) => Array.from(new Set([...prev, img.url])).slice(0, 4));
+                            setFormImage(img.url);
+                          }}
+                          className="px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all cursor-pointer bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
+                        >
+                          + {img.label}
+                        </button>
+                      ))}
                     </div>
+                  </div>
+
+                  {/* Manual URL Add */}
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={formImage}
+                      onChange={(e) => setFormImage(e.target.value)}
+                      placeholder="آدرس URL تصویر..."
+                      className="flex-1 pl-3 pr-3 py-2 bg-white border border-slate-200 rounded-xl font-mono text-[11px] text-slate-800"
+                      dir="ltr"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        if (formImage.trim()) {
+                          setFormImages((prev) => Array.from(new Set([...prev, formImage.trim()])).slice(0, 4));
+                        }
+                      }}
+                      className="text-xs font-bold"
+                    >
+                      افزودن URL
+                    </Button>
                   </div>
                 </div>
               </div>

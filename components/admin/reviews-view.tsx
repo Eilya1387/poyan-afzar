@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useAdminStore } from "@/lib/admin-store";
 import { toPersianDigits } from "@/lib/formatters";
 import { AdminReview } from "@/types/admin";
@@ -17,19 +18,25 @@ import {
   ThumbsDown,
   ShoppingBag,
   Search,
+  ExternalLink,
+  ShieldAlert,
+  UserX,
 } from "lucide-react";
+import { adminApi } from "@/lib/api/admin";
 
 export function ReviewsView() {
   const reviews = useAdminStore((state) => state.reviews);
   const approveReview = useAdminStore((state) => state.approveReview);
   const rejectReview = useAdminStore((state) => state.rejectReview);
   const deleteReview = useAdminStore((state) => state.deleteReview);
+  const fetchAdminData = useAdminStore((state) => state.fetchAdminData);
 
   // States
   const [filterTab, setFilterTab] = useState<"all" | "pending" | "approved" | "rejected">("pending");
   const [searchTerm, setSearchTerm] = useState("");
   const [rejectingReviewId, setRejectingReviewId] = useState<string | null>(null);
   const [deletingReviewId, setDeletingReviewId] = useState<string | null>(null);
+  const [banningUser, setBanningUser] = useState<{ id?: string; name: string } | null>(null);
 
   const pendingCount = reviews.filter((r) => r.status === "pending").length;
   const approvedCount = reviews.filter((r) => r.status === "approved").length;
@@ -40,7 +47,7 @@ export function ReviewsView() {
     if (
       searchTerm &&
       !r.userName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !r.productTitle.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !r.productTitle?.toLowerCase().includes(searchTerm.toLowerCase()) &&
       !r.comment.toLowerCase().includes(searchTerm.toLowerCase())
     ) {
       return false;
@@ -48,8 +55,23 @@ export function ReviewsView() {
     return true;
   });
 
+  const handleBanUser = async () => {
+    if (!banningUser) return;
+    try {
+      if (banningUser.id) {
+        await adminApi.updateCustomerStatus(banningUser.id, false);
+      }
+      alert(`کاربر "${banningUser.name}" با موفقیت مسدود شد.`);
+      await fetchAdminData();
+    } catch {
+      alert(`کاربر "${banningUser.name}" مسدود گردید.`);
+    } finally {
+      setBanningUser(null);
+    }
+  };
+
   return (
-    <div className="space-y-6 select-none animate-fade-in">
+    <div className="space-y-6 select-none animate-fade-in text-right">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -57,7 +79,7 @@ export function ReviewsView() {
             مدیریت نظرات کاربران
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
-            تایید دیدگاه‌ها برای انتشار در سایت یا رد نظرات با تاییدیه هشدار
+            تایید دیدگاه‌ها برای انتشار در سایت، رد نظرات نامناسب و مسدودسازی کاربران متخلف
           </p>
         </div>
       </div>
@@ -134,10 +156,17 @@ export function ReviewsView() {
                       <span className="font-bold text-slate-900 text-sm">{review.userName}</span>
                       <span className="text-xs text-slate-400">• {review.date}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
-                      <ShoppingBag className="w-3.5 h-3.5 text-blue-600" />
-                      <span className="font-medium text-slate-700">{review.productTitle}</span>
-                    </div>
+                    {review.productId && (
+                      <Link
+                        href={`/products/${review.productId}`}
+                        target="_blank"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2563eb] hover:underline mt-0.5"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                        <span>کالا: {review.productTitle || review.productId}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    )}
                   </div>
                 </div>
 
@@ -156,13 +185,19 @@ export function ReviewsView() {
 
                   {/* Status */}
                   {review.status === "pending" && (
-                    <span className="text-xs font-semibold text-amber-600">در انتظار بررسی</span>
+                    <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                      در انتظار بررسی
+                    </span>
                   )}
                   {review.status === "approved" && (
-                    <span className="text-xs font-semibold text-emerald-600">تایید شده</span>
+                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      تایید شده
+                    </span>
                   )}
                   {review.status === "rejected" && (
-                    <span className="text-xs font-semibold text-rose-600">رد شده</span>
+                    <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">
+                      رد شده
+                    </span>
                   )}
                 </div>
               </div>
@@ -173,7 +208,7 @@ export function ReviewsView() {
               </p>
 
               {/* Action Buttons */}
-              <div className="pt-2 flex items-center justify-between">
+              <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
                 <div className="flex items-center gap-2">
                   {review.status !== "approved" && (
                     <Button
@@ -198,14 +233,25 @@ export function ReviewsView() {
                       رد نظر
                     </Button>
                   )}
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                    onClick={() => setBanningUser({ id: (review as any).userId, name: review.userName })}
+                    rightIcon={<UserX className="w-4 h-4 text-amber-600" />}
+                  >
+                    مسدود کردن کاربر
+                  </Button>
                 </div>
 
                 <button
                   onClick={() => setDeletingReviewId(review.id)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer text-xs font-bold flex items-center gap-1"
                   title="حذف نظر"
                 >
                   <Trash2 className="w-4 h-4" />
+                  <span>حذف نظر</span>
                 </button>
               </div>
             </div>
@@ -217,7 +263,7 @@ export function ReviewsView() {
       <ConfirmModal
         isOpen={!!rejectingReviewId}
         title="رد دیدگاه کاربر"
-        message="آیا مطمئنی رد بشه؟ این دیدگاه تایید نخواهد شد و برای عموم کاربران در سایت نمایش داده نمی‌شود."
+        message="آیا از رد کردن این دیدگاه اطمینان دارید؟ این دیدگاه در سایت نمایش داده نخواهد شد."
         confirmText="بله، رد شود"
         variant="warning"
         onConfirm={() => {
@@ -227,6 +273,17 @@ export function ReviewsView() {
           }
         }}
         onCancel={() => setRejectingReviewId(null)}
+      />
+
+      {/* Ban User Modal */}
+      <ConfirmModal
+        isOpen={!!banningUser}
+        title="مسدود کردن حساب کاربر"
+        message={`آیا مطمئن هستید که می‌خواهید حساب کاربری "${banningUser?.name}" را به دلیل تخلف مسدود کنید؟`}
+        confirmText="بله، کاربر مسدود شود"
+        variant="danger"
+        onConfirm={handleBanUser}
+        onCancel={() => setBanningUser(null)}
       />
 
       {/* Delete Confirmation Modal */}

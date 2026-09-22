@@ -85,20 +85,25 @@ export const ordersApi = {
   },
 
   getMyOrders: async (): Promise<OrderDetail[]> => {
-    const res = await api.get<OrderDetail[]>("/api/orders/my-orders");
-    return Array.isArray(res.data) ? res.data : [];
+    const res = await api.get<any>("/api/orders/my-orders");
+    if (Array.isArray(res.data)) return res.data;
+    if (Array.isArray(res.data?.orders)) return res.data.orders;
+    if (Array.isArray(res.orders)) return res.orders;
+    return [];
   },
 
   trackOrder: async (trackingCode: string): Promise<OrderDetail> => {
-    const res = await api.get<OrderDetail>(`/api/orders/track/${encodeURIComponent(trackingCode)}`, {
+    const clean = String(trackingCode).trim().replace(/^[#\s]+/, "");
+    const res = await api.get<any>(`/api/orders/track/${encodeURIComponent(clean)}`, {
       skipAuth: true,
     });
-    return res.data;
+    return res.data || res;
   },
 
   getOrder: async (idOrTrackingCode: string): Promise<OrderDetail> => {
-    const res = await api.get<OrderDetail>(`/api/orders/${encodeURIComponent(idOrTrackingCode)}`);
-    return res.data;
+    const clean = String(idOrTrackingCode).trim().replace(/^[#\s]+/, "");
+    const res = await api.get<any>(`/api/orders/${encodeURIComponent(clean)}`);
+    return res.data || res;
   },
 
   cancelOrder: async (id: string, reason?: string) => {

@@ -24,7 +24,8 @@ interface CartStore {
   updateQuantity: (id: string, delta: number) => void;
   setQuantity: (id: string, qty: number) => void;
   clearCart: () => void;
-  applyCoupon: (code: string) => boolean;
+  applyCoupon: (code: string, discountAmount?: number) => boolean;
+  setCouponDiscount: (code: string, discountAmount: number) => void;
   removeCoupon: () => void;
   getRawTotal: () => number;
   getDiscountTotal: () => number;
@@ -89,10 +90,28 @@ export const useCartStore = create<CartStore>()(
         set({ items: [], couponCode: null, couponDiscount: 0 });
       },
 
-      applyCoupon: (code) => {
+      setCouponDiscount: (code, discountAmount) => {
+        set({ couponCode: code, couponDiscount: Math.max(0, discountAmount) });
+      },
+
+      applyCoupon: (code, customDiscount) => {
+        if (customDiscount !== undefined && customDiscount > 0) {
+          set({ couponCode: code, couponDiscount: customDiscount });
+          return true;
+        }
         const clean = code.trim().toLowerCase();
-        if (clean === "off10" || clean === "takhfif" || clean === "wexun") {
-          set({ couponCode: code, couponDiscount: 200000 });
+        const total = get().getRawTotal();
+        if (clean === "off10") {
+          const disc = Math.round(total * 0.1);
+          set({ couponCode: code, couponDiscount: disc });
+          return true;
+        } else if (clean === "wexun") {
+          const disc = Math.round(total * 0.15);
+          set({ couponCode: code, couponDiscount: disc });
+          return true;
+        } else if (clean === "takhfif") {
+          const disc = Math.min(total, 200000);
+          set({ couponCode: code, couponDiscount: disc });
           return true;
         }
         return false;

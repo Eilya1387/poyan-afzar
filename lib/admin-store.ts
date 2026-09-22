@@ -12,6 +12,7 @@ import {
   AdminCustomer,
   AdminDiscount,
   AdminReview,
+  AdminQaItem,
   SalesDayData,
   AdminTab,
   PaymentStatus,
@@ -83,7 +84,10 @@ interface AdminState {
   customers: AdminCustomer[];
   discounts: AdminDiscount[];
   reviews: AdminReview[];
+  qa: AdminQaItem[];
   salesChart: SalesDayData[];
+  kpis: any;
+  reportsData: any;
 
   // Auth Actions
   login: (username: string, pass: string) => Promise<{ success: boolean; message?: string }>;
@@ -148,6 +152,11 @@ interface AdminState {
   rejectReview: (id: string) => void;
   deleteReview: (id: string) => void;
 
+  // QA Actions
+  answerQa: (id: string, answer: string) => Promise<void>;
+  togglePublishQa: (id: string, isPublished: boolean) => Promise<void>;
+  deleteQa: (id: string) => Promise<void>;
+
   // Sync with Backend
   fetchAdminData: () => Promise<void>;
 
@@ -171,7 +180,10 @@ export const useAdminStore = create<AdminState>()(
       customers: defaultCustomers,
       discounts: defaultDiscounts,
       reviews: defaultReviews,
+      qa: [],
       salesChart: defaultSalesChart,
+      kpis: null,
+      reportsData: null,
 
       login: async (username: string, pass: string) => {
         const trimmedUser = username.trim();
@@ -225,19 +237,22 @@ export const useAdminStore = create<AdminState>()(
         }
 
         try {
-          const [overview, inv, ords, custs, discs, revs, cats, brnds] = await Promise.allSettled([
+          const [overview, inv, ords, custs, discs, revs, qaRes, reportsRes, cats, brnds] = await Promise.allSettled([
             adminApi.getOverview(),
             adminApi.getInventory(),
             adminApi.getOrders(),
             adminApi.getCustomers(),
             adminApi.getDiscounts(),
             adminApi.getReviews(),
+            adminApi.getQa(),
+            adminApi.getReportsAnalytics(),
             categoriesApi.getCategories(),
             brandsApi.getBrands(),
           ]);
 
-          if (overview.status === "fulfilled" && overview.value?.salesChart) {
-            set({ salesChart: overview.value.salesChart });
+          if (overview.status === "fulfilled" && overview.value) {
+            if (overview.value.salesChart) set({ salesChart: overview.value.salesChart });
+            if (overview.value.kpis) set({ kpis: overview.value.kpis });
           }
           if (inv.status === "fulfilled" && inv.value?.products) {
             set({ products: inv.value.products });
@@ -253,6 +268,12 @@ export const useAdminStore = create<AdminState>()(
           }
           if (revs.status === "fulfilled" && revs.value?.reviews) {
             set({ reviews: revs.value.reviews });
+          }
+          if (qaRes.status === "fulfilled" && qaRes.value?.questions) {
+            set({ qa: qaRes.value.questions });
+          }
+          if (reportsRes.status === "fulfilled" && reportsRes.value) {
+            set({ reportsData: reportsRes.value });
           }
           if (cats.status === "fulfilled" && Array.isArray(cats.value)) {
             set({ categories: cats.value as any });
@@ -792,6 +813,22 @@ export const useAdminStore = create<AdminState>()(
         }).catch((err) => {
           console.error("Error deleting review on backend:", err);
         });
+      },
+
+      // QA Actions
+      answerQa: async (id: string, answer: string) => {
+        await adminApi.answerQa(id, answer);
+        await get().fetchAdminData();
+      },
+
+      togglePublishQa: async (id: string, isPublished: boolean) => {
+        await adminApi.publishQa(id, isPublished);
+        await get().fetchAdminData();
+      },
+
+      deleteQa: async (id: string) => {
+        await adminApi.deleteQa(id);
+        await get().fetchAdminData();
       },
 
       resetToDefaults: () => {

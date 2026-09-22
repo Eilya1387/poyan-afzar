@@ -14,6 +14,7 @@ import {
   Users,
   Tag,
   MessageSquare,
+  HelpCircle,
   BarChart3,
   LogOut,
   X,
@@ -36,10 +37,12 @@ export function AdminSidebar({ isOpenMobile, onCloseMobile }: AdminSidebarProps)
   const setActiveTab = useAdminStore((state) => state.setActiveTab);
   const logout = useAdminStore((state) => state.logout);
   const reviews = useAdminStore((state) => state.reviews);
+  const qa = useAdminStore((state) => state.qa);
   const products = useAdminStore((state) => state.products);
   const orders = useAdminStore((state) => state.orders);
 
   const pendingReviewsCount = reviews.filter((r) => r.status === "pending").length;
+  const pendingQaCount = qa.filter((q) => !q.hasAnswer && !q.answer).length;
   const lowStockCount = products.filter((p) => p.stock <= p.minStockThreshold).length;
   const pendingOrdersCount = orders.filter((o) => o.shippingStatus === "preparing" || o.shippingStatus === "shipping").length;
 
@@ -53,6 +56,7 @@ export function AdminSidebar({ isOpenMobile, onCloseMobile }: AdminSidebarProps)
     { id: "customers", label: "مشتریان", icon: Users },
     { id: "discounts", label: "تخفیف‌ها", icon: Tag },
     { id: "reviews", label: "نظرات", icon: MessageSquare, badge: pendingReviewsCount > 0 ? `${toPersianDigits(pendingReviewsCount)} جدید` : undefined },
+    { id: "qa", label: "پرسش و پاسخ", icon: HelpCircle, badge: pendingQaCount > 0 ? `${toPersianDigits(pendingQaCount)} سوال` : undefined },
     { id: "reports", label: "گزارش‌ها", icon: BarChart3 },
   ];
 

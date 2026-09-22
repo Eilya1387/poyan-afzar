@@ -185,8 +185,26 @@ async function main() {
     if (!delRes.ok) throw new Error(`DELETE brand failed`);
   });
 
-  // 9. Products
-  let sampleProductId = "airpods-pro-2";
+  // 9. Products Setup for Testing
+  let sampleProductId = "test-sample-product-" + Date.now();
+  await fetch(`${BASE_URL}/api/products`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${adminToken}` },
+    body: JSON.stringify({
+      id: sampleProductId,
+      title: "محصول تستی سیستم",
+      enTitle: "Test Sample Product",
+      code: "TK-SAMPLE",
+      categorySlug: "mobile",
+      brandSlug: "apple",
+      price: 2500000,
+      originalPrice: 3000000,
+      stock: 10,
+      minStockThreshold: 2,
+      image: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434",
+    }),
+  });
+
   await test("GET /api/products", async () => {
     const res = await fetch(`${BASE_URL}/api/products`);
     const d = await res.json();
@@ -354,18 +372,32 @@ async function main() {
   });
 
   // 13. Discounts & Coupons
+  const testCouponCode = "TESTCOUPON" + Date.now();
+  await fetch(`${BASE_URL}/api/discounts`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${adminToken}` },
+    body: JSON.stringify({
+      title: "تخفیف آزمایشی",
+      code: testCouponCode,
+      type: "PERCENTAGE",
+      percent: 10,
+      amount: 0,
+      isActive: true,
+    }),
+  });
+
   await test("POST /api/coupons/validate & /api/discounts/validate", async () => {
     const res1 = await fetch(`${BASE_URL}/api/coupons/validate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: "OFF10", subtotal: 1000000 }),
+      body: JSON.stringify({ code: testCouponCode, subtotal: 1000000 }),
     });
     if (!res1.ok) throw new Error(`coupons/validate failed`);
 
     const res2 = await fetch(`${BASE_URL}/api/discounts/validate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: "OFF10", subtotal: 1000000 }),
+      body: JSON.stringify({ code: testCouponCode, subtotal: 1000000 }),
     });
     if (!res2.ok) throw new Error(`discounts/validate failed`);
   });
@@ -478,6 +510,12 @@ async function main() {
       body: JSON.stringify({ reason: "تست لغو" }),
     });
     if (!cancelRes.ok) throw new Error(`POST cancel order failed`);
+
+    // Clean up test order
+    await fetch(`${BASE_URL}/api/admin/orders/${testOrderId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
   });
 
   // 16. Payments
@@ -634,6 +672,12 @@ async function main() {
       body: formMulti,
     });
     if (!rMulti.ok) throw new Error(`/api/upload/images failed with ${rMulti.status}`);
+
+    // Clean up temporary test product
+    await fetch(`${BASE_URL}/api/products/${sampleProductId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
   });
 
   console.log("\n==================================================");

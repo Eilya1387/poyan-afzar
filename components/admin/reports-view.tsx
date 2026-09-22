@@ -20,15 +20,21 @@ export function ReportsView() {
   const salesChart = useAdminStore((state) => state.salesChart);
   const orders = useAdminStore((state) => state.orders);
   const products = useAdminStore((state) => state.products);
+  const reportsData = useAdminStore((state) => state.reportsData);
+  const fetchAdminData = useAdminStore((state) => state.fetchAdminData);
 
   const [dateRange, setDateRange] = useState("7days");
   const [downloadNotice, setDownloadNotice] = useState<string | null>(null);
 
-  // Calculations
-  const totalRevenue = orders.reduce((sum, o) => (o.shippingStatus !== "cancelled" ? sum + o.amount : sum), 0);
-  const totalOrdersCount = orders.length;
-  const avgOrderValue = totalOrdersCount > 0 ? Math.round(totalRevenue / totalOrdersCount) : 0;
-  const maxSales = Math.max(...salesChart.map((d) => d.amount), 1);
+  React.useEffect(() => {
+    fetchAdminData();
+  }, [fetchAdminData]);
+
+  // Calculations from live backend data
+  const totalRevenue = reportsData?.totalRevenue ?? orders.reduce((sum, o) => (o.paymentStatus === "paid" ? sum + o.amount : sum), 0);
+  const totalOrdersCount = reportsData?.totalOrdersCount ?? orders.length;
+  const avgOrderValue = reportsData?.avgOrderValue ?? (totalOrdersCount > 0 ? Math.round(totalRevenue / totalOrdersCount) : 0);
+  const maxSales = Math.max(...salesChart.map((d) => d.amount), 1000000);
 
   const handleExport = async (type: "excel" | "pdf") => {
     try {
@@ -57,13 +63,30 @@ export function ReportsView() {
     }, 4000);
   };
 
-  // Category breakdown
-  const categorySales = [
-    { name: "کارت گرافیک و پردازنده", count: 18, revenue: 142000000, percent: 45 },
-    { name: "مانیتور و نمایشگر", count: 12, revenue: 86500000, percent: 28 },
-    { name: "لوازم جانبی و گیمینگ", count: 34, revenue: 54000000, percent: 17 },
-    { name: "حافظه رم و SSD", count: 22, revenue: 31500000, percent: 10 },
-  ];
+  // Dynamic Category breakdown
+  const categorySales = React.useMemo(() => {
+    if (Array.isArray(reportsData?.categorySales) && reportsData.categorySales.length > 0) {
+      return reportsData.categorySales;
+    }
+    // Calculate from orders dynamically
+    const catMap: Record<string, { count: number; revenue: number }> = {};
+    orders.forEach((o) => {
+      o.items?.forEach((it) => {
+        const p = products.find((pr) => pr.id === it.productId);
+        const catName = p?.categoryName || p?.category || "سایر";
+        if (!catMap[catName]) catMap[catName] = { count: 0, revenue: 0 };
+        catMap[catName].count += it.quantity;
+        catMap[catName].revenue += it.price * it.quantity;
+      });
+    });
+    const totalRev = Object.values(catMap).reduce((s, c) => s + c.revenue, 0) || 1;
+    return Object.entries(catMap).map(([name, val]) => ({
+      name,
+      count: val.count,
+      revenue: val.revenue,
+      percent: Math.round((val.revenue / totalRev) * 100),
+    }));
+  }, [reportsData, orders, products]);
 
   return (
     <div className="space-y-6 select-none animate-fade-in">
@@ -210,7 +233,7 @@ export function ReportsView() {
                     {formatPriceFa(d.amount)} ت
                   </div>
 
-                  <div className="w-full max-w-[42px] bg-slate-100 rounded-t-xl overflow-hidden relative flex items-end h-full">
+                  <div className="w-full max-w-10.5 bg-slate-100 rounded-t-xl overflow-hidden relative flex items-end h-full">
                     <div
                       style={{ height: `${Math.max(12, heightPercent)}%` }}
                       className={`w-full transition-all duration-500 rounded-t-xl group-hover:brightness-95 ${
@@ -234,7 +257,7 @@ export function ReportsView() {
           </div>
 
           <div className="space-y-4 pt-2">
-            {categorySales.map((cat, idx) => (
+            {categorySales.map((cat: any, idx: number) => (
               <div key={idx} className="space-y-1.5 text-xs">
                 <div className="flex items-center justify-between font-bold">
                   <span className="text-slate-800">{cat.name}</span>

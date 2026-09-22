@@ -8,7 +8,6 @@ import {
   Truck,
   CheckCircle2,
   Heart,
-  Wallet,
   ShoppingBag,
   ShoppingCart,
   Package,
@@ -25,16 +24,19 @@ import {
   Plus,
   Trash2,
   Check,
+  X,
+  CreditCard,
+  ReceiptText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "./auth-context";
 import { useFavoritesStore, useAddressStore, useCartStore } from "@/lib/store";
 import { AddressModal } from "./address-modal";
 import { ordersApi, OrderDetail } from "@/lib/api/orders";
-import { userApi, UserAddress, WalletData } from "@/lib/api/user";
+import { userApi, UserAddress } from "@/lib/api/user";
 import { Loader2 } from "lucide-react";
 
-type TabType = "dashboard" | "orders" | "favorites" | "addresses" | "wallet" | "notifications" | "profile" | "security";
+type TabType = "dashboard" | "orders" | "favorites" | "addresses" | "notifications" | "profile" | "security";
 
 export function UserPanelView() {
   const router = useRouter();
@@ -53,7 +55,7 @@ export function UserPanelView() {
   const [liveOrders, setLiveOrders] = useState<OrderDetail[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [liveAddresses, setLiveAddresses] = useState<UserAddress[]>([]);
-  const [liveWallet, setLiveWallet] = useState<WalletData | null>(null);
+  const [selectedOrderModal, setSelectedOrderModal] = useState<OrderDetail | null>(null);
 
   // Profile Form State
   const [firstNameInput, setFirstNameInput] = useState(user?.firstName || "");
@@ -62,11 +64,6 @@ export function UserPanelView() {
   const [nationalCodeInput, setNationalCodeInput] = useState(user?.nationalCode || "");
   const [savingProfile, setSavingProfile] = useState(false);
   const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
-
-  // Wallet Top-up Modal State
-  const [showTopUpModal, setShowTopUpModal] = useState(false);
-  const [topUpAmount, setTopUpAmount] = useState("500000");
-  const [topUpLoading, setTopUpLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -85,10 +82,9 @@ export function UserPanelView() {
   const fetchPanelData = async () => {
     try {
       setLoadingOrders(true);
-      const [ordersData, addressesData, walletData] = await Promise.allSettled([
+      const [ordersData, addressesData] = await Promise.allSettled([
         ordersApi.getMyOrders(),
         userApi.getAddresses(),
-        userApi.getWallet(),
       ]);
 
       if (ordersData.status === "fulfilled" && Array.isArray(ordersData.value)) {
@@ -96,9 +92,6 @@ export function UserPanelView() {
       }
       if (addressesData.status === "fulfilled" && Array.isArray(addressesData.value)) {
         setLiveAddresses(addressesData.value);
-      }
-      if (walletData.status === "fulfilled" && walletData.value) {
-        setLiveWallet(walletData.value);
       }
     } catch (err) {
       console.error("Error fetching user panel data:", err);
@@ -156,35 +149,13 @@ export function UserPanelView() {
     }
   };
 
-  const handleTopUp = async () => {
-    const amt = parseInt(topUpAmount, 10);
-    if (!amt || amt < 10000) {
-      alert("حداقل مبلغ شارژ ۱۰,۰۰۰ تومان می‌باشد");
-      return;
-    }
-    setTopUpLoading(true);
-    try {
-      const res = await userApi.topUpWallet(amt);
-      if (res.paymentUrl) {
-        window.location.href = res.paymentUrl;
-      } else {
-        alert("درخواست شارژ با موفقیت ثبت شد");
-        setShowTopUpModal(false);
-        fetchPanelData();
-      }
-    } catch (err: any) {
-      alert(err?.message || "خطا در اتصال به درگاه پرداخت");
-    } finally {
-      setTopUpLoading(false);
-    }
-  };
-
   const handleCancelOrder = async (orderId: string) => {
     if (!confirm("آیا از لغو این سفارش اطمینان دارید؟")) return;
     try {
       await ordersApi.cancelOrder(orderId);
       alert("سفارش با موفقیت لغو شد.");
       fetchPanelData();
+      setSelectedOrderModal(null);
     } catch (err: any) {
       alert(err?.message || "امکان لغو این سفارش وجود ندارد.");
     }
@@ -221,7 +192,9 @@ export function UserPanelView() {
     );
   }
 
-  const displayName = user ? `${user.firstName} ${user.lastName}` : "ایلیا";
+  const displayName = user
+    ? (user.firstName ? `${user.firstName} ${user.lastName || ""}`.trim() : user.name || "کاربر پویان افزار")
+    : "کاربر پویان افزار";
   const displayPhone = user?.phone || "۰۹۱۲۳۴۵۶۷۸۹";
 
   return (
@@ -347,15 +320,15 @@ export function UserPanelView() {
 
           <button
             type="button"
-            onClick={() => setActiveTab("wallet")}
+            onClick={() => setActiveTab("profile")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
-              activeTab === "wallet"
+              activeTab === "profile"
                 ? "bg-[#0b1528] text-white shadow-xs"
                 : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
             }`}
           >
-            <Wallet className="w-3.5 h-3.5" />
-            <span>کیف پول</span>
+            <User className="w-3.5 h-3.5" />
+            <span>مشخصات فردی</span>
           </button>
         </div>
       </div>
@@ -457,15 +430,15 @@ export function UserPanelView() {
 
               <button
                 type="button"
-                onClick={() => setActiveTab("wallet")}
+                onClick={() => setActiveTab("profile")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === "wallet"
+                  activeTab === "profile"
                     ? "bg-[#0b1528] text-white shadow-sm"
                     : "text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                <span>کیف پول</span>
-                <Wallet className="w-4 h-4" />
+                <span>اطلاعات حساب</span>
+                <User className="w-4 h-4" />
               </button>
 
               <div className="pt-2 border-t border-slate-100">
@@ -543,7 +516,7 @@ export function UserPanelView() {
                       <span className="text-xl sm:text-2xl font-black text-slate-900">
                         {toPersianDigits(liveOrders.length)}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">سفارش ثبت‌شده</span>
+                      <span className="text-[11px] text-slate-400 font-medium">سفارش</span>
                     </div>
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
@@ -571,17 +544,17 @@ export function UserPanelView() {
                 <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
                     <span className="text-[11px] sm:text-xs font-bold text-slate-500">
-                      کیف پول
+                      آدرس‌های ثبت شده
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
-                      <span className="text-base sm:text-lg font-black text-slate-900">
-                        {formatPrice(liveWallet?.balance ?? user?.walletBalance ?? 0)}
+                      <span className="text-xl sm:text-2xl font-black text-slate-900">
+                        {toPersianDigits(liveAddresses.length || addresses.length)}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-medium">تومان</span>
+                      <span className="text-[11px] text-slate-400 font-medium">نشانی</span>
                     </div>
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                    <Wallet className="w-5 h-5" />
+                    <MapPin className="w-5 h-5" />
                   </div>
                 </div>
               </div>
@@ -652,7 +625,7 @@ export function UserPanelView() {
                   <div className="pt-3 border-t border-slate-100 flex justify-start">
                     <button
                       type="button"
-                      onClick={() => setActiveTab("orders")}
+                      onClick={() => setSelectedOrderModal(liveOrders[0])}
                       className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <span>مشاهده جزئیات کامل سفارش</span>
@@ -712,7 +685,7 @@ export function UserPanelView() {
                             <td className="py-3.5 px-2 text-center">
                               <button
                                 type="button"
-                                onClick={() => setActiveTab("orders")}
+                                onClick={() => setSelectedOrderModal(ord)}
                                 className="font-bold text-[#2563eb] hover:underline cursor-pointer"
                               >
                                 مشاهده جزئیات
@@ -742,38 +715,42 @@ export function UserPanelView() {
                   </div>
 
                   <div className="space-y-3">
-                    {favorites.slice(0, 2).map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-100 bg-slate-50/40 hover:bg-slate-50 transition-colors"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => removeFavorite(item.id)}
-                          className="text-red-500 hover:text-red-600 p-1 cursor-pointer"
-                          aria-label="حذف از علاقه‌مندی‌ها"
+                    {favorites.length === 0 ? (
+                      <p className="text-xs text-slate-400 text-center py-4">محصولی در لیست علاقه‌مندی‌ها نیست.</p>
+                    ) : (
+                      favorites.slice(0, 2).map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-100 bg-slate-50/40 hover:bg-slate-50 transition-colors"
                         >
-                          <Heart className="w-4 h-4 fill-red-500 text-red-500" />
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() => removeFavorite(item.id)}
+                            className="text-red-500 hover:text-red-600 p-1 cursor-pointer"
+                            aria-label="حذف از علاقه‌مندی‌ها"
+                          >
+                            <Heart className="w-4 h-4 fill-red-500 text-red-500" />
+                          </button>
 
-                        <div className="flex flex-col items-end flex-1 min-w-0">
-                          <h3 className="text-xs font-bold text-slate-800 line-clamp-1">
-                            {item.title}
-                          </h3>
-                          <span className="text-[11px] font-black text-[#0b1528] mt-1">
-                            {item.priceString} تومان
-                          </span>
-                        </div>
+                          <Link href={`/products/${item.id}`} className="flex flex-col items-end flex-1 min-w-0 cursor-pointer">
+                            <h3 className="text-xs font-bold text-slate-800 line-clamp-1 hover:text-[#2563eb] transition-colors">
+                              {item.title}
+                            </h3>
+                            <span className="text-[11px] font-black text-[#0b1528] mt-1">
+                              {item.priceString} تومان
+                            </span>
+                          </Link>
 
-                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-full object-contain"
-                          />
+                          <Link href={`/products/${item.id}`} className="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center cursor-pointer">
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-full object-contain"
+                            />
+                          </Link>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>
 
@@ -792,22 +769,18 @@ export function UserPanelView() {
                   </div>
 
                   <div className="space-y-3">
-                    {addresses.slice(0, 2).map((addr) => (
+                    {(liveAddresses.length > 0 ? liveAddresses : addresses).slice(0, 2).map((addr) => (
                       <div
                         key={addr.id}
                         className="p-3 rounded-xl border border-slate-100 bg-slate-50/40 text-right space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] text-slate-400 font-mono">
-                            کد پستی: {toPersianDigits(addr.postalCode)}
+                            کد پستی: {toPersianDigits(addr.postalCode || "")}
                           </span>
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-black text-slate-800">{addr.title}</span>
-                            {addr.id === "addr-home" ? (
-                              <Home className="w-3.5 h-3.5 text-slate-500" />
-                            ) : (
-                              <Briefcase className="w-3.5 h-3.5 text-slate-500" />
-                            )}
+                            <Home className="w-3.5 h-3.5 text-slate-500" />
                           </div>
                         </div>
                         <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
@@ -926,9 +899,11 @@ export function UserPanelView() {
                       </button>
 
                       <div className="flex-1 text-right">
-                        <h3 className="text-xs font-bold text-slate-900 line-clamp-2 leading-snug">
-                          {item.title}
-                        </h3>
+                        <Link href={`/products/${item.id}`} className="cursor-pointer block">
+                          <h3 className="text-xs font-bold text-slate-900 line-clamp-2 leading-snug hover:text-[#2563eb] transition-colors">
+                            {item.title}
+                          </h3>
+                        </Link>
                         <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
                           <Button
                             variant="secondary"
@@ -951,13 +926,13 @@ export function UserPanelView() {
                         </div>
                       </div>
 
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center">
+                      <Link href={`/products/${item.id}`} className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center cursor-pointer">
                         <img
                           src={item.image}
                           alt={item.title}
                           className="w-full h-full object-contain"
                         />
-                      </div>
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -984,7 +959,11 @@ export function UserPanelView() {
                   </div>
                 ) : (
                   liveOrders.map((ord) => (
-                    <div key={ord.id} className="rounded-2xl border border-slate-200 p-4 space-y-3">
+                    <div
+                      key={ord.id}
+                      onClick={() => setSelectedOrderModal(ord)}
+                      className="rounded-2xl border border-slate-200 p-4 space-y-3 hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer bg-slate-50/30"
+                    >
                       <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
                         <span className={`text-xs font-black px-3 py-1 rounded-full ${
                           ord.paymentStatus === "PAID" || ord.paymentStatus === "paid"
@@ -1009,71 +988,15 @@ export function UserPanelView() {
                           <span className="text-slate-500 font-medium">
                             {ord.items?.length || 1} کالا
                           </span>
-                          {(ord.paymentStatus === "PENDING" || ord.paymentStatus === "pending") && (
-                            <button
-                              type="button"
-                              onClick={() => handleCancelOrder(ord.id)}
-                              className="text-xs text-rose-600 hover:underline font-bold mr-2"
-                            >
-                              لغو سفارش
-                            </button>
-                          )}
+                          <span className="text-xs text-[#2563eb] font-bold">
+                            مشاهده جزئیات فاکتور ←
+                          </span>
                         </div>
                       </div>
                     </div>
                   ))
                 )}
               </div>
-            </div>
-          )}
-
-          {activeTab === "wallet" && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="pb-4 border-b border-slate-100">
-                <h2 className="text-base font-black text-slate-900">کیف پول اعتباری</h2>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
-                  موجودی کیف پول برای پرداخت‌های سریع و کش‌بک خریدها
-                </p>
-              </div>
-
-              <div className="bg-linear-to-tr from-[#0b1528] to-[#1e3a8a] text-white p-6 rounded-3xl space-y-4 shadow-lg">
-                <span className="text-xs text-blue-200 font-bold">موجودی فعلی</span>
-                <div className="text-3xl font-black tracking-tight">
-                  {formatPrice(liveWallet?.balance ?? user?.walletBalance ?? 0)}{" "}
-                  <span className="text-xs font-normal">تومان</span>
-                </div>
-                <div className="pt-2">
-                  <Button
-                    variant="secondary"
-                    size="md"
-                    onClick={() => setShowTopUpModal(true)}
-                    className="font-black text-xs"
-                  >
-                    افزایش موجودی
-                  </Button>
-                </div>
-              </div>
-
-              {liveWallet?.transactions && liveWallet.transactions.length > 0 && (
-                <div className="space-y-3 pt-4 border-t border-slate-100">
-                  <h3 className="text-sm font-bold text-slate-800">گردش تراکنش‌های اخیر</h3>
-                  <div className="divide-y divide-slate-100">
-                    {liveWallet.transactions.map((tx) => (
-                      <div key={tx.id} className="py-3 flex items-center justify-between text-xs">
-                        <div>
-                          <p className="font-bold text-slate-800">{tx.description || tx.typeFa || tx.type}</p>
-                          <span className="text-slate-400 text-[10px]">
-                            {new Intl.DateTimeFormat("fa-IR").format(new Date(tx.createdAt))}
-                          </span>
-                        </div>
-                        <span className={`font-mono font-bold ${tx.amount > 0 ? "text-emerald-600" : "text-slate-700"}`}>
-                          {tx.amount > 0 ? "+" : ""}{formatPrice(tx.amount)} تومان
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
 
@@ -1181,35 +1104,119 @@ export function UserPanelView() {
         </div>
       </div>
 
-      {showTopUpModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-sm w-full shadow-2xl space-y-4 text-right">
-            <h3 className="text-base font-black text-slate-900">شارژ کیف پول</h3>
-            <p className="text-xs text-slate-500">مبلغ مورد نظر برای افزایش موجودی را وارد کنید:</p>
-            <input
-              type="number"
-              value={topUpAmount}
-              onChange={(e) => setTopUpAmount(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:border-[#2563eb]"
-            />
-            <div className="flex gap-2 text-xs">
-              {[200000, 500000, 1000000].map((amt) => (
-                <button
-                  key={amt}
-                  type="button"
-                  onClick={() => setTopUpAmount(String(amt))}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 text-[11px] font-bold"
-                >
-                  {formatPrice(amt)}
-                </button>
-              ))}
+      {/* Order Detail Modal */}
+      {selectedOrderModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-2xl w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center">
+                  <ReceiptText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900">
+                    جزئیات و فاکتور سفارش
+                  </h3>
+                  <p className="text-xs text-slate-400 font-mono" dir="ltr">
+                    #{selectedOrderModal.trackingCode}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedOrderModal(null)}
+                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => setShowTopUpModal(false)}>
-                انصراف
-              </Button>
-              <Button type="button" variant="primary" size="sm" disabled={topUpLoading} onClick={handleTopUp}>
-                {topUpLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "اتصال به درگاه"}
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs">
+              <div>
+                <span className="text-slate-400 block mb-1">وضعیت پرداخت:</span>
+                <span className="font-bold text-slate-900">
+                  {selectedOrderModal.paymentStatusFa || selectedOrderModal.statusFa || selectedOrderModal.paymentStatus}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block mb-1">وضعیت ارسال:</span>
+                <span className="font-bold text-slate-900">
+                  {selectedOrderModal.shippingStatusFa || selectedOrderModal.shippingStatus}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block mb-1">تاریخ ثبت:</span>
+                <span className="font-bold text-slate-900">
+                  {selectedOrderModal.date || new Intl.DateTimeFormat("fa-IR").format(new Date(selectedOrderModal.createdAt))}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block mb-1">مبلغ پرداختی:</span>
+                <span className="font-black text-[#2563eb]">
+                  {formatPrice(selectedOrderModal.finalAmount || selectedOrderModal.amount)} تومان
+                </span>
+              </div>
+            </div>
+
+            {selectedOrderModal.shippingAddress && (
+              <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100 text-xs space-y-1">
+                <span className="font-bold text-slate-700 block mb-1">نشانی تحویل گیرنده:</span>
+                <p className="text-slate-600 leading-relaxed">
+                  {selectedOrderModal.shippingAddress.fullAddress || selectedOrderModal.customerAddress}
+                </p>
+                <p className="text-slate-400 pt-1">
+                  تحویل گیرنده: {selectedOrderModal.shippingAddress.receiverName || selectedOrderModal.customerName} ({toPersianDigits(selectedOrderModal.shippingAddress.receiverPhone || selectedOrderModal.customerPhone)})
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <h4 className="text-xs font-black text-slate-800">کالاهای این سفارش:</h4>
+              <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl p-2 bg-white max-h-60 overflow-y-auto">
+                {selectedOrderModal.items?.map((item, idx) => (
+                  <div key={idx} className="p-3 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {item.image && (
+                        <Link href={`/products/${item.productId}`} className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 shrink-0 p-1 flex items-center justify-center cursor-pointer">
+                          <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
+                        </Link>
+                      )}
+                      <div>
+                        <Link href={`/products/${item.productId}`} className="font-bold text-xs text-slate-800 hover:text-[#2563eb] transition-colors cursor-pointer block">
+                          {item.title}
+                        </Link>
+                        {item.color && <span className="text-[10px] text-slate-400">رنگ: {item.color}</span>}
+                      </div>
+                    </div>
+                    <div className="text-left text-xs">
+                      <span className="font-bold text-slate-900">{formatPrice(item.price * item.quantity)} تومان</span>
+                      <span className="text-slate-400 block text-[10px]">تعداد: {toPersianDigits(item.quantity)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              {(selectedOrderModal.paymentStatus === "PENDING" || selectedOrderModal.paymentStatus === "pending") ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleCancelOrder(selectedOrderModal.id)}
+                  className="text-xs text-rose-600 border-rose-200 hover:bg-rose-50 font-bold"
+                >
+                  لغو سفارش
+                </Button>
+              ) : <div />}
+
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setSelectedOrderModal(null)}
+                className="text-xs font-bold px-6"
+              >
+                بستن
               </Button>
             </div>
           </div>
