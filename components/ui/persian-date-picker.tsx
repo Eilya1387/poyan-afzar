@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Calendar as CalendarIcon, ChevronRight, ChevronLeft, X, Sparkles } from "lucide-react";
 
 interface PersianDatePickerProps {
@@ -89,13 +90,31 @@ export function PersianDatePicker({
   className = "",
 }: PersianDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   const today = getTodayJalali();
   const parsed = parseJalaliString(value) || today;
 
   const [viewYear, setViewYear] = useState<number>(parsed.year);
   const [viewMonth, setViewMonth] = useState<number>(parsed.month);
+
+  const [coords, setCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+    placement: "bottom" | "top";
+  }>({
+    top: 0,
+    left: 0,
+    width: 300,
+    placement: "bottom",
+  });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (value) {
@@ -107,18 +126,74 @@ export function PersianDatePicker({
     }
   }, [value]);
 
+  const updatePosition = () => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const popoverHeight = 350;
+    const popoverWidth = 300;
+
+    // Check if there is enough space below in viewport
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const placeTop = spaceBelow < popoverHeight && rect.top > popoverHeight;
+
+    // Calculate left so it aligns with the right edge in RTL
+    let left = rect.right - popoverWidth;
+    if (left < 10) left = 10;
+    if (left + popoverWidth > window.innerWidth - 10) {
+      left = window.innerWidth - popoverWidth - 10;
+    }
+
+    const top = placeTop
+      ? Math.max(10, rect.top - popoverHeight - 8)
+      : Math.min(window.innerHeight - popoverHeight - 10, rect.bottom + 8);
+
+    setCoords({
+      top,
+      left,
+      width: popoverWidth,
+      placement: placeTop ? "top" : "bottom",
+    });
+  };
+
+  const toggleOpen = () => {
+    if (!isOpen) {
+      updatePosition();
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
   // Close when clicked outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        popoverRef.current &&
+        !popoverRef.current.contains(target)
+      ) {
         setIsOpen(false);
       }
     }
+
+    function handleScrollOrResize() {
+      if (isOpen) {
+        updatePosition();
+      }
+    }
+
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      window.addEventListener("scroll", handleScrollOrResize, true);
+      window.addEventListener("resize", handleScrollOrResize);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScrollOrResize, true);
+      window.removeEventListener("resize", handleScrollOrResize);
     };
   }, [isOpen]);
 
@@ -174,6 +249,125 @@ export function PersianDatePicker({
     }
   };
 
+  const popoverContent = isOpen && mounted ? (
+    <div
+      ref={popoverRef}
+      style={{
+        position: "fixed",
+        top: `${coords.top}px`,
+        left: `${coords.left}px`,
+        width: `${coords.width}px`,
+        zIndex: 99999,
+      }}
+      className="bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 text-right select-none animate-in fade-in zoom-in-95 duration-150"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Calendar Header */}
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+        <button
+          type="button"
+          onClick={handleNextMonth}
+          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          title="ماه بعد"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
+          <span className="text-blue-600 font-black">{PERSIAN_MONTHS[viewMonth - 1]}</span>
+          <span>{toPersianDigits(viewYear)}</span>
+        </div>
+
+        <button
+          type="button"
+          onClick={handlePrevMonth}
+          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          title="ماه قبل"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Week Days Header */}
+      <div className="grid grid-cols-7 gap-1 text-center mb-2">
+        {PERSIAN_WEEK_DAYS.map((day, idx) => (
+          <span
+            key={day}
+            className={`text-[11px] font-bold py-1 ${
+              idx === 6 ? "text-rose-500" : "text-slate-400"
+            }`}
+          >
+            {day}
+          </span>
+        ))}
+      </div>
+
+      {/* Days Grid */}
+      <div className="grid grid-cols-7 gap-1 text-center">
+        {Array.from({ length: daysInMonth }).map((_, idx) => {
+          const dayNum = idx + 1;
+          const isSelected =
+            parsed?.year === viewYear &&
+            parsed?.month === viewMonth &&
+            parsed?.day === dayNum;
+          const isToday =
+            today.year === viewYear &&
+            today.month === viewMonth &&
+            today.day === dayNum;
+
+          return (
+            <button
+              key={dayNum}
+              type="button"
+              onClick={() => handleSelectDay(dayNum)}
+              className={`h-8 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                isSelected
+                  ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 scale-105"
+                  : isToday
+                  ? "border border-blue-500 text-blue-600 bg-blue-50/50 hover:bg-blue-100 font-black"
+                  : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              {toPersianDigits(dayNum)}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Quick Presets */}
+      <div className="pt-3 mt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-1">
+        <button
+          type="button"
+          onClick={() => applyPreset(0)}
+          className="px-2 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+        >
+          امروز
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset(7)}
+          className="px-2 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+        >
+          ۱ هفته بعد
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset(30)}
+          className="px-2 py-1 text-[10px] font-bold bg-blue-50 hover:bg-blue-100 text-[#2563eb] rounded-lg transition-colors cursor-pointer"
+        >
+          ۱ ماه بعد
+        </button>
+        <button
+          type="button"
+          onClick={() => applyPreset(90)}
+          className="px-2 py-1 text-[10px] font-bold bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors cursor-pointer"
+        >
+          ۳ ماه بعد
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div ref={containerRef} className={`relative text-right ${className}`}>
       {label && (
@@ -184,7 +378,7 @@ export function PersianDatePicker({
 
       {/* Input Display Button */}
       <div
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleOpen}
         className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl font-mono text-xs text-slate-800 cursor-pointer transition-all select-none group focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 shadow-2xs"
       >
         <span className="font-bold text-slate-800 text-xs tracking-wider dir-ltr">
@@ -195,114 +389,10 @@ export function PersianDatePicker({
         </div>
       </div>
 
-      {/* Popover Calendar Modal */}
-      {isOpen && (
-        <div className="absolute top-full mt-2 right-0 z-50 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 animate-in fade-in zoom-in-95 duration-150">
-          {/* Calendar Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-            <button
-              type="button"
-              onClick={handleNextMonth}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
-              title="ماه بعد"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-
-            <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
-              <span className="text-blue-600 font-black">{PERSIAN_MONTHS[viewMonth - 1]}</span>
-              <span>{toPersianDigits(viewYear)}</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handlePrevMonth}
-              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
-              title="ماه قبل"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-1 text-center mb-2">
-            {PERSIAN_WEEK_DAYS.map((day, idx) => (
-              <span
-                key={day}
-                className={`text-[11px] font-bold py-1 ${
-                  idx === 6 ? "text-rose-500" : "text-slate-400"
-                }`}
-              >
-                {day}
-              </span>
-            ))}
-          </div>
-
-          {/* Days Grid */}
-          <div className="grid grid-cols-7 gap-1 text-center">
-            {Array.from({ length: daysInMonth }).map((_, idx) => {
-              const dayNum = idx + 1;
-              const isSelected =
-                parsed?.year === viewYear &&
-                parsed?.month === viewMonth &&
-                parsed?.day === dayNum;
-              const isToday =
-                today.year === viewYear &&
-                today.month === viewMonth &&
-                today.day === dayNum;
-
-              return (
-                <button
-                  key={dayNum}
-                  type="button"
-                  onClick={() => handleSelectDay(dayNum)}
-                  className={`h-8 sm:h-9 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
-                    isSelected
-                      ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 scale-105"
-                      : isToday
-                      ? "border border-blue-500 text-blue-600 bg-blue-50/50 hover:bg-blue-100 font-black"
-                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  {toPersianDigits(dayNum)}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Quick Presets */}
-          <div className="pt-3 mt-3 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => applyPreset(0)}
-              className="px-2.5 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-            >
-              امروز
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset(7)}
-              className="px-2.5 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
-            >
-              ۱ هفته بعد
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset(30)}
-              className="px-2.5 py-1 text-[10px] font-bold bg-blue-50 hover:bg-blue-100 text-[#2563eb] rounded-lg transition-colors cursor-pointer"
-            >
-              ۱ ماه بعد
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPreset(90)}
-              className="px-2.5 py-1 text-[10px] font-bold bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors cursor-pointer"
-            >
-              ۳ ماه بعد
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Portal Popover */}
+      {mounted && typeof document !== "undefined" && popoverContent
+        ? createPortal(popoverContent, document.body)
+        : null}
     </div>
   );
 }
