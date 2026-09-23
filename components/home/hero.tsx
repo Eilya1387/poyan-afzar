@@ -11,39 +11,49 @@ interface Slide {
   badge: string;
   image: string;
   buttonText: string;
+  imagePosition?: string;
 }
 
 const slides: Slide[] = [
   {
     id: 1,
-    title: "جشنواره هدفون و تجهیزات صوتی گیمینگ",
-    subtitle: "تا ۴۰٪ تخفیف ویژه برای برترین برندهای روز با ضمانت اصالت",
-    badge: "تخفیف شگفت‌انگیز",
-    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1600&q=80",
+    title: "غول‌های پردازشی و کارت گرافیک‌های نسل جدید",
+    subtitle: "ارتقای سیستم گیمینگ و رندرینگ با ضمانت اصالت و برترین برندهای روز",
+    badge: "سخت‌افزار حرفه‌ای",
+    image: "/images/gpu.webp",
     buttonText: "مشاهده و خرید",
   },
   {
     id: 2,
-    title: "جدیدترین گوشی‌ها و لوازم جانبی هوشمند",
-    subtitle: "تضمین اصالت کالا همراه با ارسال اکسپرس و پشتیبانی ۲۴ ساعته",
-    badge: "پرفروش‌ترین‌های هفته",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1600&q=80",
+    title: "جشنواره هدفون و تجهیزات صوتی پیشرفته",
+    subtitle: "تجربه صدای فراگیر و شفاف با برترین هدفون‌های گیمینگ و استودیویی",
+    badge: "تخفیف شگفت‌انگیز",
+    image: "/images/head.webp",
     buttonText: "مشاهده و خرید",
+    imagePosition: "object-[50%_20%]",
   },
   {
     id: 3,
-    title: "سخت‌افزار و تجهیزات تخصصی کامپیوتر",
-    subtitle: "کیبورد مکانیکال، ماوس‌های گیمینگ حرفه‌ای و حافظه‌های پرسرعت",
-    badge: "ویژه گیمرها",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80",
+    title: "جدیدترین گوشی‌های هوشمند و لوازم جانبی اصلی",
+    subtitle: "خرید انواع گوشی، شارژر بی‌سیم و ایرپاد با ضمانت اصالت و ارسال سریع",
+    badge: "پرفروش‌ترین‌های هفته",
+    image: "/images/iph.webp",
     buttonText: "مشاهده و خرید",
   },
   {
     id: 4,
+    title: "کیبورد مکانیکال و ماوس‌های حرفه‌ای گیمینگ",
+    subtitle: "سرعت پاسخ‌دهی بالا، سوییچ‌های اختصاصی و ارگونومی بی‌نظیر برای گیمرها",
+    badge: "ویژه گیمرها",
+    image: "/images/key.webp",
+    buttonText: "مشاهده و خرید",
+  },
+  {
+    id: 5,
     title: "ساعت‌های هوشمند و گجت‌های پوشیدنی",
-    subtitle: "بررسی و خرید جدیدترین گجت‌های هوشمند بازار با بهترین قیمت",
+    subtitle: "پایش دقیق سلامتی و طراحی مدرن و مقاوم با بهترین قیمت بازار",
     badge: "پیشنهاد اختصاصی",
-    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=1600&q=80",
+    image: "/images/wa.webp",
     buttonText: "مشاهده و خرید",
   },
 ];
@@ -145,34 +155,36 @@ export function Hero() {
                 isMobile ? "w-[72%] px-1.5" : "w-full px-0"
               }`}
             >
-              <div className="relative w-full h-60 sm:h-72 md:h-96 lg:h-112 rounded-2xl md:rounded-3xl overflow-hidden bg-slate-900 shadow-sm md:shadow-md">
+              <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-[2.25/1] lg:aspect-[2.4/1] rounded-2xl md:rounded-3xl overflow-hidden bg-slate-900 shadow-sm md:shadow-md">
                 <img
                   src={slide.image}
                   alt={slide.title}
-                  className="w-full h-full object-cover select-none"
+                  className={`w-full h-full object-cover select-none brightness-[0.89] md:brightness-[0.91] ${
+                    slide.imagePosition || "object-center"
+                  }`}
                   loading="lazy"
                 />
 
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-transparent md:bg-linear-to-l md:from-transparent md:via-black/45 md:to-black/85 pointer-events-none" />
+                {/* Slight subtle dark overlay for enhanced contrast and readability */}
+                <div className="absolute inset-0 bg-black/25 md:bg-gradient-to-l md:from-black/55 md:via-black/25 md:to-transparent pointer-events-none" />
 
                 <div
                   dir="rtl"
-                  className="absolute inset-y-0 right-0 left-0 md:left-auto md:w-2/3 lg:w-1/2 p-3 sm:p-6 md:p-16 flex flex-col justify-end md:justify-center items-start text-right z-10 pointer-events-none"
+                  className="absolute inset-y-0 right-0 left-0 md:left-auto md:w-3/5 lg:w-1/2 p-4 sm:p-6 md:py-8 md:pr-20 md:pl-6 lg:pr-24 lg:pl-8 flex flex-col justify-end md:justify-center items-start text-right z-10 pointer-events-none"
                 >
-
-                  <h2 className="text-xs sm:text-xl md:text-3xl font-black text-white leading-snug mb-1 md:mb-2 line-clamp-1 md:line-clamp-2 pointer-events-auto">
+                  <h2 className="text-xs sm:text-lg md:text-2xl lg:text-3xl font-black text-white leading-snug mb-1 md:mb-2 line-clamp-1 md:line-clamp-2 pointer-events-auto drop-shadow-md">
                     {slide.title}
                   </h2>
 
-                  <p className="hidden md:block text-xs sm:text-sm text-slate-200 leading-relaxed mb-5 max-w-lg pointer-events-auto">
+                  <p className="hidden md:block text-xs sm:text-sm md:text-base text-slate-100 leading-relaxed mb-3 md:mb-4 max-w-lg pointer-events-auto drop-shadow">
                     {slide.subtitle}
                   </p>
 
                   <Link
                     href="/products"
-                    className="mt-0.5 sm:mt-1 inline-flex items-center gap-1.5 text-[11px] sm:text-xs md:text-sm font-black px-3 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl bg-white text-slate-900 shadow-md hover:bg-slate-100 transition-all cursor-pointer pointer-events-auto"
+                    className="mt-1 sm:mt-2 inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm font-black px-3.5 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-lg sm:rounded-xl bg-white text-slate-900 shadow-md hover:bg-slate-100 transition-all cursor-pointer pointer-events-auto hover:shadow-lg hover:-translate-y-0.5"
                   >
-                    <ShoppingBag className="w-3.5 h-3.5 text-[#2563eb]" />
+                    <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2563eb]" />
                     <span>{slide.buttonText}</span>
                   </Link>
                 </div>
@@ -183,22 +195,22 @@ export function Hero() {
 
         <div
           dir="rtl"
-          className="hidden md:flex items-center justify-between absolute inset-y-0 inset-x-4 pointer-events-none"
+          className="hidden md:flex items-center justify-between absolute inset-y-0 inset-x-4 md:inset-x-6 pointer-events-none z-20"
         >
           <button
             onClick={prevSlide}
             aria-label="اسلاید قبلی"
-            className="w-11 h-11 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-lg backdrop-blur-md flex items-center justify-center pointer-events-auto transition-all duration-200 cursor-pointer hover:scale-105"
+            className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-lg backdrop-blur-md flex items-center justify-center pointer-events-auto transition-all duration-200 cursor-pointer hover:scale-105"
           >
-            <ChevronRight className="w-6 h-6 stroke-[2.2]" />
+            <ChevronRight className="w-5 h-5 lg:w-6 lg:h-6 stroke-[2.2]" />
           </button>
 
           <button
             onClick={nextSlide}
             aria-label="اسلاید بعدی"
-            className="w-11 h-11 rounded-full bg-white/80 hover:bg-white text-slate-800 shadow-lg backdrop-blur-md flex items-center justify-center pointer-events-auto transition-all duration-200 cursor-pointer hover:scale-105"
+            className="w-10 h-10 lg:w-11 lg:h-11 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-lg backdrop-blur-md flex items-center justify-center pointer-events-auto transition-all duration-200 cursor-pointer hover:scale-105"
           >
-            <ChevronLeft className="w-6 h-6 stroke-[2.2]" />
+            <ChevronLeft className="w-5 h-5 lg:w-6 lg:h-6 stroke-[2.2]" />
           </button>
         </div>
 

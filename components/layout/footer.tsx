@@ -236,7 +236,13 @@ export function Footer() {
         </div>
 
         <div className="border-t border-slate-100 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 text-center md:text-right">
-          <div>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</div>
+          <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
+            <span>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</span>
+            <span className="text-slate-300 hidden sm:inline">•</span>
+            <span className="font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md text-[11px] border border-slate-200/60">
+              نسخه ۴.۲.۷
+            </span>
+          </div>
 
           <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
             <span>قدرت گرفته از</span>
