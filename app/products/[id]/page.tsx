@@ -6,6 +6,9 @@ import { Footer } from "@/components/layout/footer";
 import { ProductDetailView } from "@/components/product/product-detail-view";
 import { fetchProducts, fetchProductById } from "@/lib/products";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }

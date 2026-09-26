@@ -1095,14 +1095,15 @@ export function ProductsView() {
       {/* Delete Confirmation Modal */}
       <ConfirmModal
         isOpen={!!deletingProductId}
-        title="حذف محصول"
-        message="آیا از حذف این محصول مطمئن هستید؟ این کالا از لیست فروشگاه خارج خواهد شد."
+        title="حذف کالا"
+        message="آیا از حذف این کالا از فروشگاه اطمینان دارید؟ این عملیات غیرقابل بازگشت است."
         confirmText="بله، حذف شود"
         variant="danger"
-        onConfirm={() => {
+        onConfirm={async () => {
           if (deletingProductId) {
-            deleteProduct(deletingProductId);
+            const idToDelete = deletingProductId;
             setDeletingProductId(null);
+            await deleteProduct(idToDelete);
           }
         }}
         onCancel={() => setDeletingProductId(null)}

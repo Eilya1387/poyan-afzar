@@ -171,7 +171,7 @@ export async function fetchProducts(params?: {
     }
     const qStr = query.toString();
     const url = `${API_BASE_URL}/api/products${qStr ? `?${qStr}` : ""}`;
-    const res = await fetch(url, { next: { revalidate: 30 } });
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     const json = await res.json();
     const list = Array.isArray(json.data)
@@ -189,7 +189,7 @@ export async function fetchProducts(params?: {
 export async function fetchProductById(id: string): Promise<Product | null> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/products/${encodeURIComponent(id)}`, {
-      next: { revalidate: 30 },
+      cache: "no-store",
     });
     if (!res.ok) {
       if (res.status === 404) return null;
@@ -227,7 +227,7 @@ export async function fetchFlashDeals(): Promise<Product[]> {
 export async function fetchRelatedProducts(id: string): Promise<Product[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/products/${encodeURIComponent(id)}/related`, {
-      next: { revalidate: 30 },
+      cache: "no-store",
     });
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     const json = await res.json();

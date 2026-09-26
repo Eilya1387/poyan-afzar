@@ -148,9 +148,9 @@ interface AdminState {
   ) => void;
 
   // Review Actions
-  approveReview: (id: string) => void;
-  rejectReview: (id: string) => void;
-  deleteReview: (id: string) => void;
+  approveReview: (id: string) => Promise<void>;
+  rejectReview: (id: string) => Promise<void>;
+  deleteReview: (id: string) => Promise<void>;
 
   // QA Actions
   answerQa: (id: string, answer: string) => Promise<void>;
@@ -255,7 +255,7 @@ export const useAdminStore = create<AdminState>()(
             if (overview.value.salesChart) set({ salesChart: overview.value.salesChart });
             if (overview.value.kpis) set({ kpis: overview.value.kpis });
           }
-          if (allProds.status === "fulfilled" && allProds.value?.items && allProds.value.items.length > 0) {
+          if (allProds.status === "fulfilled" && Array.isArray(allProds.value?.items)) {
             const mappedProds: AdminProduct[] = allProds.value.items.map((p) => ({
               id: p.id,
               title: p.title,
@@ -281,7 +281,7 @@ export const useAdminStore = create<AdminState>()(
               createdAt: p.createdAt || new Intl.DateTimeFormat("fa-IR").format(new Date()),
             }));
             set({ products: mappedProds });
-          } else if (inv.status === "fulfilled" && inv.value?.products) {
+          } else if (inv.status === "fulfilled" && Array.isArray(inv.value?.products)) {
             set({ products: inv.value.products });
           }
           if (ords.status === "fulfilled" && ords.value?.orders) {
@@ -293,8 +293,13 @@ export const useAdminStore = create<AdminState>()(
           if (discs.status === "fulfilled" && Array.isArray(discs.value)) {
             set({ discounts: discs.value });
           }
-          if (revs.status === "fulfilled" && revs.value?.reviews) {
-            set({ reviews: revs.value.reviews });
+          if (revs.status === "fulfilled") {
+            const reviewsArray = Array.isArray(revs.value)
+              ? revs.value
+              : Array.isArray(revs.value?.reviews)
+              ? revs.value.reviews
+              : [];
+            set({ reviews: reviewsArray });
           }
           if (qaRes.status === "fulfilled" && qaRes.value?.questions) {
             set({ qa: qaRes.value.questions });
@@ -400,16 +405,17 @@ export const useAdminStore = create<AdminState>()(
         });
       },
 
-      deleteProduct: (id) => {
+      deleteProduct: async (id) => {
         set((state) => ({
           products: state.products.filter((p) => p.id !== id),
         }));
 
-        productsApi.deleteProduct(id).then(() => {
-          get().fetchAdminData();
-        }).catch((err) => {
+        try {
+          await productsApi.deleteProduct(id);
+          await get().fetchAdminData();
+        } catch (err) {
           console.error("Error deleting product on backend:", err);
-        });
+        }
       },
 
       updateStock: (id, newStock) => {
@@ -824,44 +830,47 @@ export const useAdminStore = create<AdminState>()(
       },
 
       // Review Actions
-      approveReview: (id) => {
+      approveReview: async (id) => {
         set((state) => ({
           reviews: state.reviews.map((r) =>
             r.id === id ? { ...r, status: "approved" } : r
           ),
         }));
 
-        adminApi.approveReview(id).then(() => {
-          get().fetchAdminData();
-        }).catch((err) => {
+        try {
+          await adminApi.approveReview(id);
+          await get().fetchAdminData();
+        } catch (err) {
           console.error("Error approving review on backend:", err);
-        });
+        }
       },
 
-      rejectReview: (id) => {
+      rejectReview: async (id) => {
         set((state) => ({
           reviews: state.reviews.map((r) =>
             r.id === id ? { ...r, status: "rejected" } : r
           ),
         }));
 
-        adminApi.rejectReview(id).then(() => {
-          get().fetchAdminData();
-        }).catch((err) => {
+        try {
+          await adminApi.rejectReview(id);
+          await get().fetchAdminData();
+        } catch (err) {
           console.error("Error rejecting review on backend:", err);
-        });
+        }
       },
 
-      deleteReview: (id) => {
+      deleteReview: async (id) => {
         set((state) => ({
           reviews: state.reviews.filter((r) => r.id !== id),
         }));
 
-        adminApi.deleteReview(id).then(() => {
-          get().fetchAdminData();
-        }).catch((err) => {
+        try {
+          await adminApi.deleteReview(id);
+          await get().fetchAdminData();
+        } catch (err) {
           console.error("Error deleting review on backend:", err);
-        });
+        }
       },
 
       // QA Actions

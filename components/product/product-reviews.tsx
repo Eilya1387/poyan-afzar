@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ProductReview, RatingDistributionItem } from "@/lib/products";
 import { productsApi } from "@/lib/api/products";
 import { useAuth } from "@/components/auth/auth-context";
+import { formatPersianDate, toPersianDigits } from "@/lib/formatters";
 
 interface ProductReviewsProps {
   productId?: string;
@@ -24,58 +25,57 @@ export function ProductReviews({
 }: ProductReviewsProps) {
   const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
-  const [reviewsList, setReviewsList] = useState<ProductReview[]>(initialReviews);
-  const [ratingVal, setRatingVal] = useState(initialRating);
-  const [reviewsCountVal, setReviewsCountVal] = useState(initialCount);
-  const [distVal, setDistVal] = useState<RatingDistributionItem[]>(initialDistribution);
+  const [reviewsList, setReviewsList] = useState<ProductReview[]>(initialReviews || []);
+  const [ratingVal, setRatingVal] = useState(initialRating || 5);
+  const [reviewsCountVal, setReviewsCountVal] = useState(initialCount || 0);
+  const [distVal, setDistVal] = useState<RatingDistributionItem[]>(initialDistribution || []);
 
   const [formRating, setFormRating] = useState(5);
-  const [userName, setUserName] = useState(user ? `${user.firstName} ${user.lastName}` : "");
+  const [userName, setUserName] = useState(
+    user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : ""
+  );
   const [userComment, setUserComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchLiveReviews = async () => {
     if (!productId) return;
-    const currentProductId: string = productId;
-    let isMounted = true;
-    async function loadReviews() {
-      try {
-        const res = await productsApi.getReviews(currentProductId);
-        if (!isMounted) return;
-        if (res.reviews && res.reviews.length > 0) {
-          setReviewsList(
-            res.reviews.map((r: any) => ({
-              id: r.id,
-              user: r.userName || r.user || "کاربر پویان افزار",
-              verified: r.verified ?? true,
-              date: r.date || (r.createdAt ? new Intl.DateTimeFormat("fa-IR").format(new Date(r.createdAt)) : "۱۴۰۳/۰۹/۲۵"),
-              rating: r.rating || 5,
-              comment: r.comment || "",
-              avatar: r.avatar,
-            }))
-          );
-        }
-        if (res.rating) setRatingVal(res.rating);
-        if (res.reviewsCount) setReviewsCountVal(res.reviewsCount);
-        if (res.distribution) setDistVal(res.distribution);
-      } catch (err) {
-        console.error("Failed to load reviews:", err);
-      }
-    }
-    loadReviews();
-    return () => {
-      isMounted = false;
-    };
-  }, [productId]);
+    try {
+      const res = await productsApi.getReviews(productId);
+      const revs = Array.isArray(res.reviews)
+        ? res.reviews
+        : Array.isArray((res as any).data?.reviews)
+        ? (res as any).data.reviews
+        : Array.isArray((res as any).data)
+        ? (res as any).data
+        : [];
 
-  const formatPersianNumber = (num: number) => {
-    const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-    return num
-      .toLocaleString("fa-IR")
-      .replace(/[0-9]/g, (w) => persianDigits[+w]);
+      setReviewsList(
+        revs.map((r: any) => ({
+          id: r.id,
+          user: r.userName || r.user || "کاربر پویان افزار",
+          verified: r.verified ?? r.isVerifiedBuyer ?? true,
+          date: formatPersianDate(r.createdAt || r.date),
+          rating: Number(r.rating) || 5,
+          comment: r.comment || "",
+          avatar: r.avatar || r.userAvatar,
+        }))
+      );
+
+      if (typeof res.rating === "number") setRatingVal(res.rating);
+      if (typeof res.reviewsCount === "number") setReviewsCountVal(res.reviewsCount);
+      if (Array.isArray(res.distribution) && res.distribution.length > 0) {
+        setDistVal(res.distribution);
+      }
+    } catch (err) {
+      console.error("Failed to load reviews:", err);
+    }
   };
+
+  useEffect(() => {
+    fetchLiveReviews();
+  }, [productId]);
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,16 +93,22 @@ export function ProductReviews({
       }
 
       setSubmitted(true);
+      await fetchLiveReviews();
       setTimeout(() => {
         setShowModal(false);
         setSubmitted(false);
         setUserComment("");
-      }, 1500);
+      }, 1800);
     } catch (err: any) {
       setErrorMsg(err?.message || "خطا در ثبت دیدگاه.");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const formatPersianNumber = (num?: number | string | null) => {
+    if (num === undefined || num === null) return "۰";
+    return toPersianDigits(num);
   };
 
   return (
@@ -171,40 +177,49 @@ export function ProductReviews({
         </div>
       </div>
 
-      <div className="divide-y divide-slate-100 pt-2">
-        {reviewsList.map((rev) => (
-          <div key={rev.id} className="py-5 first:pt-2 space-y-2.5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-sm text-slate-900">
-                  {rev.user}
-                </span>
-                {rev.verified && (
-                  <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                    خریدار تایید شده
-                  </span>
-                )}
-              </div>
-              <span className="text-xs text-slate-400 font-medium">
-                {rev.date}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: rev.rating }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3.5 h-3.5 fill-amber-400 text-amber-400"
-                />
-              ))}
-            </div>
-
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              {rev.comment}
-            </p>
+      <div className="pt-2">
+        {reviewsList.length === 0 ? (
+          <div className="py-12 text-center text-slate-400 text-xs bg-slate-50/50 rounded-2xl border border-slate-100 p-6 space-y-2">
+            <p className="font-bold text-slate-700 text-sm">هنوز دیدگاهی برای این کالا ثبت نشده است</p>
+            <p className="text-slate-400 text-xs font-medium">اولین نفری باشید که نظر و تجربه خود را درباره این کالا با دیگران به اشتراک می‌گذارد.</p>
           </div>
-        ))}
+        ) : (
+          <div className="divide-y divide-slate-100">
+            {reviewsList.map((rev) => (
+              <div key={rev.id} className="py-5 first:pt-2 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-black text-sm text-slate-900">
+                      {rev.user}
+                    </span>
+                    {rev.verified && (
+                      <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        خریدار تایید شده
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-slate-400 font-medium font-mono" dir="ltr">
+                    {rev.date}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-0.5">
+                  {Array.from({ length: rev.rating }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-3.5 h-3.5 fill-amber-400 text-amber-400"
+                    />
+                  ))}
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {rev.comment}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {showModal && (
