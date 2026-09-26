@@ -1,5 +1,10 @@
+export const BACKEND_URL =
+  process.env.BACKEND_API_URL || "https://api.poyanafzar.noteduco342.ir";
+
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.poyanafzar.noteduco342.ir";
+  typeof window !== "undefined"
+    ? "" // Client-side: use same-origin proxy (e.g. /api/...) to completely avoid CORS preflight errors on PATCH, DELETE, PUT
+    : process.env.NEXT_PUBLIC_API_URL || BACKEND_URL;
 
 const ACCESS_TOKEN_KEY = "poyan_access_token";
 const REFRESH_TOKEN_KEY = "poyan_refresh_token";
