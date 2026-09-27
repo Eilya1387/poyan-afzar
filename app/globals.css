@@ -66,9 +66,16 @@ body {
   min-height: 100vh;
 }
 
-/* Telegram-like View Transition for theme toggle */
+/* Prevent layout thrashing and internal element CSS transitions during snapshot capture */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *:before,
+html.theme-transitioning *:after {
+  transition: none !important;
+}
+
+/* High-performance View Transition for smooth, slow, and cinematic theme toggle */
 ::view-transition-group(root) {
-  animation-duration: 0s !important;
   animation: none !important;
 }
 
@@ -80,6 +87,9 @@ body {
 ::view-transition-new(root) {
   animation: none !important;
   mix-blend-mode: normal !important;
+  display: block;
+  height: 100%;
+  overflow: clip;
 }
 
 ::view-transition-old(root) {
@@ -87,17 +97,18 @@ body {
 }
 
 ::view-transition-new(root) {
-  z-index: 9999;
+  z-index: 2147483646;
+  will-change: clip-path;
 }
 
-.dark::view-transition-old(root),
-[data-theme="dark"]::view-transition-old(root) {
-  z-index: 1;
-}
-
-.dark::view-transition-new(root),
-[data-theme="dark"]::view-transition-new(root) {
-  z-index: 9999;
+/* Fallback GPU-composited ripple overlay for mobile browsers without View Transition API */
+.theme-ripple-fallback {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147483646;
+  transform: translate(-50%, -50%) scale(0);
+  will-change: transform, opacity;
 }
 
 @keyframes pulseSubtle {

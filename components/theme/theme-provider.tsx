@@ -120,36 +120,33 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   ) => {
     if (nextMode === mode) return;
 
-    // Check if View Transition API is supported and user hasn't reduced motion
-    const isViewTransitionSupported =
-      typeof document !== "undefined" &&
-      "startViewTransition" in document &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ANIMATION_DURATION = 1050; // 1.05s slow, calm and highly visible
 
-    if (!isViewTransitionSupported) {
-      setModeState(nextMode);
-      applyThemeToDOM(nextMode);
-      return;
-    }
+    // Determine click / touch / reveal origin coordinates
+    let x = typeof window !== "undefined" ? window.innerWidth / 2 : 0;
+    let y = typeof window !== "undefined" ? window.innerHeight / 2 : 0;
 
-    // Determine click / reveal origin coordinates (Telegram style)
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
+    if (event) {
+      const native = (event as unknown as { nativeEvent?: { touches?: Array<{ clientX: number; clientY: number }> } }).nativeEvent;
+      if (native && native.touches && native.touches[0]) {
+        x = native.touches[0].clientX;
+        y = native.touches[0].clientY;
+      } else if (
+        typeof event.clientX === "number" &&
+        typeof event.clientY === "number" &&
+        (event.clientX !== 0 || event.clientY !== 0)
+      ) {
+        x = event.clientX;
+        y = event.clientY;
+      }
 
-    if (
-      event &&
-      typeof event.clientX === "number" &&
-      typeof event.clientY === "number" &&
-      (event.clientX !== 0 || event.clientY !== 0)
-    ) {
-      x = event.clientX;
-      y = event.clientY;
-    } else if (event && (event.currentTarget || event.target)) {
-      const el = (event.currentTarget || event.target) as HTMLElement;
+      const el = (event.currentTarget || event.target) as HTMLElement | null;
       if (el && typeof el.getBoundingClientRect === "function") {
         const rect = el.getBoundingClientRect();
-        x = rect.left + rect.width / 2;
-        y = rect.top + rect.height / 2;
+        if (rect.width > 0 && rect.height > 0) {
+          x = rect.left + rect.width / 2;
+          y = rect.top + rect.height / 2;
+        }
       }
     }
 
@@ -166,40 +163,111 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     );
 
     const endRadius =
-      Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y))) + 4;
+      Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y))) + 16;
 
-    const doc = document as unknown as {
-      startViewTransition: (cb: () => void) => { ready: Promise<void> };
-    };
+    // Check if View Transition API is supported and user hasn't reduced motion
+    const isViewTransitionSupported =
+      typeof document !== "undefined" &&
+      "startViewTransition" in document &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const transition = doc.startViewTransition(() => {
-      flushSync(() => {
-        setModeState(nextMode);
-      });
-      applyThemeToDOM(nextMode);
-    });
+    if (!isViewTransitionSupported) {
+      // GPU-accelerated lightweight ripple fallback for mobile browsers without View Transition API
+      try {
+        const targetColor = nextMode === "dark" ? "#0b0f19" : "#f8fafc";
+        const rippleSize = Math.ceil(endRadius * 2);
+        const ripple = document.createElement("div");
+        ripple.className = "theme-ripple-fallback";
+        ripple.style.left = `${Math.round(x)}px`;
+        ripple.style.top = `${Math.round(y)}px`;
+        ripple.style.width = `${rippleSize}px`;
+        ripple.style.height = `${rippleSize}px`;
+        ripple.style.marginLeft = `-${Math.round(rippleSize / 2)}px`;
+        ripple.style.marginTop = `-${Math.round(rippleSize / 2)}px`;
+        ripple.style.backgroundColor = targetColor;
+        document.body.appendChild(ripple);
 
-    transition.ready
-      .then(() => {
-        const clipPath = [
-          `circle(0px at ${x}px ${y}px)`,
-          `circle(${endRadius}px at ${x}px ${y}px)`,
-        ];
-
-        document.documentElement.animate(
+        const anim = ripple.animate(
+          [
+            { transform: "scale(0)", opacity: 1 },
+            { transform: "scale(1)", opacity: 1 },
+          ],
           {
-            clipPath: clipPath,
-          },
-          {
-            duration: 750,
+            duration: ANIMATION_DURATION,
             easing: "cubic-bezier(0.2, 0, 0, 1)",
-            pseudoElement: "::view-transition-new(root)",
+            fill: "forwards",
           }
         );
-      })
-      .catch(() => {
-        // graceful fallback if animation fails
+
+        // Halfway through ripple expansion, switch DOM theme state
+        setTimeout(() => {
+          setModeState(nextMode);
+          applyThemeToDOM(nextMode);
+        }, Math.round(ANIMATION_DURATION * 0.4));
+
+        anim.onfinish = () => {
+          const fade = ripple.animate(
+            [{ opacity: 1 }, { opacity: 0 }],
+            { duration: 250, easing: "ease-out", fill: "forwards" }
+          );
+          fade.onfinish = () => {
+            if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
+          };
+        };
+      } catch {
+        setModeState(nextMode);
+        applyThemeToDOM(nextMode);
+      }
+      return;
+    }
+
+    try {
+      const doc = document as unknown as {
+        startViewTransition: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
+      };
+
+      document.documentElement.classList.add("theme-transitioning");
+
+      const transition = doc.startViewTransition(() => {
+        flushSync(() => {
+          setModeState(nextMode);
+        });
+        applyThemeToDOM(nextMode);
       });
+
+      transition.ready
+        .then(() => {
+          document.documentElement.classList.remove("theme-transitioning");
+          try {
+            document.documentElement.animate(
+              {
+                clipPath: [
+                  `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`,
+                  `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`,
+                ],
+              },
+              {
+                duration: ANIMATION_DURATION,
+                easing: "cubic-bezier(0.2, 0, 0, 1)",
+                pseudoElement: "::view-transition-new(root)",
+              }
+            );
+          } catch {
+            // Fallback
+          }
+        })
+        .catch(() => {
+          document.documentElement.classList.remove("theme-transitioning");
+        });
+
+      transition.finished.finally(() => {
+        document.documentElement.classList.remove("theme-transitioning");
+      });
+    } catch {
+      document.documentElement.classList.remove("theme-transitioning");
+      setModeState(nextMode);
+      applyThemeToDOM(nextMode);
+    }
   };
 
   const toggleTheme = (event?: React.MouseEvent | MouseEvent) => {
@@ -272,7 +340,7 @@ export function ThemeToggle({
       <button
         type="button"
         onClick={(e) => toggleTheme(e)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border cursor-pointer ${
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border cursor-pointer active:scale-95 transition-all duration-200 ${
           isDark
             ? "bg-slate-800/90 border-slate-700 text-amber-300 hover:bg-slate-800 shadow-sm"
             : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-blue-600"
@@ -280,14 +348,14 @@ export function ThemeToggle({
         title={isDark ? "تغییر به حالت روز (روشن)" : "تغییر به حالت شب (تاریک)"}
         aria-label={isDark ? "حالت روز" : "حالت شب"}
       >
-        <div className="relative w-4 h-4">
+        <div className="relative w-4 h-4 flex items-center justify-center">
           <Sun
-            className={`w-4 h-4 text-amber-400 absolute inset-0 ${
+            className={`w-4 h-4 text-amber-400 absolute transition-all duration-700 ease-out ${
               isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
             }`}
           />
           <Moon
-            className={`w-4 h-4 text-slate-600 absolute inset-0 ${
+            className={`w-4 h-4 text-slate-600 dark:text-slate-300 absolute transition-all duration-700 ease-out ${
               !isDark ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0"
             }`}
           />
@@ -305,7 +373,7 @@ export function ThemeToggle({
     <button
       type="button"
       onClick={(e) => toggleTheme(e)}
-      className={`relative p-2 rounded-xl border flex items-center justify-center cursor-pointer group ${
+      className={`relative p-2 rounded-xl border flex items-center justify-center cursor-pointer group active:scale-90 transition-all duration-200 ${
         isDark
           ? "bg-slate-800/90 border-slate-700/80 text-amber-300 hover:text-amber-200 hover:border-amber-400/40 hover:bg-slate-800 shadow-xs"
           : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200"
@@ -315,14 +383,14 @@ export function ThemeToggle({
     >
       <div className="relative w-5 h-5 flex items-center justify-center">
         <Sun
-          className={`w-5 h-5 text-amber-400 absolute transform ${
+          className={`w-5 h-5 text-amber-400 absolute transition-all duration-700 ease-out ${
             isDark
               ? "rotate-0 scale-100 opacity-100"
               : "-rotate-90 scale-0 opacity-0"
           }`}
         />
         <Moon
-          className={`w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 absolute transform ${
+          className={`w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 absolute transition-all duration-700 ease-out ${
             !isDark
               ? "rotate-0 scale-100 opacity-100"
               : "rotate-90 scale-0 opacity-0"
