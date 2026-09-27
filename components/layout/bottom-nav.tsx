@@ -77,7 +77,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="ناوبری سریع موبایل"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl border-t border-slate-200 dark:border-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.4)] px-2 pt-2 pb-3 transition-colors duration-200"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl border-t border-slate-200 dark:border-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.4)] px-2 pt-2 pb-3"
     >
       <div className="relative flex items-center justify-around max-w-md mx-auto h-16">
         <div

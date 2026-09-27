@@ -76,7 +76,7 @@ function ShareIcon({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-slate-800 mt-12 pt-12 pb-24 md:pb-8 text-slate-700 dark:text-slate-300 transition-colors duration-200">
+    <footer className="bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-slate-800 mt-12 pt-12 pb-24 md:pb-8 text-slate-700 dark:text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10">
           <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right">

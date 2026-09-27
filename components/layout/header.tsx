@@ -113,7 +113,7 @@ export function Header({
     <div className="w-full">
       {isSticky && <div className="h-20 sm:h-32 w-full pointer-events-none" aria-hidden="true" />}
       <header
-        className={`w-full transition-colors duration-200 ${
+        className={`w-full ${
           isSticky
             ? "fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0b0f19]/95 backdrop-blur-md shadow-md border-b border-slate-200/80 dark:border-slate-800 animate-slide-down"
             : "relative bg-white dark:bg-[#0b0f19] border-b border-slate-200 dark:border-slate-800"

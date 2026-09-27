@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useTransition } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import { Sun, Moon } from "lucide-react";
 
 export type ThemeMode = "light" | "dark";
@@ -95,7 +96,6 @@ function applyThemeToDOM(targetMode: ThemeMode) {
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>("light");
-  const [, startTransition] = useTransition();
 
   useEffect(() => {
     try {
@@ -153,17 +153,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
+    if (Number.isNaN(x) || x < 0) x = window.innerWidth / 2;
+    if (Number.isNaN(y) || y < 0) y = window.innerHeight / 2;
+
+    const w = Math.max(
+      window.innerWidth || 0,
+      document.documentElement.clientWidth || 0
     );
+    const h = Math.max(
+      window.innerHeight || 0,
+      document.documentElement.clientHeight || 0
+    );
+
+    const endRadius =
+      Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y))) + 4;
 
     const doc = document as unknown as {
       startViewTransition: (cb: () => void) => { ready: Promise<void> };
     };
 
     const transition = doc.startViewTransition(() => {
-      startTransition(() => {
+      flushSync(() => {
         setModeState(nextMode);
       });
       applyThemeToDOM(nextMode);
@@ -182,7 +192,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           },
           {
             duration: 750,
-            easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+            easing: "cubic-bezier(0.2, 0, 0, 1)",
             pseudoElement: "::view-transition-new(root)",
           }
         );
@@ -262,7 +272,7 @@ export function ThemeToggle({
       <button
         type="button"
         onClick={(e) => toggleTheme(e)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border cursor-pointer ${
           isDark
             ? "bg-slate-800/90 border-slate-700 text-amber-300 hover:bg-slate-800 shadow-sm"
             : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-blue-600"
@@ -272,12 +282,12 @@ export function ThemeToggle({
       >
         <div className="relative w-4 h-4">
           <Sun
-            className={`w-4 h-4 text-amber-400 absolute inset-0 transition-all duration-300 ${
+            className={`w-4 h-4 text-amber-400 absolute inset-0 ${
               isDark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
             }`}
           />
           <Moon
-            className={`w-4 h-4 text-slate-600 absolute inset-0 transition-all duration-300 ${
+            className={`w-4 h-4 text-slate-600 absolute inset-0 ${
               !isDark ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0"
             }`}
           />
@@ -295,7 +305,7 @@ export function ThemeToggle({
     <button
       type="button"
       onClick={(e) => toggleTheme(e)}
-      className={`relative p-2 rounded-xl border transition-all duration-200 flex items-center justify-center cursor-pointer group ${
+      className={`relative p-2 rounded-xl border flex items-center justify-center cursor-pointer group ${
         isDark
           ? "bg-slate-800/90 border-slate-700/80 text-amber-300 hover:text-amber-200 hover:border-amber-400/40 hover:bg-slate-800 shadow-xs"
           : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200"
@@ -305,14 +315,14 @@ export function ThemeToggle({
     >
       <div className="relative w-5 h-5 flex items-center justify-center">
         <Sun
-          className={`w-5 h-5 text-amber-400 absolute transition-all duration-300 transform ${
+          className={`w-5 h-5 text-amber-400 absolute transform ${
             isDark
               ? "rotate-0 scale-100 opacity-100"
               : "-rotate-90 scale-0 opacity-0"
           }`}
         />
         <Moon
-          className={`w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 absolute transition-all duration-300 transform ${
+          className={`w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:text-blue-600 absolute transform ${
             !isDark
               ? "rotate-0 scale-100 opacity-100"
               : "rotate-90 scale-0 opacity-0"

@@ -37,10 +37,10 @@ export function Brands() {
   return (
     <section className="py-12 overflow-hidden">
       <div className="text-center mb-8">
-        <h2 className="text-lg sm:text-xl font-black text-[#0b1528] dark:text-white">
+        <h2 className="text-lg sm:text-xl font-black text-blue-600 dark:text-sky-400">
           محبوب‌ترین برندهای جهان
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-300 font-medium mt-1">
           ارائه مستقیم محصولات اورجینال از معتبرترین برندهای تکنولوژی
         </p>
       </div>
@@ -59,7 +59,7 @@ export function Brands() {
               <img
                 src={`/brands/${brand.file}`}
                 alt={brand.name}
-                className="h-10 sm:h-14 md:h-16 w-auto max-w-35 sm:max-w-42.5 object-contain opacity-70 dark:opacity-60 dark:brightness-150 group-hover:opacity-100 dark:group-hover:opacity-100 transition-all duration-300 group-hover:drop-shadow-sm"
+                className="h-10 sm:h-14 md:h-16 w-auto max-w-35 sm:max-w-42.5 object-contain opacity-75 group-hover:opacity-100 dark:invert dark:opacity-85 dark:group-hover:opacity-100 transition-all duration-300 group-hover:drop-shadow-sm"
                 loading="lazy"
               />
             </div>

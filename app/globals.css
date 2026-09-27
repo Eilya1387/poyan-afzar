@@ -49,6 +49,12 @@ textarea {
 html {
   background-color: var(--background);
   color: var(--foreground);
+  color-scheme: light;
+}
+
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
@@ -61,10 +67,19 @@ body {
 }
 
 /* Telegram-like View Transition for theme toggle */
+::view-transition-group(root) {
+  animation-duration: 0s !important;
+  animation: none !important;
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+  animation: none !important;
+  mix-blend-mode: normal !important;
 }
 
 ::view-transition-old(root) {
@@ -72,7 +87,7 @@ body {
 }
 
 ::view-transition-new(root) {
-  z-index: 999999;
+  z-index: 9999;
 }
 
 .dark::view-transition-old(root),
@@ -82,7 +97,7 @@ body {
 
 .dark::view-transition-new(root),
 [data-theme="dark"]::view-transition-new(root) {
-  z-index: 999999;
+  z-index: 9999;
 }
 
 @keyframes pulseSubtle {

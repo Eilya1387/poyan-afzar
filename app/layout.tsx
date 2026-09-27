@@ -51,7 +51,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 dark:bg-[#0b0f19] dark:text-slate-100 antialiased selection:bg-blue-100 dark:selection:bg-blue-900/60 selection:text-blue-900 dark:selection:text-blue-100 transition-colors duration-200">
+      <body className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 dark:bg-[#0b0f19] dark:text-slate-100 antialiased selection:bg-blue-100 dark:selection:bg-blue-900/60 selection:text-blue-900 dark:selection:text-blue-100">
         <ThemeProvider>
           <AuthProvider>
             {children}

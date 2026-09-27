@@ -38,7 +38,7 @@ export function AdminHeader({ onOpenMobileMenu }: AdminHeaderProps) {
   const totalAlerts = pendingReviews.length + lowStock.length + pendingOrders.length;
 
   return (
-    <header className="sticky top-0 z-20 bg-white dark:bg-[#111827] border-b border-slate-200/80 dark:border-slate-800 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4 select-none transition-colors">
+    <header className="sticky top-0 z-20 bg-white dark:bg-[#111827] border-b border-slate-200/80 dark:border-slate-800 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4 select-none">
       {/* Search Input Bar (Center/Right in RTL) */}
       <div className="flex items-center gap-3 flex-1 max-w-lg">
         <button
