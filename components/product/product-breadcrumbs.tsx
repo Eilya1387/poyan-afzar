@@ -19,25 +19,25 @@ export function ProductBreadcrumbs({ items }: ProductBreadcrumbsProps) {
   return (
     <nav
       aria-label="مسیر راهنما"
-      className="py-3 flex items-center justify-between gap-4 text-xs text-slate-500 overflow-x-auto no-scrollbar"
+      className="py-3 flex items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400 overflow-x-auto no-scrollbar"
     >
       <ol className="flex items-center gap-2 whitespace-nowrap">
         {parentItems.map((item) => (
           <li key={item.title} className="flex items-center gap-2">
             <Link
               href={item.href}
-              className="hover:text-[#2563eb] transition-colors cursor-pointer"
+              className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
             >
               {item.title}
             </Link>
-            <span className="text-slate-300 select-none">/</span>
+            <span className="text-slate-300 dark:text-slate-600 select-none">/</span>
           </li>
         ))}
       </ol>
 
       {currentItem && (
         <span
-          className="font-medium text-slate-700 whitespace-nowrap shrink-0"
+          className="font-medium text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0"
           aria-current="page"
         >
           {currentItem.title}

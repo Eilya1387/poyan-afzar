@@ -118,51 +118,51 @@ export function BuyBox({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs sticky top-24 space-y-5 text-right">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-5 shadow-xs sticky top-24 space-y-5 text-right">
       <div className=" pt-4">
         {discount && oldPrice && (
           <div className="flex items-center justify-between mb-1.5">
             <span className="bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-2xs">
               {discount}
             </span>
-            <span className="text-xs text-slate-400 line-through font-medium">
+            <span className="text-xs text-slate-400 dark:text-slate-500 line-through font-medium">
               {oldPrice}
             </span>
           </div>
         )}
 
         <div className="flex items-baseline justify-between gap-1.5">
-          <span className="text-2xl font-black text-slate-900 tracking-tight">
+          <span className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             {price}
           </span>
-          <span className="text-xs text-slate-500 font-medium">تومان</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">تومان</span>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-        <div className="inline-flex items-center border border-slate-200 rounded-xl bg-slate-50/50 p-1">
+      <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4">
+        <div className="inline-flex items-center border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/50 p-1">
           <button
             type="button"
             onClick={handleDecrement}
             disabled={quantity <= 1}
             aria-label="کاهش تعداد"
-            className="w-7 h-7 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-slate-700 hover:text-[#2563eb] hover:border-blue-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 shadow-2xs flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-[#2563eb] dark:hover:text-blue-400 hover:border-blue-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
-          <span className="w-9 text-center text-xs font-black text-slate-800 select-none">
+          <span className="w-9 text-center text-xs font-black text-slate-800 dark:text-slate-200 select-none">
             {toPersianDigits(quantity)}
           </span>
           <button
             type="button"
             onClick={handleIncrement}
             aria-label="افزایش تعداد"
-            className="w-7 h-7 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-slate-700 hover:text-[#2563eb] hover:border-blue-200 transition-colors cursor-pointer"
+            className="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 shadow-2xs flex items-center justify-center text-slate-700 dark:text-slate-200 hover:text-[#2563eb] dark:hover:text-blue-400 hover:border-blue-200 transition-colors cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
         </div>
-        <span className="text-xs text-slate-500 font-medium">تعداد</span>
+        <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">تعداد</span>
       </div>
 
       <div className="space-y-2.5 pt-1">

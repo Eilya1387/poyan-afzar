@@ -101,23 +101,23 @@ export function BestSellers() {
     <section className="py-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-lg sm:text-xl font-black text-[#0b1528]">
+          <h2 className="text-lg sm:text-xl font-black text-[#0b1528] dark:text-white">
             پرفروش‌ترین محصولات
           </h2>
-          <p className="text-xs text-slate-600 font-medium mt-1">
+          <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">
             محبوب‌ترین کالاهای دیجیتال بر اساس انتخاب خریداران
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeTab === tab.id
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               {tab.label}
@@ -127,19 +127,19 @@ export function BestSellers() {
       </div>
 
       {itemsList.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200/90 dark:border-slate-800/80 p-8 sm:p-12 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center mx-auto">
             <Plus className="w-6 h-6" />
           </div>
-          <h3 className="text-sm sm:text-base font-black text-slate-800">
+          <h3 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100">
             در حال حاضر محصولی در این بخش ثبت نشده است
           </h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
             محصولات به زودی توسط مدیریت فروشگاه اضافه و در دسترس قرار خواهند گرفت.
           </p>
         </div>
       ) : filteredProducts.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 text-center text-xs text-slate-500">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/80 dark:border-slate-800/80 p-6 text-center text-xs text-slate-500 dark:text-slate-400">
           محصولی در این دسته‌بندی یافت نشد.
         </div>
       ) : (
@@ -148,10 +148,10 @@ export function BestSellers() {
             <Link
               key={product.id}
               href={`/products/${product.id}`}
-              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl border border-slate-200 p-2.5 sm:p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-md transition-all duration-200 group cursor-pointer"
+              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800/80 p-2.5 sm:p-4 flex flex-col justify-between hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md dark:hover:shadow-black/40 transition-all duration-200 group cursor-pointer"
             >
               <div>
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 sm:mb-3 border border-slate-100 flex items-center justify-center p-0">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 mb-2 sm:mb-3 border border-slate-100 dark:border-slate-800 flex items-center justify-center p-0">
                   {product.discount && (
                     <span className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 z-10 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
                       {product.discount}
@@ -163,7 +163,7 @@ export function BestSellers() {
                       type="button"
                       onClick={(e) => handleToggleFavorite(e, product)}
                       aria-label="افزودن به علاقه‌مندی‌ها"
-                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 border border-slate-200 shadow-xs flex items-center justify-center text-slate-600 hover:text-red-500 transition-colors cursor-pointer"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-xs flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-red-500 transition-colors cursor-pointer"
                     >
                       <Heart
                         className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
@@ -181,16 +181,16 @@ export function BestSellers() {
                   />
                 </div>
 
-                <div className="text-[10px] sm:text-[11px] mb-1 font-medium text-slate-500 truncate">
+                <div className="text-[10px] sm:text-[11px] mb-1 font-medium text-slate-500 dark:text-slate-400 truncate">
                   {product.brand}
                 </div>
 
-                <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] transition-colors">
+                <h3 className="text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 dark:text-slate-100 line-clamp-2 h-7 sm:h-10 leading-tight group-hover:text-[#2563eb] dark:group-hover:text-blue-400 transition-colors">
                   {product.title}
                 </h3>
               </div>
 
-              <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100">
+              <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between max-sm:justify-center gap-1 sm:gap-2">
                   <Button
                     variant="secondary"
@@ -207,9 +207,9 @@ export function BestSellers() {
                     <span>{addedId === product.id ? "افزوده شد" : "خرید"}</span>
                   </Button>
 
-                  <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] truncate">
+                  <div className="flex items-center gap-0.5 sm:gap-1 font-black text-xs sm:text-sm md:text-base text-[#0b1528] dark:text-white truncate">
                     <span>{product.price}</span>
-                    <span className="text-[9px] sm:text-[10px] font-medium text-slate-600">
+                    <span className="text-[9px] sm:text-[10px] font-medium text-slate-600 dark:text-slate-400">
                       تومان
                     </span>
                   </div>

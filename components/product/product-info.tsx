@@ -42,19 +42,19 @@ export function ProductInfo({
     <div className="flex flex-col gap-5 text-right">
       <div>
         <div className="flex items-center justify-between gap-2 mb-2 text-xs">
-          <span className="text-slate-400 font-medium">
+          <span className="text-slate-400 dark:text-slate-500 font-medium">
             کد کالا: {code}
           </span>
-          <span className="font-bold text-[#2563eb] hover:underline cursor-pointer">
+          <span className="font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer">
             {brand}
           </span>
         </div>
 
-        <h1 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 leading-snug mb-1">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-snug mb-1">
           {title}
         </h1>
 
-        <p className="text-xs text-slate-400 font-medium tracking-normal mb-3" dir="ltr">
+        <p className="text-xs text-slate-400 dark:text-slate-500 font-medium tracking-normal mb-3" dir="ltr">
           {enTitle}
         </p>
 
@@ -67,25 +67,25 @@ export function ProductInfo({
               />
             ))}
           </div>
-          <span className="font-bold text-slate-700">
+          <span className="font-bold text-slate-700 dark:text-slate-300">
             {formatPersianNumber(rating)}
           </span>
-          <span className="text-slate-400">
+          <span className="text-slate-400 dark:text-slate-500">
             (از {formatPersianNumber(reviewsCount)} دیدگاه کاربران)
           </span>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 space-y-4 shadow-2xs">
-        <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-600">
-          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 sm:p-5 space-y-4 shadow-2xs">
+        <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
           <span>{stockText}</span>
         </div>
 
         {colors.length > 0 && (
-          <div className="pt-3 border-t border-slate-100">
-            <div className="text-xs font-bold text-slate-700 mb-2">
-              انتخاب رنگ: <span className="text-slate-900 font-black">{selectedColor}</span>
+          <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+              انتخاب رنگ: <span className="text-slate-900 dark:text-white font-black">{selectedColor}</span>
             </div>
 
             <div className="flex items-center gap-2.5">
@@ -100,12 +100,12 @@ export function ProductInfo({
                     title={c.name}
                     className={`w-7 h-7 rounded-full transition-all cursor-pointer flex items-center justify-center p-0.5 ${
                       isSelected
-                        ? "ring-2 ring-[#2563eb] ring-offset-2"
-                        : "ring-1 ring-slate-300 hover:ring-slate-400"
+                        ? "ring-2 ring-[#2563eb] ring-offset-2 dark:ring-offset-slate-900"
+                        : "ring-1 ring-slate-300 dark:ring-slate-700 hover:ring-slate-400"
                     }`}
                   >
                     <span
-                      className="w-full h-full rounded-full border border-slate-200 shadow-2xs"
+                      className="w-full h-full rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs"
                       style={{ backgroundColor: c.hex }}
                     />
                   </button>
@@ -115,26 +115,26 @@ export function ProductInfo({
           </div>
         )}
 
-        <div className="pt-3 border-t border-slate-100">
-          <div className="text-xs font-bold text-slate-700 mb-2">
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
             گارانتی:
           </div>
-          <div className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200/90 bg-slate-50/70 text-xs font-semibold text-slate-800">
-            <ShieldCheck className="w-4 h-4 text-[#2563eb] shrink-0" />
+          <div className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200/90 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/50 text-xs font-semibold text-slate-800 dark:text-slate-200">
+            <ShieldCheck className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
             <span>{guarantee}</span>
           </div>
         </div>
       </div>
 
       {highlights.length > 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 space-y-3 shadow-2xs">
-          <h2 className="text-xs sm:text-sm font-black text-slate-900">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-4 sm:p-5 space-y-3 shadow-2xs">
+          <h2 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
             ویژگی‌های برجسته محصول:
           </h2>
-          <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
+          <ul className="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
             {highlights.map((item, idx) => (
               <li key={idx} className="flex items-start gap-2 leading-relaxed">
-                <Circle className="w-2 h-2 fill-[#2563eb] text-[#2563eb] shrink-0 mt-1.5" />
+                <Circle className="w-2 h-2 fill-[#2563eb] dark:fill-blue-400 text-[#2563eb] dark:text-blue-400 shrink-0 mt-1.5" />
                 <span>{item}</span>
               </li>
             ))}

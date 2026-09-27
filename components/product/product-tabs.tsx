@@ -17,7 +17,7 @@ export function ProductTabs({
   ];
 
   return (
-    <div className="border-b border-slate-200 sticky top-0 z-20 bg-[#f8fafc]/95 backdrop-blur-md">
+    <div className="border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 bg-[#f8fafc]/95 dark:bg-[#0b0f19]/95 backdrop-blur-md">
       <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto no-scrollbar py-1">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -28,8 +28,8 @@ export function ProductTabs({
               onClick={() => onTabChange(tab.id)}
               className={`pb-3 pt-2 text-xs sm:text-sm font-black whitespace-nowrap transition-all border-b-2 cursor-pointer ${
                 isActive
-                  ? "border-[#2563eb] text-[#2563eb]"
-                  : "border-transparent text-slate-500 hover:text-slate-800"
+                  ? "border-[#2563eb] dark:border-blue-400 text-[#2563eb] dark:text-blue-400"
+                  : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               }`}
             >
               {tab.label}

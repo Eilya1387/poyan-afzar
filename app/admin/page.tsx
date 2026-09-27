@@ -55,7 +55,7 @@ export default function AdminPage() {
 
   // Logged in -> Render Admin Panel
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 antialiased" dir="rtl">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 antialiased transition-colors" dir="rtl">
       {/* Sidebar Navigation (Fixed on right for desktop) */}
       <AdminSidebar
         isOpenMobile={mobileMenuOpen}
@@ -63,7 +63,7 @@ export default function AdminPage() {
       />
 
       {/* Main Content Area (offset by sidebar width on desktop) */}
-      <div className="lg:mr-64 min-h-screen flex flex-col bg-slate-50">
+      <div className="lg:mr-64 min-h-screen flex flex-col bg-slate-50 dark:bg-[#0b0f19]">
         {/* Top Header */}
         <AdminHeader onOpenMobileMenu={() => setMobileMenuOpen(true)} />
 

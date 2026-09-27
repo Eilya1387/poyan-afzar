@@ -25,10 +25,10 @@ export function SortBar({
   totalCount,
 }: SortBarProps) {
   return (
-    <div className="w-full bg-white border border-slate-200/80 rounded-2xl p-3 sm:px-4 sm:py-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 shadow-xs">
+    <div className="w-full bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3 sm:px-4 sm:py-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 shadow-xs">
       <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#0b1528] shrink-0 ml-1">
-          <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#2563eb] flex items-center justify-center">
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#0b1528] dark:text-white shrink-0 ml-1">
+          <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center">
             <ArrowDownUp className="w-3.5 h-3.5" />
           </div>
           <span>مرتب‌سازی:</span>
@@ -42,10 +42,10 @@ export function SortBar({
                 key={opt.id}
                 type="button"
                 onClick={() => onSortChange(opt.id)}
-                className={`text-xs px-3 py-1.5 rounded-xl font-bold cursor-pointer select-none active:scale-95 ${
+                className={`text-xs px-3 py-1.5 rounded-xl font-bold cursor-pointer select-none active:scale-95 transition-colors ${
                   isActive
-                    ? "bg-[#0b1528] text-white shadow-sm ring-1 ring-[#0b1528]"
-                    : "text-slate-600 bg-transparent"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm ring-1 ring-[#0b1528] dark:ring-blue-600"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-transparent"
                 }`}
               >
                 {opt.label}

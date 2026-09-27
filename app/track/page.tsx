@@ -60,15 +60,15 @@ function TrackOrderContent() {
 
   return (
     <div className="max-w-3xl w-full mx-auto px-4 py-12 text-right">
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xl space-y-6">
+      <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center mx-auto">
             <Package className="w-6 h-6" />
           </div>
-          <h1 className="text-xl font-black text-slate-900">
+          <h1 className="text-xl font-black text-slate-900 dark:text-white">
             پیگیری وضعیت سفارش
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             کد رهگیری سفارش خود (مثال: TK-69BCBD67) را وارد کنید تا از آخرین وضعیت آماده‌سازی و ارسال مطلع شوید
           </p>
         </div>
@@ -80,7 +80,7 @@ function TrackOrderContent() {
             value={trackingCode}
             onChange={(e) => setTrackingCode(e.target.value)}
             placeholder="مثال: TK-49F5EB32"
-            className="flex-1 bg-slate-50 border border-slate-200 focus:border-[#2563eb] rounded-xl px-4 py-2.5 text-xs text-slate-800 font-mono focus:outline-none"
+            className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:border-[#2563eb] rounded-xl px-4 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-mono focus:outline-none"
             dir="ltr"
           />
           <Button
@@ -95,33 +95,33 @@ function TrackOrderContent() {
         </form>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs text-center font-bold">
+          <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-400 text-xs text-center font-bold">
             {error}
           </div>
         )}
 
         {order && (
-          <div className="space-y-6 pt-6 border-t border-slate-100 animate-fade-in">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 rounded-2xl p-4 border border-slate-100">
+          <div className="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800 animate-fade-in">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
               <div className="space-y-1">
-                <span className="text-xs text-slate-500">کد رهگیری:</span>
-                <div className="font-mono font-black text-sm text-[#2563eb]" dir="ltr">
+                <span className="text-xs text-slate-500 dark:text-slate-400">کد رهگیری:</span>
+                <div className="font-mono font-black text-sm text-[#2563eb] dark:text-blue-400" dir="ltr">
                   #{order.trackingCode}
                 </div>
               </div>
 
               <div className="space-y-1">
-                <span className="text-xs text-slate-500">وضعیت سفارش:</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">وضعیت سفارش:</span>
                 <div>
-                  <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full border border-blue-100 inline-block">
+                  <span className="bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 text-xs font-black px-3 py-1 rounded-full border border-blue-100 dark:border-blue-900/60 inline-block">
                     {order.statusFa || order.paymentStatusFa || order.paymentStatus}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <span className="text-xs text-slate-500">مبلغ کل فاکتور:</span>
-                <div className="font-bold text-slate-900 text-sm">
+                <span className="text-xs text-slate-500 dark:text-slate-400">مبلغ کل فاکتور:</span>
+                <div className="font-bold text-slate-900 dark:text-white text-sm">
                   {formatPrice(order.finalAmount || order.amount)} تومان
                 </div>
               </div>
@@ -153,10 +153,10 @@ function TrackOrderContent() {
               ];
 
               return (
-                <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-100">
+                <div className="bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl p-4 sm:p-6 border border-slate-100 dark:border-slate-800">
                   <div className="relative">
                     {/* Horizontal Connector Line */}
-                    <div className="absolute top-4 sm:top-5 left-13 right-13 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                    <div className="absolute top-4 sm:top-5 left-13 right-13 h-1 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0">
                       <div
                         className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
                         style={{
@@ -180,10 +180,10 @@ function TrackOrderContent() {
                           <div
                             className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                               s.done
-                                ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50"
+                                ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50 dark:ring-emerald-950/40"
                                 : s.current
-                                ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 animate-pulse"
-                                : "bg-white border-2 border-slate-200 text-slate-400"
+                                ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 dark:ring-blue-950/40 animate-pulse"
+                                : "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500"
                             }`}
                           >
                             {s.done ? (
@@ -195,10 +195,10 @@ function TrackOrderContent() {
                           <span
                             className={`text-[10px] sm:text-xs font-bold leading-tight ${
                               s.done
-                                ? "text-emerald-700"
+                                ? "text-emerald-700 dark:text-emerald-400"
                                 : s.current
-                                ? "text-[#2563eb] font-black"
-                                : "text-slate-400"
+                                ? "text-[#2563eb] dark:text-blue-400 font-black"
+                                : "text-slate-400 dark:text-slate-500"
                             }`}
                           >
                             {s.label}
@@ -212,27 +212,27 @@ function TrackOrderContent() {
             })()}
 
             {order.items && order.items.length > 0 && (
-              <div className="space-y-3 pt-4 border-t border-slate-100">
-                <h3 className="text-xs font-black text-slate-800">اقلام سفارش:</h3>
-                <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl p-2 bg-white">
+              <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <h3 className="text-xs font-black text-slate-800 dark:text-slate-200">اقلام سفارش:</h3>
+                <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-2 bg-white dark:bg-slate-900">
                   {order.items.map((item, idx) => (
                     <div key={idx} className="py-2.5 px-3 flex items-center justify-between text-xs gap-3">
                       <div className="flex items-center gap-2.5">
                         {item.image && (
-                          <img src={item.image} alt={item.title} className="w-10 h-10 object-contain rounded-lg bg-slate-50 p-1 border border-slate-200" />
+                          <img src={item.image} alt={item.title} className="w-10 h-10 object-contain rounded-lg bg-slate-50 dark:bg-slate-800 p-1 border border-slate-200 dark:border-slate-700" />
                         )}
                         <div>
                           <Link
                             href={`/products/${item.productId}`}
-                            className="font-bold text-slate-800 hover:text-[#2563eb] transition-colors inline-flex items-center gap-1 cursor-pointer"
+                            className="font-bold text-slate-800 dark:text-slate-200 hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors inline-flex items-center gap-1 cursor-pointer"
                           >
                             <span>{item.title}</span>
-                            <ExternalLink className="w-3 h-3 text-slate-400" />
+                            <ExternalLink className="w-3 h-3 text-slate-400 dark:text-slate-500" />
                           </Link>
-                          {item.color && <span className="text-[10px] text-slate-400 block">رنگ: {item.color}</span>}
+                          {item.color && <span className="text-[10px] text-slate-400 dark:text-slate-500 block">رنگ: {item.color}</span>}
                         </div>
                       </div>
-                      <span className="text-slate-500 font-mono">تعداد: {toPersianDigits(item.quantity)}</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-mono">تعداد: {toPersianDigits(item.quantity)}</span>
                     </div>
                   ))}
                 </div>
@@ -247,7 +247,7 @@ function TrackOrderContent() {
 
 export default function TrackOrderPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc]">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] dark:bg-[#0b0f19]">
       <Header />
       <main className="flex-1">
         <Suspense fallback={<div className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin text-[#2563eb] mx-auto" /></div>}>

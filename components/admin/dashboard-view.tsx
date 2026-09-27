@@ -137,18 +137,18 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
       {/* Top Title & Actions Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             داشبورد مدیریت
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
             خلاصه وضعیت فروش و فعالیت‌های امروز فروشگاه
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Date Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold shadow-2xs">
-            <Calendar className="w-4 h-4 text-blue-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold shadow-2xs">
+            <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>{getPersianFullDate()}</span>
           </div>
 
@@ -168,92 +168,92 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
       {/* 4 Stat Cards Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         {/* Card 1: فروش امروز */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100/60 dark:border-blue-900/40">
               <CreditCard className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">فروش امروز</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">فروش امروز</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                 {formatPriceFa(todaySales)}
               </span>
               <span className="text-xs font-bold text-slate-400">تومان</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
               <span>گزارش رسمی سرور</span>
             </div>
           </div>
         </div>
 
         {/* Card 2: تعداد سفارش امروز */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100/60 dark:border-blue-900/40">
               <ShoppingCart className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">سفارشات امروز</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">سفارشات امروز</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                 {toPersianDigits(todayOrdersCount)}
               </span>
               <span className="text-xs font-bold text-slate-400">سفارش</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
               <span>ثبت شده در سیستم</span>
             </div>
           </div>
         </div>
 
         {/* Card 3: درآمد ماه */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100/60 dark:border-blue-900/40">
               <Receipt className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">درآمد ماه</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">درآمد ماه</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                 {formatPriceFa(monthRevenue)}
               </span>
               <span className="text-xs font-bold text-slate-400">تومان</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
               <span>گردش مالی کل</span>
             </div>
           </div>
         </div>
 
         {/* Card 4: مشتریان */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
+        <div className="bg-white dark:bg-[#111827] rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-2xs hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="flex items-start justify-between">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100/60">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100/60 dark:border-blue-900/40">
               <UserPlus className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-slate-500">کل خریداران</p>
+            <p className="text-xs font-bold text-slate-500 dark:text-slate-400">کل خریداران</p>
           </div>
 
           <div className="mt-4">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                 {toPersianDigits(totalCustomers)}
               </span>
               <span className="text-xs font-bold text-slate-400">مشتری</span>
             </div>
 
-            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500">
+            <div className="mt-2.5 flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400">
               <span>کاربران فعال سامانه</span>
             </div>
           </div>
@@ -263,17 +263,17 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
       {/* Middle Row: Sales Chart (Left/Right) & Low Stock (Side) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Sales Chart (8 cols on desktop) */}
-        <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-100 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="lg:col-span-8 bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 نمودار فروش ۷ روز گذشته
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 روند درآمد و تراکنش‌های فروشگاه در هفته اخیر
               </p>
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-300">
               <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]" />
               <span>فروش (تومان)</span>
             </div>
@@ -296,19 +296,19 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                   >
                     {/* Tooltip on hover */}
                     {isHovered && (
-                      <div className="absolute -top-10 bg-slate-900 text-white text-[11px] font-bold py-1 px-2.5 rounded-lg shadow-lg whitespace-nowrap z-20 pointer-events-none animate-scale-up">
+                      <div className="absolute -top-10 bg-slate-900 dark:bg-slate-800 text-white text-[11px] font-bold py-1 px-2.5 rounded-lg shadow-lg whitespace-nowrap z-20 pointer-events-none animate-scale-up border border-transparent dark:border-slate-700">
                         {formatPriceFa(day.amount)} تومان ({toPersianDigits(day.ordersCount)} سفارش)
                       </div>
                     )}
 
                     {/* Bar Pill */}
-                    <div className="w-full max-w-13 bg-slate-100 rounded-t-xl h-full flex items-end overflow-hidden">
+                    <div className="w-full max-w-13 bg-slate-100 dark:bg-slate-800 rounded-t-xl h-full flex items-end overflow-hidden">
                       <div
                         style={{ height: `${heightPercent}%` }}
                         className={`w-full rounded-t-xl transition-all duration-300 ${
                           isToday
                             ? "bg-[#2563eb] shadow-md shadow-blue-500/20"
-                            : "bg-[#e8f0fe] hover:bg-blue-200"
+                            : "bg-[#e8f0fe] dark:bg-blue-950/60 hover:bg-blue-200 dark:hover:bg-blue-900/60"
                         }`}
                       />
                     </div>
@@ -316,7 +316,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                     {/* Day Label */}
                     <span
                       className={`text-xs font-bold transition-colors ${
-                        isToday ? "text-[#2563eb]" : "text-slate-500"
+                        isToday ? "text-[#2563eb] dark:text-blue-400" : "text-slate-500 dark:text-slate-400"
                       }`}
                     >
                       {day.dayName}
@@ -329,13 +329,13 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
         </div>
 
         {/* Low Stock Alerts (4 cols on desktop) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-100 shadow-2xs flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="pb-4 border-b border-slate-100">
-              <h2 className="text-base font-bold text-slate-900">
+            <div className="pb-4 border-b border-slate-100 dark:border-slate-800">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 محصولات رو به اتمام
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 نیازمند شارژ سریع انبار
               </p>
             </div>
@@ -345,17 +345,17 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
               {lowStockProducts.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 border border-slate-100/80 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-slate-100/80 dark:border-slate-800 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/60">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100/60 dark:border-blue-900/40">
                       <ShoppingCart className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 line-clamp-1">
                         {item.title}
                       </h4>
-                      <p className="text-xs font-bold text-rose-600 mt-0.5">
+                      <p className="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5">
                         موجودی: {toPersianDigits(item.stock)} عدد
                       </p>
                     </div>
@@ -363,7 +363,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
 
                   <button
                     onClick={() => setActiveTab("inventory")}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                     title="مدیریت موجودی"
                   >
                     <Layers className="w-4 h-4" />
@@ -388,11 +388,11 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
       {/* Bottom Row: Recent Orders & Pending Reviews */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Recent Orders Table (8 cols on desktop) */}
-        <div className="lg:col-span-8 bg-white rounded-2xl p-6 border border-slate-100 shadow-2xs">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div className="lg:col-span-8 bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-2xs">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-base font-bold text-slate-900">آخرین سفارش‌ها</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">آخرین سفارش‌ها</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 سفارش‌های ثبت شده اخیر در فروشگاه
               </p>
             </div>
@@ -401,7 +401,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
               size="sm"
               onClick={() => setActiveTab("orders")}
               leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
-              className="text-[#2563eb] hover:text-blue-800"
+              className="text-[#2563eb] dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
             >
               مشاهده همه
             </Button>
@@ -411,7 +411,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
           <div className="overflow-x-auto">
             <table className="w-full text-right text-xs">
               <thead>
-                <tr className="text-slate-500 font-bold border-b border-slate-100">
+                <tr className="text-slate-500 dark:text-slate-400 font-bold border-b border-slate-100 dark:border-slate-800">
                   <th className="py-3 px-3">شماره سفارش</th>
                   <th className="py-3 px-3">نام مشتری</th>
                   <th className="py-3 px-3">تاریخ</th>
@@ -421,22 +421,22 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                   <th className="py-3 px-3 text-center">عملیات</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100/80">
+              <tbody className="divide-y divide-slate-100/80 dark:divide-slate-800">
                 {recentOrders.map((order) => (
                   <tr
                     key={order.id}
-                    className="hover:bg-slate-50/70 transition-colors font-medium text-slate-700"
+                    className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors font-medium text-slate-700 dark:text-slate-300"
                   >
-                    <td className="py-3.5 px-3 font-bold text-slate-900">
+                    <td className="py-3.5 px-3 font-bold text-slate-900 dark:text-white">
                       {order.id}
                     </td>
-                    <td className="py-3.5 px-3 font-semibold text-slate-800">
+                    <td className="py-3.5 px-3 font-semibold text-slate-800 dark:text-slate-200">
                       {order.customerName}
                     </td>
-                    <td className="py-3.5 px-3 text-slate-500">
+                    <td className="py-3.5 px-3 text-slate-500 dark:text-slate-400">
                       {order.date}
                     </td>
-                    <td className="py-3.5 px-3 font-bold text-slate-900">
+                    <td className="py-3.5 px-3 font-bold text-slate-900 dark:text-white">
                       {formatPriceFa(order.amount)}
                     </td>
                     <td className="py-3.5 px-3 text-center">
@@ -454,7 +454,7 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                             setActiveTab("orders");
                           }
                         }}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                         title="مشاهده جزئیات سفارش"
                       >
                         <Eye className="w-4 h-4" />
@@ -468,21 +468,21 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
         </div>
 
         {/* Pending Reviews Widget (4 cols on desktop) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-100 shadow-2xs flex flex-col justify-between">
+        <div className="lg:col-span-4 bg-white dark:bg-[#111827] rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-base font-bold text-slate-900">
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">
                     نظرات در انتظار تایید
                   </h2>
                   {pendingCount > 0 && (
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-[#2563eb] border border-blue-100">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 text-[#2563eb] dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
                       {toPersianDigits(pendingCount)} جدید
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   بررسی نظرات کاربران
                 </p>
               </div>
@@ -493,16 +493,16 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
               {pendingReviews.length === 0 ? (
                 <div className="text-center py-8 text-slate-400">
                   <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-                  <p className="text-xs font-bold text-slate-600">نظر جدیدی در صف بررسی نیست</p>
+                  <p className="text-xs font-bold text-slate-600 dark:text-slate-400">نظر جدیدی در صف بررسی نیست</p>
                 </div>
               ) : (
                 pendingReviews.map((review) => (
                   <div
                     key={review.id}
-                    className="p-3.5 rounded-xl border border-slate-100 bg-slate-50/50 space-y-2.5"
+                    className="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2.5"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-800">
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                         {review.userName}
                       </span>
                       {/* 5 Stars */}
@@ -511,14 +511,14 @@ export function DashboardView({ onSelectOrder }: DashboardViewProps) {
                           <Star
                             key={i}
                             className={`w-3 h-3 ${
-                              i < review.rating ? "fill-amber-400" : "text-slate-300"
+                              i < review.rating ? "fill-amber-400" : "text-slate-300 dark:text-slate-600"
                             }`}
                           />
                         ))}
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
                       {review.comment}
                     </p>
 

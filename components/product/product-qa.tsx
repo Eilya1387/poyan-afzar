@@ -93,13 +93,13 @@ export function ProductQA({ productId }: { productId?: string }) {
   };
 
   return (
-    <section id="qa" className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 space-y-6 shadow-2xs text-right">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+    <section id="qa" className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 md:p-8 space-y-6 shadow-2xs text-right">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900">
+          <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900 dark:text-white">
             پرسش و پاسخ کاربران
           </h2>
-          <p className="text-xs text-slate-400 font-medium mt-1">
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1">
             سؤالات خود را درباره این محصول بپرسید
           </p>
         </div>
@@ -111,31 +111,31 @@ export function ProductQA({ productId }: { productId?: string }) {
           return (
             <div
               key={item.id}
-              className="rounded-xl border border-slate-200 overflow-hidden transition-colors"
+              className="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors"
             >
               <button
                 type="button"
                 onClick={() => setOpenId(isOpen ? null : item.id)}
-                className="w-full p-4 flex items-center justify-between gap-3 text-right bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="w-full p-4 flex items-center justify-between gap-3 text-right bg-slate-50/50 dark:bg-slate-850 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <HelpCircle className="w-4 h-4 text-[#2563eb] shrink-0" />
-                  <span className="text-xs sm:text-sm font-bold text-slate-800">
+                  <HelpCircle className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
+                  <span className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
                     {item.question}
                   </span>
                 </div>
                 <ChevronDown
-                  className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
-                    isOpen ? "rotate-180 text-[#2563eb]" : ""
+                  className={`w-4 h-4 text-slate-400 dark:text-slate-500 transition-transform duration-200 shrink-0 ${
+                    isOpen ? "rotate-180 text-[#2563eb] dark:text-blue-400" : ""
                   }`}
                 />
               </button>
 
               {isOpen && (
-                <div className="p-4 bg-white border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed space-y-2">
+                <div className="p-4 bg-white dark:bg-[#111827] border-t border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed space-y-2">
                   <p>{item.answer}</p>
                   {item.author && (
-                    <div className="text-[11px] text-[#2563eb] font-bold text-left">
+                    <div className="text-[11px] text-[#2563eb] dark:text-blue-400 font-bold text-left">
                       — {item.author}
                     </div>
                   )}
@@ -146,8 +146,8 @@ export function ProductQA({ productId }: { productId?: string }) {
         })}
       </div>
 
-      <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200/90 bg-slate-50/60 p-4 sm:p-5 space-y-3">
-        <label className="block text-xs font-bold text-slate-700">
+      <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200/90 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-850 p-4 sm:p-5 space-y-3">
+        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
           پرسش شما درباره این کالا
         </label>
         <div className="flex flex-col sm:flex-row gap-2">
@@ -157,7 +157,7 @@ export function ProductQA({ productId }: { productId?: string }) {
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
             placeholder="پرسش خود را بنویسید..."
-            className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
+            className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#2563eb]"
           />
           <Button
             type="submit"

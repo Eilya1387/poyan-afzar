@@ -102,10 +102,10 @@ export function FlashSale() {
             <Link
               key={deal.id}
               href={`/products/${deal.id}`}
-              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white rounded-2xl p-2.5 sm:p-3 text-slate-900 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100"
+              className="w-[39%] sm:w-50 md:w-auto shrink-0 md:shrink snap-start bg-white dark:bg-[#111827] rounded-2xl p-2.5 sm:p-3 text-slate-900 dark:text-slate-100 flex flex-col justify-between hover:shadow-lg dark:hover:shadow-black/50 transition-all duration-200 group cursor-pointer border border-transparent hover:border-blue-100 dark:hover:border-slate-700"
             >
               <div>
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 mb-2 border border-slate-100 flex items-center justify-center p-0">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 mb-2 border border-slate-100 dark:border-slate-800 flex items-center justify-center p-0">
                   <span className="absolute top-1.5 right-1.5 z-10 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
                     {deal.discount}
                   </span>
@@ -117,21 +117,21 @@ export function FlashSale() {
                   />
                 </div>
 
-                <div className="text-[10px] font-medium text-slate-500 mb-0.5 truncate">
+                <div className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-0.5 truncate">
                   {deal.brand}
                 </div>
 
-                <h3 className="text-[11px] sm:text-xs font-bold text-slate-800 line-clamp-2 h-7 sm:h-8 leading-tight group-hover:text-[#2563eb] transition-colors">
+                <h3 className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 line-clamp-2 h-7 sm:h-8 leading-tight group-hover:text-[#2563eb] dark:group-hover:text-blue-400 transition-colors">
                   {deal.title}
                 </h3>
               </div>
 
-              <div className="mt-2.5 pt-2 border-t border-slate-100 ">
-                <span className="block text-[10px] text-slate-400 line-through text-left max-sm:text-center">
+              <div className="mt-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <span className="block text-[10px] text-slate-400 dark:text-slate-500 line-through text-left max-sm:text-center">
                   {deal.oldPrice}
                 </span>
 
-                <div className="flex items-center justify-between max-sm:justify-center mt-1 gap-1 ">
+                <div className="flex items-center justify-between max-sm:justify-center mt-1 gap-1">
                   <Button
                     variant="secondary"
                     size="icon"
@@ -147,9 +147,9 @@ export function FlashSale() {
                     )}
                   </Button>
 
-                  <div className="flex items-center gap-0.5 font-black text-xs sm:text-sm text-[#0b1528] truncate">
+                  <div className="flex items-center gap-0.5 font-black text-xs sm:text-sm text-[#0b1528] dark:text-white truncate">
                     <span>{deal.price}</span>
-                    <span className="text-[9px] font-medium text-slate-500">
+                    <span className="text-[9px] font-medium text-slate-500 dark:text-slate-400">
                       تومان
                     </span>
                   </div>

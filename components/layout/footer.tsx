@@ -76,7 +76,7 @@ function ShareIcon({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-slate-200 mt-12 pt-12 pb-24 md:pb-8 text-slate-700">
+    <footer className="bg-white dark:bg-[#0f172a] border-t border-slate-200 dark:border-slate-800 mt-12 pt-12 pb-24 md:pb-8 text-slate-700 dark:text-slate-300 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-10">
           <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right">
@@ -89,12 +89,12 @@ export function Footer() {
                 alt="پویان افزار"
                 className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
               />
-              <span className="text-2xl font-black tracking-tight text-[#0b1528]">
-                پویان <span className="text-[#2563eb]">افزار</span>
+              <span className="text-2xl font-black tracking-tight text-[#0b1528] dark:text-white">
+                پویان <span className="text-[#2563eb] dark:text-blue-400">افزار</span>
               </span>
             </Link>
 
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm mb-6">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm mb-6">
               پویان افزار، مرجع تخصصی تامین و فروش لوازم جانبی موبایل، قطعات
               کامپیوتر و تجهیزات گیمینگ با ضمانت اصالت و بهترین قیمت در سراسر
               کشور.
@@ -104,28 +104,28 @@ export function Footer() {
               <a
                 href="#"
                 aria-label="تلگرام پویان افزار"
-                className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#2563eb] hover:border-[#2563eb] hover:bg-blue-50/50 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-[#2563eb] dark:hover:text-blue-400 hover:border-[#2563eb] dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <TelegramIcon className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="اینستاگرام پویان افزار"
-                className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:text-pink-600 hover:border-pink-500 hover:bg-pink-50/50 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-500 dark:hover:border-pink-500 hover:bg-pink-50/50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <InstagramIcon className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="توییتر پویان افزار"
-                className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#2563eb] hover:border-[#2563eb] hover:bg-blue-50/50 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-[#2563eb] dark:hover:text-blue-400 hover:border-[#2563eb] dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <TwitterIcon className="w-4 h-4" />
               </a>
               <a
                 href="#"
                 aria-label="اشتراک‌گذاری"
-                className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#2563eb] hover:border-[#2563eb] hover:bg-blue-50/50 transition-all cursor-pointer"
+                className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-[#2563eb] dark:hover:text-blue-400 hover:border-[#2563eb] dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <ShareIcon className="w-4 h-4" />
               </a>
@@ -133,25 +133,25 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-3 text-center lg:text-right">
-            <h3 className="text-sm font-black text-slate-900 mb-4">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white mb-4">
               نشانی و اطلاعات تماس
             </h3>
-            <div className="space-y-3 text-xs sm:text-sm text-slate-600">
+            <div className="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               <div className="flex items-start gap-2.5 justify-center lg:justify-start leading-relaxed">
-                <span className="font-bold text-slate-700 shrink-0">آدرس:</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">آدرس:</span>
                 <span>
                   تهران، خیابان ولیعصر، نرسیده به تقاطع میرداماد، مجتمع تجاری
                   پویان، طبقه ۳
                 </span>
               </div>
               <div className="flex items-center gap-2.5 justify-center lg:justify-start">
-                <span className="font-bold text-slate-700 shrink-0">تلفن:</span>
-                <span dir="ltr" className="font-bold text-slate-900">
+                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">تلفن:</span>
+                <span dir="ltr" className="font-bold text-slate-900 dark:text-slate-100">
                   ۰۲۱-۸۸۷۷۶۶۵۵
                 </span>
               </div>
               <div className="flex items-center gap-2.5 justify-center lg:justify-start">
-                <span className="font-bold text-slate-700 shrink-0">
+                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">
                   ساعات کار:
                 </span>
                 <span>شنبه تا چهارشنبه ۹ الی ۱۸</span>
@@ -160,14 +160,14 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-2 text-center lg:text-right">
-            <h3 className="text-sm font-black text-slate-900 mb-4">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white mb-4">
               دسته‌بندی‌های اصلی
             </h3>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 flex flex-col items-center lg:items-start">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400 flex flex-col items-center lg:items-start">
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
+                  className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   موبایل و تبلت
                 </Link>
@@ -175,7 +175,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
+                  className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   قطعات کامپیوتر
                 </Link>
@@ -183,7 +183,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
+                  className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   تجهیزات گیمینگ
                 </Link>
@@ -191,7 +191,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
+                  className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   لوازم جانبی صوتی
                 </Link>
@@ -199,7 +199,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#2563eb] transition-colors cursor-pointer"
+                  className="hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 >
                   شارژر و کابل
                 </Link>
@@ -208,49 +208,49 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-3 flex flex-col items-center lg:items-start text-center lg:text-right">
-            <h3 className="text-sm font-black text-slate-900 mb-4">
+            <h3 className="text-sm font-black text-slate-900 dark:text-white mb-4">
               نمادها و اعتماد
             </h3>
 
             <div className="flex items-center gap-3 mb-5 justify-center lg:justify-start">
-              <div className="w-24 h-24 rounded-2xl border border-slate-200 bg-slate-50/70 p-2.5 flex flex-col items-center justify-center text-center hover:border-slate-300 transition-colors cursor-pointer">
-                <CheckCircle className="w-6 h-6 text-[#2563eb] mb-1" />
-                <span className="text-[10px] font-bold text-slate-700 leading-tight">
+              <div className="w-24 h-24 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 p-2.5 flex flex-col items-center justify-center text-center hover:border-slate-300 dark:hover:border-slate-600 transition-colors cursor-pointer">
+                <CheckCircle className="w-6 h-6 text-[#2563eb] dark:text-blue-400 mb-1" />
+                <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight">
                   نماد اعتماد الکترونیکی
                 </span>
               </div>
 
-              <div className="w-24 h-24 rounded-2xl border border-slate-200 bg-slate-50/70 p-2.5 flex flex-col items-center justify-center text-center hover:border-slate-300 transition-colors cursor-pointer">
-                <ShieldCheck className="w-6 h-6 text-emerald-600 mb-1" />
-                <span className="text-[10px] font-bold text-slate-700 leading-tight">
+              <div className="w-24 h-24 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/60 p-2.5 flex flex-col items-center justify-center text-center hover:border-slate-300 dark:hover:border-slate-600 transition-colors cursor-pointer">
+                <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400 mb-1" />
+                <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight">
                   فاند ساماندهی
                 </span>
               </div>
             </div>
 
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl">
-              <PhoneCall className="w-4 h-4 text-[#2563eb]" />
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3.5 py-2 rounded-xl">
+              <PhoneCall className="w-4 h-4 text-[#2563eb] dark:text-blue-400" />
               <span>تلفن پشتیبانی: ۰۲۱-۹۱۰۰۰۰۰۰</span>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-slate-100 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 text-center md:text-right">
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400 text-center md:text-right">
           <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
             <span>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</span>
-            <span className="text-slate-300 hidden sm:inline">•</span>
-
-          </div>
-            <span className="font-semibold text-slate-500 px-2 py-0.5 rounded-md text-[11px]">
+            <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
+            <span className="font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md text-[11px] border border-slate-200/60 dark:border-slate-700">
               نسخه ۴.۲.۷
             </span>
-          <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-slate-300 font-medium">
             <span>قدرت گرفته از</span>
             <a
               href="https://wexun.ir"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold text-[#0b1528] hover:text-[#2563eb] transition-colors cursor-pointer underline underline-offset-4 decoration-blue-500/40"
+              className="font-bold text-[#0b1528] dark:text-white hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer underline underline-offset-4 decoration-blue-500/40"
             >
               WeXuN Team
             </a>

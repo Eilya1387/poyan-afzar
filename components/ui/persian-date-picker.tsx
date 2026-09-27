@@ -259,29 +259,29 @@ export function PersianDatePicker({
         width: `${coords.width}px`,
         zIndex: 99999,
       }}
-      className="bg-white rounded-3xl shadow-2xl border border-slate-200 p-4 text-right select-none animate-in fade-in zoom-in-95 duration-150"
+      className="bg-white dark:bg-[#111827] rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 text-right select-none animate-in fade-in zoom-in-95 duration-150"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Calendar Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
         <button
           type="button"
           onClick={handleNextMonth}
-          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           title="ماه بعد"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900">
-          <span className="text-blue-600 font-black">{PERSIAN_MONTHS[viewMonth - 1]}</span>
+        <div className="flex items-center gap-1.5 font-bold text-xs text-slate-900 dark:text-white">
+          <span className="text-blue-600 dark:text-blue-400 font-black">{PERSIAN_MONTHS[viewMonth - 1]}</span>
           <span>{toPersianDigits(viewYear)}</span>
         </div>
 
         <button
           type="button"
           onClick={handlePrevMonth}
-          className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           title="ماه قبل"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -294,7 +294,7 @@ export function PersianDatePicker({
           <span
             key={day}
             className={`text-[11px] font-bold py-1 ${
-              idx === 6 ? "text-rose-500" : "text-slate-400"
+              idx === 6 ? "text-rose-500" : "text-slate-400 dark:text-slate-500"
             }`}
           >
             {day}
@@ -324,8 +324,8 @@ export function PersianDatePicker({
                 isSelected
                   ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 scale-105"
                   : isToday
-                  ? "border border-blue-500 text-blue-600 bg-blue-50/50 hover:bg-blue-100 font-black"
-                  : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                  ? "border border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-black"
+                  : "text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               {toPersianDigits(dayNum)}
@@ -335,32 +335,32 @@ export function PersianDatePicker({
       </div>
 
       {/* Quick Presets */}
-      <div className="pt-3 mt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-1">
+      <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-1">
         <button
           type="button"
           onClick={() => applyPreset(0)}
-          className="px-2 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+          className="px-2 py-1 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg transition-colors cursor-pointer"
         >
           امروز
         </button>
         <button
           type="button"
           onClick={() => applyPreset(7)}
-          className="px-2 py-1 text-[10px] font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
+          className="px-2 py-1 text-[10px] font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg transition-colors cursor-pointer"
         >
           ۱ هفته بعد
         </button>
         <button
           type="button"
           onClick={() => applyPreset(30)}
-          className="px-2 py-1 text-[10px] font-bold bg-blue-50 hover:bg-blue-100 text-[#2563eb] rounded-lg transition-colors cursor-pointer"
+          className="px-2 py-1 text-[10px] font-bold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[#2563eb] dark:text-blue-400 rounded-lg transition-colors cursor-pointer"
         >
           ۱ ماه بعد
         </button>
         <button
           type="button"
           onClick={() => applyPreset(90)}
-          className="px-2 py-1 text-[10px] font-bold bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors cursor-pointer"
+          className="px-2 py-1 text-[10px] font-bold bg-purple-50 dark:bg-purple-950/60 hover:bg-purple-100 dark:hover:bg-purple-900/60 text-purple-700 dark:text-purple-300 rounded-lg transition-colors cursor-pointer"
         >
           ۳ ماه بعد
         </button>
@@ -371,7 +371,7 @@ export function PersianDatePicker({
   return (
     <div ref={containerRef} className={`relative text-right ${className}`}>
       {label && (
-        <label className="block text-slate-700 font-bold mb-1.5 text-xs">
+        <label className="block text-slate-700 dark:text-slate-200 font-bold mb-1.5 text-xs">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
@@ -379,12 +379,12 @@ export function PersianDatePicker({
       {/* Input Display Button */}
       <div
         onClick={toggleOpen}
-        className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl font-mono text-xs text-slate-800 cursor-pointer transition-all select-none group focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 shadow-2xs"
+        className="flex items-center justify-between px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-xs text-slate-800 dark:text-slate-100 cursor-pointer transition-all select-none group focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 shadow-2xs"
       >
-        <span className="font-bold text-slate-800 text-xs tracking-wider dir-ltr">
-          {value ? toPersianDigits(value) : <span className="text-slate-400 font-sans">{placeholder}</span>}
+        <span className="font-bold text-slate-800 dark:text-slate-100 text-xs tracking-wider dir-ltr">
+          {value ? toPersianDigits(value) : <span className="text-slate-400 dark:text-slate-500 font-sans">{placeholder}</span>}
         </span>
-        <div className="flex items-center gap-1.5 text-slate-400 group-hover:text-blue-600 transition-colors">
+        <div className="flex items-center gap-1.5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           <CalendarIcon className="w-4 h-4" />
         </div>
       </div>

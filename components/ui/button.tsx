@@ -36,13 +36,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantStyles: Record<ButtonVariant, string> = {
       primary:
-        "bg-linear-to-b from-[#15233c] to-[#0b1528] text-white border border-slate-700/50 shadow-[0_2px_8px_rgba(11,21,40,0.2)] hover:shadow-[0_4px_16px_rgba(11,21,40,0.3)] hover:brightness-110",
+        "bg-linear-to-b from-[#15233c] to-[#0b1528] dark:from-[#2563eb] dark:to-[#1d4ed8] text-white border border-slate-700/50 dark:border-blue-500/50 shadow-[0_2px_8px_rgba(11,21,40,0.2)] hover:shadow-[0_4px_16px_rgba(11,21,40,0.3)] hover:brightness-110",
       secondary:
         "bg-linear-to-b from-[#3b82f6] to-[#2563eb] text-white border border-blue-400/30 shadow-[0_2px_10px_rgba(37,99,235,0.25)] hover:shadow-[0_4px_16px_rgba(37,99,235,0.38)] hover:brightness-110",
       outline:
-        "border border-slate-200/90 bg-white text-slate-800 shadow-2xs hover:bg-slate-50 hover:border-slate-300 hover:shadow-xs",
-      ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
-      icon: "border border-slate-200/90 bg-white text-slate-700 shadow-2xs hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 hover:shadow-xs",
+        "border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-slate-800 dark:text-slate-100 shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-xs",
+      ghost: "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white",
+      icon: "border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-white hover:shadow-xs",
     };
 
     const sizeStyles: Record<ButtonSize, string> = {

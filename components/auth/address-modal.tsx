@@ -100,13 +100,13 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 max-w-lg w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+      <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-lg w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center">
               <MapPin className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-black text-slate-900">
+            <h3 className="text-base font-black text-slate-900 dark:text-white">
               افزودن آدرس جدید
             </h3>
           </div>
@@ -114,14 +114,14 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 text-xs p-3 rounded-xl mb-4 font-bold">
+          <div className="bg-red-50 dark:bg-rose-950/40 border border-red-200 dark:border-rose-900 text-red-600 dark:text-rose-300 text-xs p-3 rounded-xl mb-4 font-bold">
             {error}
           </div>
         )}
@@ -129,14 +129,14 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">استان</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">استان</label>
               <select
                 value={selectedProvince}
                 onChange={handleProvinceChange}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               >
                 {provinces.map((p) => (
-                  <option key={p.id} value={p.name}>
+                  <option key={p.id} value={p.name} className="dark:bg-slate-900 dark:text-white">
                     {p.name}
                   </option>
                 ))}
@@ -144,14 +144,14 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">شهر</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">شهر</label>
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               >
                 {cities.map((c) => (
-                  <option key={c} value={c}>
+                  <option key={c} value={c} className="dark:bg-slate-900 dark:text-white">
                     {c}
                   </option>
                 ))}
@@ -160,20 +160,20 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
           </div>
 
           <div>
-            <label className="block font-bold text-slate-700 mb-1.5">نشانی پستی دقیق</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">نشانی پستی دقیق</label>
             <textarea
               rows={2}
               required
               value={fullAddress}
               onChange={(e) => setFullAddress(e.target.value)}
               placeholder="خیابان، کوچه، پلاک، طبقه، واحد..."
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:bg-white focus:outline-none focus:border-[#2563eb]"
+              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-xs text-slate-900 dark:text-white font-medium focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">کد پستی (۱۰ رقمی)</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">کد پستی (۱۰ رقمی)</label>
               <input
                 type="text"
                 dir="ltr"
@@ -182,38 +182,38 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
                 placeholder="۱۲۳۴۵۶۷۸۹۰"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-left text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-left text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">عنوان آدرس</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">عنوان آدرس</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="مثال: منزل، محل کار"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">نام و نام خانوادگی تحویل‌گیرنده</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">نام و نام خانوادگی تحویل‌گیرنده</label>
               <input
                 type="text"
                 required
                 value={receiverName}
                 onChange={(e) => setReceiverName(e.target.value)}
                 placeholder="نام تحویل‌گیرنده"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1.5">شماره تماس تحویل‌گیرنده</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1.5">شماره تماس تحویل‌گیرنده</label>
               <input
                 type="tel"
                 dir="ltr"
@@ -221,7 +221,7 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
                 value={receiverPhone}
                 onChange={(e) => setReceiverPhone(e.target.value)}
                 placeholder="۰۹xxxxxxxxx"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-left text-slate-900 font-bold focus:bg-white focus:outline-none focus:border-[#2563eb]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-left text-slate-900 dark:text-white font-bold focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb]"
               />
             </div>
           </div>
@@ -232,14 +232,14 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
               id="default-address"
               checked={isDefault}
               onChange={(e) => setIsDefault(e.target.checked)}
-              className="w-4 h-4 rounded text-[#2563eb] focus:ring-blue-500 border-slate-300 cursor-pointer"
+              className="w-4 h-4 rounded text-[#2563eb] focus:ring-blue-500 border-slate-300 dark:border-slate-700 dark:bg-slate-900 cursor-pointer"
             />
-            <label htmlFor="default-address" className="text-xs font-bold text-slate-700 cursor-pointer">
+            <label htmlFor="default-address" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
               تنظیم به عنوان آدرس پیش‌فرض
             </label>
           </div>
 
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
             <Button
               type="button"
               variant="outline"

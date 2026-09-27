@@ -251,7 +251,7 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-8 text-right">
+      <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl p-6 sm:p-8 text-right">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 group cursor-pointer mb-5">
             <img
@@ -259,8 +259,8 @@ export function LoginForm() {
               alt="پویان افزار"
               className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
             />
-            <span className="text-2xl font-black tracking-tight text-[#0b1528]">
-              پویان <span className="text-[#2563eb]">افزار</span>
+            <span className="text-2xl font-black tracking-tight text-[#0b1528] dark:text-white">
+              پویان <span className="text-[#2563eb] dark:text-blue-400">افزار</span>
             </span>
           </Link>
 
@@ -268,33 +268,33 @@ export function LoginForm() {
             <div
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 step === "phone"
-                  ? "w-8 bg-[#2563eb]"
+                  ? "w-8 bg-[#2563eb] dark:bg-blue-500"
                   : "w-2.5 bg-emerald-500"
               }`}
             />
             <div
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 step === "otp"
-                  ? "w-8 bg-[#2563eb]"
+                  ? "w-8 bg-[#2563eb] dark:bg-blue-500"
                   : step === "name"
                   ? "w-2.5 bg-emerald-500"
-                  : "w-2.5 bg-slate-200"
+                  : "w-2.5 bg-slate-200 dark:bg-slate-800"
               }`}
             />
             <div
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                step === "name" ? "w-8 bg-[#2563eb]" : "w-2.5 bg-slate-200"
+                step === "name" ? "w-8 bg-[#2563eb] dark:bg-blue-500" : "w-2.5 bg-slate-200 dark:bg-slate-800"
               }`}
             />
           </div>
 
-          <h1 className="text-lg sm:text-xl font-black text-slate-900">
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
             {step === "phone" && "ورود یا ثبت‌نام"}
             {step === "otp" && "کد تأیید را وارد کنید"}
             {step === "name" && "اطلاعات حساب کاربری"}
           </h1>
 
-          <p className="text-xs text-slate-500 font-medium mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
             {step === "phone" && "برای ادامه، لطفاً شماره موبایل خود را وارد نمایید"}
             {step === "otp" && `کد ۴ رقمی به شماره ${toPersianDigits(phone)} ارسال شد`}
             {step === "name" && "لطفاً نام و نام خانوادگی خود را جهت ساخت پروفایل وارد کنید"}
@@ -304,7 +304,7 @@ export function LoginForm() {
         {step === "phone" && (
           <form onSubmit={handlePhoneSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-2">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
                 شماره موبایل
               </label>
               <div className="relative">
@@ -319,16 +319,16 @@ export function LoginForm() {
                     setPhoneError("");
                   }}
                   placeholder="۰۹xxxxxxxxx"
-                  className={`w-full bg-slate-50 border rounded-2xl py-3 px-4 pl-11 text-left text-sm font-bold text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 transition-all ${
+                  className={`w-full bg-slate-50 dark:bg-slate-900 border rounded-2xl py-3 px-4 pl-11 text-left text-sm font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:ring-2 transition-all ${
                     phoneError
-                      ? "border-red-400 focus:ring-red-100"
-                      : "border-slate-200 focus:border-[#2563eb] focus:ring-blue-100"
+                      ? "border-red-400 focus:ring-red-100 dark:focus:ring-red-950"
+                      : "border-slate-200 dark:border-slate-700 focus:border-[#2563eb] focus:ring-blue-100 dark:focus:ring-blue-950"
                   }`}
                 />
-                <Smartphone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                <Smartphone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500 pointer-events-none" />
               </div>
               {phoneError && (
-                <p className="text-[11px] text-red-500 font-bold mt-1.5">{phoneError}</p>
+                <p className="text-[11px] text-red-500 dark:text-rose-400 font-bold mt-1.5">{phoneError}</p>
               )}
             </div>
 
@@ -342,7 +342,7 @@ export function LoginForm() {
               دریافت کد تأیید
             </Button>
 
-            <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center leading-relaxed">
               با ورود به پویان افزار، کلیه قوانین و مقررات را می‌پذیرید.
             </p>
           </form>
@@ -357,7 +357,7 @@ export function LoginForm() {
                   setOtp([digits[0] || "", digits[1] || "", digits[2] || "", digits[3] || ""]);
                   setOtpError("");
                 }}
-                className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs text-center cursor-pointer hover:bg-blue-100 transition-colors"
+                className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 text-xs text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors"
               >
                 کد ارسالی سرور: <span className="font-mono font-bold text-sm tracking-wider">{devCodeHint}</span> (برای درج کلیک کنید)
               </div>
@@ -375,13 +375,13 @@ export function LoginForm() {
                   value={digit}
                   onChange={(e) => handleOtpChange(idx, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                  className="w-13 h-14 text-center text-xl font-black rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all text-slate-900"
+                  className="w-13 h-14 text-center text-xl font-black rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-850 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950 focus:outline-none transition-all text-slate-900 dark:text-white"
                 />
               ))}
             </div>
 
             {otpError && (
-              <p className="text-[11px] text-red-500 font-bold text-center">{otpError}</p>
+              <p className="text-[11px] text-red-500 dark:text-rose-400 font-bold text-center">{otpError}</p>
             )}
 
             <div className="flex items-center justify-between text-xs pt-1">
@@ -392,18 +392,18 @@ export function LoginForm() {
                   setOtp(["", "", "", ""]);
                   setOtpError("");
                 }}
-                className="text-[#2563eb] hover:underline font-bold flex items-center gap-1 cursor-pointer"
+                className="text-[#2563eb] dark:text-blue-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
               >
                 <ArrowRight className="w-3.5 h-3.5" />
                 <span>تغییر شماره</span>
               </button>
 
-              <div className="text-slate-500 font-medium flex items-center gap-1">
+              <div className="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
                 {canResend ? (
                   <button
                     type="button"
                     onClick={handleResendOtp}
-                    className="text-[#2563eb] hover:underline font-bold flex items-center gap-1 cursor-pointer"
+                    className="text-[#2563eb] dark:text-blue-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     <span>ارسال مجدد کد</span>
@@ -429,7 +429,7 @@ export function LoginForm() {
         {step === "name" && (
           <form onSubmit={handleNameSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 نام
               </label>
               <input
@@ -442,12 +442,12 @@ export function LoginForm() {
                   setNameError("");
                 }}
                 placeholder="مثال: علی"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 text-xs sm:text-sm font-bold text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950 transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 نام خانوادگی
               </label>
               <input
@@ -459,12 +459,12 @@ export function LoginForm() {
                   setNameError("");
                 }}
                 placeholder="مثال: محمدی"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 text-xs sm:text-sm font-bold text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-850 focus:outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-950 transition-all"
               />
             </div>
 
             {nameError && (
-              <p className="text-[11px] text-red-500 font-bold">{nameError}</p>
+              <p className="text-[11px] text-red-500 dark:text-rose-400 font-bold">{nameError}</p>
             )}
 
             <Button

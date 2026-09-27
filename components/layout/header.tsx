@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-context";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
+import { ThemeToggle } from "@/components/theme/theme-provider";
 
 export interface HeaderProps {
   cartCount?: number;
@@ -112,10 +113,10 @@ export function Header({
     <div className="w-full">
       {isSticky && <div className="h-20 sm:h-32 w-full pointer-events-none" aria-hidden="true" />}
       <header
-        className={`w-full ${
+        className={`w-full transition-colors duration-200 ${
           isSticky
-            ? "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200/80 animate-slide-down"
-            : "relative bg-white border-b border-slate-200"
+            ? "fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0b0f19]/95 backdrop-blur-md shadow-md border-b border-slate-200/80 dark:border-slate-800 animate-slide-down"
+            : "relative bg-white dark:bg-[#0b0f19] border-b border-slate-200 dark:border-slate-800"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -128,10 +129,10 @@ export function Header({
                   className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
                 />
                 <div className="flex flex-col">
-                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#0b1528]">
-                    پویان <span className="text-[#2563eb]">افزار</span>
+                  <span className="text-lg sm:text-xl font-black tracking-tight text-[#0b1528] dark:text-white">
+                    پویان <span className="text-[#2563eb] dark:text-blue-400">افزار</span>
                   </span>
-                  <span className="hidden sm:block text-[10px] text-slate-600 font-medium -mt-1">
+                  <span className="hidden sm:block text-[10px] text-slate-500 dark:text-slate-400 font-medium -mt-1">
                     مرجع تخصصی کالای دیجیتال
                   </span>
                 </div>
@@ -142,7 +143,7 @@ export function Header({
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-medium transition-colors hover:text-[#2563eb] cursor-pointer text-slate-600"
+                  className="text-sm font-medium transition-colors hover:text-[#2563eb] dark:hover:text-blue-400 cursor-pointer text-slate-600 dark:text-slate-300"
                 >
                   {link.name}
                 </Link>
@@ -157,11 +158,11 @@ export function Header({
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="جستجوی کالا، برند یا مدل..."
-                className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-[#2563eb] rounded-xl py-2 sm:py-2.5 pr-9 sm:pr-11 pl-4 text-xs sm:text-sm text-slate-800 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all"
+                className="w-full bg-slate-50 dark:bg-slate-900/90 hover:bg-slate-100/80 dark:hover:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 border border-slate-200 dark:border-slate-700/80 focus:border-[#2563eb] dark:focus:border-blue-500 rounded-xl py-2 sm:py-2.5 pr-9 sm:pr-11 pl-4 text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 transition-all"
               />
               <button
                 type="submit"
-                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-[#2563eb] transition-colors cursor-pointer"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                 title="جستجو"
                 aria-label="جستجو"
               >
@@ -171,6 +172,8 @@ export function Header({
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            <ThemeToggle />
+
             <div className="hidden md:flex items-center">
               {isLoaded ? (
                 isLoggedIn ? (
@@ -197,7 +200,7 @@ export function Header({
                   </Link>
                 )
               ) : (
-                <div className="w-20 sm:w-28 h-9 sm:h-10 rounded-xl bg-slate-100 animate-pulse" />
+                <div className="w-20 sm:w-28 h-9 sm:h-10 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse" />
               )}
             </div>
 
@@ -205,7 +208,7 @@ export function Header({
               <Button
                 variant="icon"
                 size="icon"
-                className="relative text-slate-700 hover:text-red-500 cursor-pointer"
+                className="relative text-slate-700 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                 aria-label="علاقه‌مندی‌ها"
               >
                 <Heart className="w-5 h-5" />
@@ -224,12 +227,12 @@ export function Header({
               <Button
                 variant="icon"
                 size="icon"
-                className="relative text-slate-700 hover:text-[#2563eb] cursor-pointer"
+                className="relative text-slate-700 dark:text-slate-300 hover:text-[#2563eb] dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                 aria-label="سبد خرید"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {mounted && cartCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-[#2563eb] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#2563eb] dark:bg-blue-600 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-xs">
                     {cartCount}
                   </span>
                 )}
@@ -239,16 +242,16 @@ export function Header({
         </div>
       </div>
 
-      <div className="hidden md:block border-t border-slate-100 bg-white">
+      <div className="hidden md:block border-t border-slate-100 dark:border-slate-800/80 bg-white dark:bg-[#0b0f19]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-12">
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
-                className="flex items-center gap-2.5 text-sm font-bold text-slate-800 hover:text-[#2563eb] py-2 px-3 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+                className="flex items-center gap-2.5 text-sm font-bold text-slate-800 dark:text-slate-200 hover:text-[#2563eb] dark:hover:text-blue-400 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
               >
-                <Menu className="w-5 h-5 text-slate-600" />
+                <Menu className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                 <span>دسته‌بندی‌های کالا</span>
                 <ChevronDown
                   className={`w-4 h-4 transition-transform duration-200 ${
@@ -258,7 +261,7 @@ export function Header({
               </button>
 
               {categoryDropdownOpen && (
-                <div className="absolute right-0 top-full mt-1 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute right-0 top-full mt-1 w-64 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                   {categories.map((cat) => {
                     const Icon = cat.icon;
                     return (
@@ -266,9 +269,9 @@ export function Header({
                         key={cat.name}
                         href={cat.href}
                         onClick={() => setCategoryDropdownOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-[#2563eb] transition-colors cursor-pointer"
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer"
                       >
-                        <Icon className="w-4 h-4 text-slate-600" />
+                        <Icon className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                         <span>{cat.name}</span>
                       </Link>
                     );
@@ -282,7 +285,7 @@ export function Header({
                 <Link
                   key={cat.name}
                   href={cat.href}
-                  className="text-xs font-medium text-slate-600 hover:text-[#0b1528] whitespace-nowrap transition-colors cursor-pointer"
+                  className="text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-[#0b1528] dark:hover:text-white whitespace-nowrap transition-colors cursor-pointer"
                 >
                   {cat.name}
                 </Link>
@@ -292,6 +295,6 @@ export function Header({
         </div>
       </div>
     </header>
-    </div>
-  );
+  </div>
+);
 }

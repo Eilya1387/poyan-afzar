@@ -77,11 +77,11 @@ export function BottomNav() {
   return (
     <nav
       aria-label="ناوبری سریع موبایل"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-2xl border-t border-slate-200 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-2 pt-2 pb-3"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl border-t border-slate-200 dark:border-slate-800 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.4)] px-2 pt-2 pb-3 transition-colors duration-200"
     >
       <div className="relative flex items-center justify-around max-w-md mx-auto h-16">
         <div
-          className="absolute -top-6 bottom-5 rounded-xl bg-[#2563eb] shadow-[0_4px_16px_rgba(37,99,235,0.35)] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-0 pointer-events-none"
+          className="absolute -top-6 bottom-5 rounded-xl bg-[#2563eb] dark:bg-blue-600 shadow-[0_4px_16px_rgba(37,99,235,0.35)] dark:shadow-[0_4px_20px_rgba(37,99,235,0.5)] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] z-0 pointer-events-none"
           style={{
             right: `calc(${activeIndex * 20}% + 6px)`,
             width: "calc(22% - 20px)",
@@ -105,7 +105,7 @@ export function BottomNav() {
                   className={`w-7 h-7 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
                     isActive
                       ? "text-white stroke-[2.4] scale-115 -translate-y-6"
-                      : "text-slate-500 group-hover:text-slate-800 stroke-[1.8]"
+                      : "text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 stroke-[1.8]"
                   }`}
                 />
 
@@ -126,7 +126,7 @@ export function BottomNav() {
                 className={`text-[10px] tracking-tight mt-1 transition-all duration-300 leading-none ${
                   isActive
                     ? "text-white font-black hidden"
-                    : "text-slate-500 group-hover:text-slate-800 font-medium"
+                    : "text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 font-medium"
                 }`}
               >
                 {item.label}

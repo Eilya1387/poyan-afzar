@@ -37,17 +37,17 @@ export function Brands() {
   return (
     <section className="py-12 overflow-hidden">
       <div className="text-center mb-8">
-        <h2 className="text-lg sm:text-xl font-black text-[#0b1528]">
+        <h2 className="text-lg sm:text-xl font-black text-[#0b1528] dark:text-white">
           محبوب‌ترین برندهای جهان
         </h2>
-        <p className="text-xs text-slate-500 font-medium mt-1">
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
           ارائه مستقیم محصولات اورجینال از معتبرترین برندهای تکنولوژی
         </p>
       </div>
 
       <div className="relative w-full overflow-hidden py-4" dir="ltr">
-        <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-44 bg-linear-to-r from-[#f8fafc] via-[#f8fafc]/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-44 bg-linear-to-l from-[#f8fafc] via-[#f8fafc]/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-44 bg-linear-to-r from-[#f8fafc] dark:from-[#0b0f19] via-[#f8fafc]/80 dark:via-[#0b0f19]/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-44 bg-linear-to-l from-[#f8fafc] dark:from-[#0b0f19] via-[#f8fafc]/80 dark:via-[#0b0f19]/80 to-transparent z-10 pointer-events-none" />
 
         <div className="flex w-max animate-marquee gap-12 sm:gap-16 items-center">
           {doubleList.map((brand, idx) => (
@@ -59,7 +59,7 @@ export function Brands() {
               <img
                 src={`/brands/${brand.file}`}
                 alt={brand.name}
-                className="h-10 sm:h-14 md:h-16 w-auto max-w-35 sm:max-w-42.5 object-contain opacity-70 group-hover:opacity-100 transition-all duration-300 group-hover:drop-shadow-sm"
+                className="h-10 sm:h-14 md:h-16 w-auto max-w-35 sm:max-w-42.5 object-contain opacity-70 dark:opacity-60 dark:brightness-150 group-hover:opacity-100 dark:group-hover:opacity-100 transition-all duration-300 group-hover:drop-shadow-sm"
                 loading="lazy"
               />
             </div>

@@ -124,19 +124,19 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-2xl w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 max-w-2xl w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200">
         {!orderComplete ? (
           <>
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 mb-6">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center">
                   <ReceiptText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900">
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">
                     تکمیل و نهایی‌سازی سفارش
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                     بررسی فاکتور، آدرس تحویل و درگاه پرداخت
                   </p>
                 </div>
@@ -145,64 +145,64 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-6">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 space-y-3">
-                <h4 className="text-xs font-black text-slate-800">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 p-4 space-y-3">
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-200">
                   فاکتور خرید
                 </h4>
 
-                <div className="divide-y divide-slate-100 text-xs">
+                <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
                   {items.map((item) => (
                     <div key={item.id} className="py-2.5 flex items-center justify-between">
-                      <span className="font-bold text-slate-800 truncate max-w-70">
+                      <span className="font-bold text-slate-800 dark:text-slate-200 truncate max-w-70">
                         {item.title} ({toPersianDigits(item.quantity)} عدد)
                       </span>
-                      <span className="font-black text-slate-900">
+                      <span className="font-black text-slate-900 dark:text-white">
                         {formatPrice(item.price * item.quantity)} تومان
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <div className="border-t border-slate-200 pt-3 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between text-slate-500">
+                <div className="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                     <span>جمع کل کالاها</span>
                     <span className="font-bold">{formatPrice(getRawTotal())} تومان</span>
                   </div>
                   {getDiscountTotal() > 0 && (
-                    <div className="flex items-center justify-between text-emerald-600 font-bold">
+                    <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold">
                       <span>تخفیف کل</span>
                       <span>{formatPrice(getDiscountTotal())}- تومان</span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-slate-500">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                     <span>هزینه ارسال اکسپرس</span>
-                    <span className="font-bold text-emerald-600">رایگان</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">رایگان</span>
                   </div>
-                  <div className="flex items-center justify-between text-slate-900 text-sm font-black pt-2 border-t border-slate-200">
+                  <div className="flex items-center justify-between text-slate-900 dark:text-white text-sm font-black pt-2 border-t border-slate-200 dark:border-slate-800">
                     <span>مبلغ قابل پرداخت</span>
-                    <span className="text-[#2563eb] text-base">{formatPrice(getFinalTotal())} تومان</span>
+                    <span className="text-[#2563eb] dark:text-blue-400 text-base">{formatPrice(getFinalTotal())} تومان</span>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-black text-slate-800 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-[#2563eb]" />
+                  <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-[#2563eb] dark:text-blue-400" />
                     <span>انتخاب آدرس تحویل</span>
                   </h4>
 
                   <button
                     type="button"
                     onClick={() => setAddressModalOpen(true)}
-                    className="text-xs font-bold text-[#2563eb] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>افزودن آدرس جدید</span>
@@ -210,8 +210,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 </div>
 
                 {addresses.length === 0 ? (
-                  <div className="p-4 rounded-2xl border border-amber-200 bg-amber-50/60 text-center space-y-2">
-                    <p className="text-xs text-amber-800 font-bold">
+                  <div className="p-4 rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/60 dark:bg-amber-950/30 text-center space-y-2">
+                    <p className="text-xs text-amber-800 dark:text-amber-300 font-bold">
                       شما هنوز آدرسی ثبت نکرده‌اید.
                     </p>
                     <Button
@@ -231,8 +231,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         key={addr.id}
                         className={`flex items-start gap-3 p-3.5 rounded-2xl border cursor-pointer transition-all ${
                           selectedAddressId === addr.id
-                            ? "border-[#2563eb] bg-blue-50/40 ring-1 ring-[#2563eb]"
-                            : "border-slate-200 hover:border-slate-300 bg-white"
+                            ? "border-[#2563eb] dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/40 ring-1 ring-[#2563eb] dark:ring-blue-500"
+                            : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900/50"
                         }`}
                       >
                         <input
@@ -245,12 +245,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                         />
                         <div className="flex-1 text-right text-xs space-y-1">
                           <div className="flex items-center justify-between">
-                            <span className="font-black text-slate-900">{addr.title}</span>
-                            <span className="text-[10px] text-slate-400 font-mono">
+                            <span className="font-black text-slate-900 dark:text-white">{addr.title}</span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                               کد پستی: {toPersianDigits(addr.postalCode)}
                             </span>
                           </div>
-                          <p className="text-slate-600 font-medium leading-relaxed">
+                          <p className="text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                             {addr.fullAddress}
                           </p>
                         </div>
@@ -261,8 +261,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               </div>
 
               <div className="space-y-3">
-                <h4 className="text-xs font-black text-slate-800 flex items-center gap-1.5">
-                  <CreditCard className="w-4 h-4 text-[#2563eb]" />
+                <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <CreditCard className="w-4 h-4 text-[#2563eb] dark:text-blue-400" />
                   <span>انتخاب شیوه پرداخت</span>
                 </h4>
 
@@ -270,8 +270,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   <label
                     className={`p-3 rounded-2xl border cursor-pointer flex items-center gap-2.5 transition-all ${
                       paymentMethod === "gateway"
-                        ? "border-[#2563eb] bg-blue-50/40 ring-1 ring-[#2563eb]"
-                        : "border-slate-200 bg-white"
+                        ? "border-[#2563eb] dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/40 ring-1 ring-[#2563eb] dark:ring-blue-500"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50"
                     }`}
                   >
                     <input
@@ -283,16 +283,16 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       className="text-[#2563eb] focus:ring-blue-500"
                     />
                     <div className="flex flex-col">
-                      <span className="font-bold text-slate-800">درگاه پرداخت اینترنتی</span>
-                      <span className="text-[10px] text-slate-400">اتصال به کلیه کارت‌های عضو شتاب</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">درگاه پرداخت اینترنتی</span>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500">اتصال به کلیه کارت‌های عضو شتاب</span>
                     </div>
                   </label>
 
                   <label
                     className={`p-3 rounded-2xl border cursor-pointer flex items-center gap-2.5 transition-all ${
                       paymentMethod === "wallet"
-                        ? "border-[#2563eb] bg-blue-50/40 ring-1 ring-[#2563eb]"
-                        : "border-slate-200 bg-white"
+                        ? "border-[#2563eb] dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/40 ring-1 ring-[#2563eb] dark:ring-blue-500"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50"
                     }`}
                   >
                     <input
@@ -304,20 +304,20 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       className="text-[#2563eb] focus:ring-blue-500"
                     />
                     <div className="flex flex-col">
-                      <span className="font-bold text-slate-800">کیف پول کاربری</span>
-                      <span className="text-[10px] text-slate-400">پرداخت سریع از موجودی حساب</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">کیف پول کاربری</span>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500">پرداخت سریع از موجودی حساب</span>
                     </div>
                   </label>
                 </div>
               </div>
 
               {errorMessage && (
-                <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl text-center">
+                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-bold rounded-xl text-center">
                   {errorMessage}
                 </div>
               )}
 
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <Button
                   type="button"
                   variant="outline"
@@ -343,21 +343,21 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           </>
         ) : (
           <div className="py-8 text-center space-y-5">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border-4 border-emerald-100 shadow-md">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border-4 border-emerald-100 dark:border-emerald-900 shadow-md">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
-            <h3 className="text-xl font-black text-slate-900">
+            <h3 className="text-xl font-black text-slate-900 dark:text-white">
               سفارش شما با موفقیت ثبت شد!
             </h3>
 
-            <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
               پرداخت با موفقیت انجام شد و سفارش شما در فرآیند آماده‌سازی قرار گرفت.
             </p>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 max-w-xs mx-auto text-xs font-bold text-slate-800 space-y-1">
+            <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 max-w-xs mx-auto text-xs font-bold text-slate-800 dark:text-slate-200 space-y-1">
               <div>کد رهگیری سفارش:</div>
-              <div className="text-base font-black text-[#2563eb] tracking-wider font-mono" dir="ltr">
+              <div className="text-base font-black text-[#2563eb] dark:text-blue-400 tracking-wider font-mono" dir="ltr">
                 #{trackingCode}
               </div>
             </div>

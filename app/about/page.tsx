@@ -53,16 +53,16 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 pb-16 md:pb-0 text-right">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-white pb-16 md:pb-0 text-right">
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-12">
         <section className="space-y-6">
           <div className="space-y-1 text-right">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white">
               ارزش‌ها و تعهدات ما
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
               چرا هزاران کاربر و متخصص سخت‌افزار به پویان افزار اعتماد می‌کنند؟
             </p>
           </div>
@@ -73,15 +73,15 @@ export default function AboutPage() {
               return (
                 <div
                   key={v.title}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-3 transition-all hover:border-slate-300"
+                  className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-2xs space-y-3 transition-all hover:border-slate-300 dark:hover:border-slate-700"
                 >
-                  <div className="w-11 h-11 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-sm sm:text-base font-black text-slate-900">
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
                     {v.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {v.desc}
                   </p>
                 </div>
@@ -90,39 +90,39 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 md:p-10 shadow-2xs space-y-6">
+        <section className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 md:p-10 shadow-2xs space-y-6">
           <div className="space-y-2">
-            <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900">
+            <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900 dark:text-white">
               دسته‌بندی‌های تخصصی تحت پوشش
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
               ما در پویان افزار تمامی ملزومات حرفه‌ای، اداری و شخصی را از برندهای پیشرو مانند Apple، Samsung، Sony، Razer، Logitech، Asus و Anker با بالاترین کیفیت عرضه می‌کنیم:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs sm:text-sm font-bold text-slate-700">
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>موبایل، تبلت و لوازم جانبی هوشمند</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>قطعات کامپیوتر، کارت گرافیک و پردازنده</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>تجهیزات تخصصی گیمینگ و استریم</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>هدفون، هندزفری و اسپیکرهای پرچمدار</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>انواع حافظه ذخیره‌سازی، SSD و فلش مموری</span>
             </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-              <CheckCircle2 className="w-4 h-4 text-[#2563eb] shrink-0" />
+            <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+              <CheckCircle2 className="w-4 h-4 text-[#2563eb] dark:text-blue-400 shrink-0" />
               <span>آداپتور، کابل و شارژرهای دیواری پیشرفته GaN</span>
             </div>
           </div>

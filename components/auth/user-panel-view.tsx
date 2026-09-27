@@ -195,17 +195,17 @@ export function UserPanelView() {
   return (
     <div className="space-y-4 sm:space-y-6 text-right pt-2 sm:pt-4">
       {/* Mobile User Header */}
-      <div className="lg:hidden bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs">
+      <div className="lg:hidden bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 shadow-2xs">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-2xl bg-[#0b1528] text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-[#0b1528] dark:bg-slate-800 text-white flex items-center justify-center shrink-0 shadow-xs border border-transparent dark:border-slate-700">
               <User className="w-6 h-6 text-slate-200" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-sm font-black text-slate-900 truncate">
+              <h2 className="text-sm font-black text-slate-900 dark:text-white truncate">
                 سلام، {displayName}
               </h2>
-              <p className="text-[11px] text-slate-400 font-mono mt-0.5" dir="ltr">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-mono mt-0.5" dir="ltr">
                 {toPersianDigits(displayPhone)}
               </p>
             </div>
@@ -214,7 +214,7 @@ export function UserPanelView() {
           <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/cart"
-              className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 hover:bg-blue-100 text-[#2563eb] rounded-xl text-xs font-black transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[#2563eb] dark:text-blue-400 rounded-xl text-xs font-black transition-colors"
             >
               <ShoppingCart className="w-4 h-4" />
               <span>سبد خرید</span>
@@ -228,7 +228,7 @@ export function UserPanelView() {
             <button
               type="button"
               onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+              className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-rose-400 hover:bg-red-50 dark:hover:bg-rose-950/30 rounded-xl transition-colors cursor-pointer"
               title="خروج از حساب"
               aria-label="خروج از حساب"
             >
@@ -239,15 +239,15 @@ export function UserPanelView() {
       </div>
 
       {/* Mobile Scrollable Tabs */}
-      <div className="lg:hidden -mx-4 px-4 py-1.5 overflow-x-auto no-scrollbar border-b border-slate-200/80 bg-[#f8fafc]">
+      <div className="lg:hidden -mx-4 px-4 py-1.5 overflow-x-auto no-scrollbar border-b border-slate-200/80 dark:border-slate-800 bg-[#f8fafc] dark:bg-[#0b0f19]">
         <div className="flex items-center gap-2 min-w-max pb-1">
           <button
             type="button"
             onClick={() => setActiveTab("dashboard")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeTab === "dashboard"
-                ? "bg-[#0b1528] text-white shadow-xs"
-                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-xs"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-850"
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -259,8 +259,8 @@ export function UserPanelView() {
             onClick={() => setActiveTab("orders")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeTab === "orders"
-                ? "bg-[#0b1528] text-white shadow-xs"
-                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-xs"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-850"
             }`}
           >
             <Package className="w-3.5 h-3.5" />
@@ -269,7 +269,7 @@ export function UserPanelView() {
 
           <Link
             href="/cart"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 bg-white text-slate-600 border border-slate-200/90 hover:bg-blue-50 hover:text-[#2563eb] transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-[#2563eb] dark:hover:text-blue-400 transition-all cursor-pointer"
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>سبد خرید</span>
@@ -285,15 +285,15 @@ export function UserPanelView() {
             onClick={() => setActiveTab("favorites")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeTab === "favorites"
-                ? "bg-[#0b1528] text-white shadow-xs"
-                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-xs"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-850"
             }`}
           >
             <Heart className="w-3.5 h-3.5" />
             <span>علاقه‌مندی‌ها</span>
             {mounted && favorites.length > 0 && (
               <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+                activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
               }`}>
                 {toPersianDigits(favorites.length)}
               </span>
@@ -305,8 +305,8 @@ export function UserPanelView() {
             onClick={() => setActiveTab("addresses")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeTab === "addresses"
-                ? "bg-[#0b1528] text-white shadow-xs"
-                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-xs"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-850"
             }`}
           >
             <MapPin className="w-3.5 h-3.5" />
@@ -318,8 +318,8 @@ export function UserPanelView() {
             onClick={() => setActiveTab("profile")}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
               activeTab === "profile"
-                ? "bg-[#0b1528] text-white shadow-xs"
-                : "bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50"
+                ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-xs"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-850"
             }`}
           >
             <User className="w-3.5 h-3.5" />
@@ -331,17 +331,17 @@ export function UserPanelView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Desktop Persistent Sidebar */}
         <div className="hidden lg:block lg:col-span-4 xl:col-span-3">
-          <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-2xs space-y-5 sticky top-24">
-            <div className="flex flex-col items-center text-center pb-4 border-b border-slate-100">
-              <div className="w-16 h-16 rounded-full bg-[#0b1528] text-white flex items-center justify-center mb-3 shadow-sm">
+          <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-2xs space-y-5 sticky top-24">
+            <div className="flex flex-col items-center text-center pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="w-16 h-16 rounded-full bg-[#0b1528] dark:bg-slate-800 text-white flex items-center justify-center mb-3 shadow-sm border border-transparent dark:border-slate-700">
                 <User className="w-8 h-8 text-slate-200" />
               </div>
 
-              <h2 className="text-base font-black text-slate-900 mb-0.5">
+              <h2 className="text-base font-black text-slate-900 dark:text-white mb-0.5">
                 سلام، {displayName}
               </h2>
 
-              <p className="text-xs text-slate-400 font-mono mb-1" dir="ltr">
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-mono mb-1" dir="ltr">
                 {toPersianDigits(displayPhone)}
               </p>
             </div>
@@ -352,8 +352,8 @@ export function UserPanelView() {
                 onClick={() => setActiveTab("dashboard")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "dashboard"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>داشبورد</span>
@@ -365,8 +365,8 @@ export function UserPanelView() {
                 onClick={() => setActiveTab("orders")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "orders"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>سفارش‌های من</span>
@@ -375,7 +375,7 @@ export function UserPanelView() {
 
               <Link
                 href="/cart"
-                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#2563eb] transition-all cursor-pointer group"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-[#2563eb] dark:hover:text-blue-400 transition-all cursor-pointer group"
               >
                 <div className="flex items-center gap-2">
                   <span>سبد خرید</span>
@@ -385,7 +385,7 @@ export function UserPanelView() {
                     </span>
                   )}
                 </div>
-                <ShoppingCart className="w-4 h-4 text-slate-400 group-hover:text-[#2563eb] transition-colors" />
+                <ShoppingCart className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-[#2563eb] dark:group-hover:text-blue-400 transition-colors" />
               </Link>
 
               <button
@@ -393,15 +393,15 @@ export function UserPanelView() {
                 onClick={() => setActiveTab("favorites")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "favorites"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span>علاقه‌مندی‌ها</span>
                   {mounted && favorites.length > 0 && (
                     <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
-                      activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+                      activeTab === "favorites" ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
                     }`}>
                       {toPersianDigits(favorites.length)}
                     </span>
@@ -415,8 +415,8 @@ export function UserPanelView() {
                 onClick={() => setActiveTab("addresses")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "addresses"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>آدرس‌های من</span>
@@ -428,19 +428,19 @@ export function UserPanelView() {
                 onClick={() => setActiveTab("profile")}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "profile"
-                    ? "bg-[#0b1528] text-white shadow-sm"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? "bg-[#0b1528] dark:bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>اطلاعات حساب</span>
                 <User className="w-4 h-4" />
               </button>
 
-              <div className="pt-2 border-t border-slate-100">
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
                 >
                   <span>خروج از حساب</span>
                   <LogOut className="w-4 h-4" />
@@ -455,16 +455,16 @@ export function UserPanelView() {
           {activeTab === "dashboard" && (
             <>
               {mounted && cartCount > 0 && (
-                <div className="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/60 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-[#2563eb] text-white flex items-center justify-center shrink-0">
                       <ShoppingCart className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-slate-900">
+                      <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                         شما {toPersianDigits(cartCount)} کالا در سبد خرید خود دارید
                       </h3>
-                      <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                         برای تکمیل و نهایی‌سازی سفارش خود اقدام کنید
                       </p>
                     </div>
@@ -478,13 +478,13 @@ export function UserPanelView() {
                 </div>
               )}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-500">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                       سفارش‌های فعال
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
-                      <span className="text-xl sm:text-2xl font-black text-slate-900">
+                      <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                         {toPersianDigits(
                           liveOrders.filter(
                             (o) =>
@@ -494,79 +494,79 @@ export function UserPanelView() {
                           ).length
                         )}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">در جریان</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">در جریان</span>
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center shrink-0">
                     <Truck className="w-5 h-5" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-500">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                       کل سفارش‌ها
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
-                      <span className="text-xl sm:text-2xl font-black text-slate-900">
+                      <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                         {toPersianDigits(liveOrders.length)}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">سفارش</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">سفارش</span>
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-5 h-5" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-500">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                       علاقه‌مندی‌ها
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
-                      <span className="text-xl sm:text-2xl font-black text-slate-900">
+                      <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                         {toPersianDigits(favorites.length)}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">کالا</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">کالا</span>
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-500 dark:text-rose-400 flex items-center justify-center shrink-0">
                     <Heart className="w-5 h-5" />
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-5 flex items-center justify-between shadow-2xs">
                   <div className="flex flex-col text-right">
-                    <span className="text-[11px] sm:text-xs font-bold text-slate-500">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400">
                       آدرس‌های ثبت شده
                     </span>
                     <div className="flex items-baseline gap-1 mt-1.5">
-                      <span className="text-xl sm:text-2xl font-black text-slate-900">
+                      <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                         {toPersianDigits(liveAddresses.length || addresses.length)}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">نشانی</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">نشانی</span>
                     </div>
                   </div>
-                  <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                 </div>
               </div>
 
               {liveOrders.length > 0 && (
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-6">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-2xs space-y-6">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-bold text-slate-500">
+                      <span className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">
                         پیگیری آخرین سفارش
                       </span>
-                      <span className="text-sm sm:text-base font-black text-slate-900 font-mono" dir="ltr">
+                      <span className="text-sm sm:text-base font-black text-slate-900 dark:text-white font-mono" dir="ltr">
                         #{liveOrders[0].trackingCode}
                       </span>
                     </div>
 
-                    <span className="bg-blue-50 text-[#2563eb] text-xs font-black px-3 py-1 rounded-full border border-blue-100/60 shadow-2xs">
+                    <span className="bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 text-xs font-black px-3 py-1 rounded-full border border-blue-100/60 dark:border-blue-900/60 shadow-2xs">
                       {liveOrders[0].statusFa || liveOrders[0].paymentStatusFa || liveOrders[0].paymentStatus}
                     </span>
                   </div>
@@ -595,10 +595,10 @@ export function UserPanelView() {
                     ];
 
                     return (
-                      <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-5 border border-slate-100">
+                      <div className="bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl p-4 sm:p-5 border border-slate-100 dark:border-slate-800">
                         <div className="relative">
                           {/* Horizontal Connector Line */}
-                          <div className="absolute top-4 sm:top-5 left-15 right-15 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                          <div className="absolute top-4 sm:top-5 left-15 right-15 h-1 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0">
                             <div
                               className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
                               style={{
@@ -622,10 +622,10 @@ export function UserPanelView() {
                                 <div
                                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                                     s.done
-                                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50"
+                                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-4 ring-emerald-50 dark:ring-emerald-950/40"
                                       : s.current
-                                      ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 animate-pulse"
-                                      : "bg-white border-2 border-slate-200 text-slate-400"
+                                      ? "bg-[#2563eb] text-white shadow-md shadow-blue-500/30 ring-4 ring-blue-100 dark:ring-blue-950/40 animate-pulse"
+                                      : "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500"
                                   }`}
                                 >
                                   {s.done ? (
@@ -637,10 +637,10 @@ export function UserPanelView() {
                                 <span
                                   className={`text-[10px] sm:text-xs font-bold leading-tight ${
                                     s.done
-                                      ? "text-emerald-700"
+                                      ? "text-emerald-700 dark:text-emerald-400"
                                       : s.current
-                                      ? "text-[#2563eb] font-black"
-                                      : "text-slate-400"
+                                      ? "text-[#2563eb] dark:text-blue-400 font-black"
+                                      : "text-slate-400 dark:text-slate-500"
                                   }`}
                                 >
                                   {s.label}
@@ -653,11 +653,11 @@ export function UserPanelView() {
                     );
                   })()}
 
-                  <div className="pt-3 border-t border-slate-100 flex justify-start">
+                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-start">
                     <button
                       type="button"
                       onClick={() => setSelectedOrderModal(liveOrders[0])}
-                      className="text-xs font-bold text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:text-[#1d4ed8] flex items-center gap-1.5 transition-colors cursor-pointer"
                     >
                       <span>مشاهده جزئیات کامل سفارش</span>
                       <ArrowLeft className="w-4 h-4" />
@@ -666,29 +666,29 @@ export function UserPanelView() {
                 </div>
               )}
 
-              <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <h2 className="text-sm sm:text-base font-black text-slate-900">
+              <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-2xs space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
                     سفارش‌های اخیر
                   </h2>
                   <button
                     type="button"
                     onClick={() => setActiveTab("orders")}
-                    className="text-xs font-bold text-[#2563eb] hover:underline cursor-pointer"
+                    className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer"
                   >
                     همه سفارش‌ها
                   </button>
                 </div>
 
                 {liveOrders.length === 0 ? (
-                  <div className="py-8 text-center text-xs text-slate-400">
+                  <div className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
                     شما تاکنون سفارشی ثبت نکرده‌اید.
                   </div>
                 ) : (
                   <div className="overflow-x-auto no-scrollbar">
                     <table className="w-full text-xs text-right whitespace-nowrap">
                       <thead>
-                        <tr className="text-slate-400 font-bold border-b border-slate-100">
+                        <tr className="text-slate-400 dark:text-slate-500 font-bold border-b border-slate-100 dark:border-slate-800">
                           <th className="py-3 px-2 font-medium">شماره سفارش</th>
                           <th className="py-3 px-2 font-medium">تاریخ</th>
                           <th className="py-3 px-2 font-medium">مبلغ (تومان)</th>
@@ -696,20 +696,20 @@ export function UserPanelView() {
                           <th className="py-3 px-2 font-medium text-center">عملیات</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {liveOrders.slice(0, 4).map((ord) => (
                           <tr key={ord.id}>
-                            <td className="py-3.5 px-2 font-bold text-slate-900 font-mono" dir="ltr">
+                            <td className="py-3.5 px-2 font-bold text-slate-900 dark:text-white font-mono" dir="ltr">
                               #{ord.trackingCode}
                             </td>
-                            <td className="py-3.5 px-2 text-slate-600 font-medium">
+                            <td className="py-3.5 px-2 text-slate-600 dark:text-slate-300 font-medium">
                               {ord.date || new Intl.DateTimeFormat("fa-IR").format(new Date(ord.createdAt))}
                             </td>
-                            <td className="py-3.5 px-2 font-bold text-slate-900">
+                            <td className="py-3.5 px-2 font-bold text-slate-900 dark:text-white">
                               {formatPrice(ord.finalAmount || ord.amount)}
                             </td>
                             <td className="py-3.5 px-2">
-                              <span className="inline-block bg-blue-50 text-[#2563eb] text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                              <span className="inline-block bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
                                 {ord.statusFa || ord.paymentStatusFa || ord.paymentStatus}
                               </span>
                             </td>
@@ -717,7 +717,7 @@ export function UserPanelView() {
                               <button
                                 type="button"
                                 onClick={() => setSelectedOrderModal(ord)}
-                                className="font-bold text-[#2563eb] hover:underline cursor-pointer"
+                                className="font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer"
                               >
                                 مشاهده جزئیات
                               </button>
@@ -731,15 +731,15 @@ export function UserPanelView() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-2xs space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 className="text-sm font-black text-slate-900">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-2xs space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <h2 className="text-sm font-black text-slate-900 dark:text-white">
                       علاقه‌مندی‌های اخیر
                     </h2>
                     <button
                       type="button"
                       onClick={() => setActiveTab("favorites")}
-                      className="text-xs font-bold text-[#2563eb] hover:underline cursor-pointer"
+                      className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer"
                     >
                       همه
                     </button>
@@ -747,12 +747,12 @@ export function UserPanelView() {
 
                   <div className="space-y-3">
                     {favorites.length === 0 ? (
-                      <p className="text-xs text-slate-400 text-center py-4">محصولی در لیست علاقه‌مندی‌ها نیست.</p>
+                      <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">محصولی در لیست علاقه‌مندی‌ها نیست.</p>
                     ) : (
                       favorites.slice(0, 2).map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-100 bg-slate-50/40 hover:bg-slate-50 transition-colors"
+                          className="flex items-center justify-between gap-3 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors"
                         >
                           <button
                             type="button"
@@ -767,15 +767,15 @@ export function UserPanelView() {
                           </button>
 
                           <Link href={`/products/${item.id}`} className="flex flex-col items-end flex-1 min-w-0 cursor-pointer">
-                            <h3 className="text-xs font-bold text-slate-800 line-clamp-1 hover:text-[#2563eb] transition-colors">
+                            <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-1 hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors">
                               {item.title}
                             </h3>
-                            <span className="text-[11px] font-black text-[#0b1528] mt-1">
+                            <span className="text-[11px] font-black text-[#0b1528] dark:text-white mt-1">
                               {item.priceString} تومان
                             </span>
                           </Link>
 
-                          <Link href={`/products/${item.id}`} className="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center cursor-pointer">
+                          <Link href={`/products/${item.id}`} className="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800 shrink-0 border border-slate-200/80 dark:border-slate-700/80 p-1 flex items-center justify-center cursor-pointer">
                             <img
                               src={item.image}
                               alt={item.title}
@@ -788,15 +788,15 @@ export function UserPanelView() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-2xs space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 className="text-sm font-black text-slate-900">
+                <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-2xs space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <h2 className="text-sm font-black text-slate-900 dark:text-white">
                       آدرس‌های ثبت شده
                     </h2>
                     <button
                       type="button"
                       onClick={() => setActiveTab("addresses")}
-                      className="text-xs font-bold text-[#2563eb] hover:underline cursor-pointer"
+                      className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer"
                     >
                       مدیریت
                     </button>
@@ -806,18 +806,18 @@ export function UserPanelView() {
                     {(liveAddresses.length > 0 ? liveAddresses : addresses).slice(0, 2).map((addr) => (
                       <div
                         key={addr.id}
-                        className="p-3 rounded-xl border border-slate-100 bg-slate-50/40 text-right space-y-1.5"
+                        className="p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/40 text-right space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] text-slate-400 font-mono">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                             کد پستی: {toPersianDigits(addr.postalCode || "")}
                           </span>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-black text-slate-800">{addr.title}</span>
+                            <span className="text-xs font-black text-slate-800 dark:text-slate-200">{addr.title}</span>
                             <Home className="w-3.5 h-3.5 text-slate-500" />
                           </div>
                         </div>
-                        <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                           {addr.fullAddress}
                         </p>
                       </div>
@@ -829,11 +829,11 @@ export function UserPanelView() {
           )}
 
           {activeTab === "addresses" && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <div>
-                  <h2 className="text-base font-black text-slate-900">آدرس‌های تحویل سفارش</h2>
-                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  <h2 className="text-base font-black text-slate-900 dark:text-white">آدرس‌های تحویل سفارش</h2>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
                     مدیریت نشانی‌ها جهت ارسال سریع سفارشات
                   </p>
                 </div>
@@ -854,17 +854,17 @@ export function UserPanelView() {
                     key={addr.id}
                     className={`p-4 rounded-2xl border transition-all ${
                       addr.isDefault
-                        ? "border-[#2563eb] bg-blue-50/30 ring-1 ring-blue-500/20"
-                        : "border-slate-200 bg-slate-50/40"
+                        ? "border-[#2563eb] dark:border-blue-500 bg-blue-50/30 dark:bg-blue-950/40 ring-1 ring-blue-500/20"
+                        : "border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/40"
                     }`}
                   >
-                    <div className="flex items-center justify-between pb-2 border-b border-slate-100/80 mb-2">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-100/80 dark:border-slate-800 mb-2">
                       <div className="flex items-center gap-2">
                         {!addr.isDefault && (
                           <button
                             type="button"
                             onClick={() => handleSetDefaultAddress(addr.id)}
-                            className="text-xs font-bold text-[#2563eb] hover:underline cursor-pointer"
+                            className="text-xs font-bold text-[#2563eb] dark:text-blue-400 hover:underline cursor-pointer"
                           >
                             انتخاب به عنوان پیش‌فرض
                           </button>
@@ -872,7 +872,7 @@ export function UserPanelView() {
                         <button
                           type="button"
                           onClick={() => handleDeleteAddress(addr.id)}
-                          className="text-slate-400 hover:text-red-500 p-1 cursor-pointer transition-colors"
+                          className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-rose-400 p-1 cursor-pointer transition-colors"
                           aria-label="حذف آدرس"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -881,19 +881,19 @@ export function UserPanelView() {
 
                       <div className="flex items-center gap-2">
                         {addr.isDefault && (
-                          <span className="bg-emerald-50 text-emerald-700 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emerald-200">
+                          <span className="bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                             پیش‌فرض
                           </span>
                         )}
-                        <span className="text-sm font-black text-slate-900">{addr.title}</span>
+                        <span className="text-sm font-black text-slate-900 dark:text-white">{addr.title}</span>
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-700 leading-relaxed font-medium mb-3">
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium mb-3">
                       {addr.fullAddress}
                     </p>
 
-                    <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500 pt-1">
+                    <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
                       <span>تحویل‌گیرنده: {addr.receiverName} ({toPersianDigits(addr.receiverPhone)})</span>
                       <span className="font-mono">کد پستی: {toPersianDigits(addr.postalCode || "")}</span>
                     </div>
@@ -904,16 +904,16 @@ export function UserPanelView() {
           )}
 
           {activeTab === "favorites" && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="pb-4 border-b border-slate-100">
-                <h2 className="text-base font-black text-slate-900">لیست علاقه‌مندی‌ها</h2>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs space-y-6">
+              <div className="pb-4 border-b border-slate-100 dark:border-slate-800">
+                <h2 className="text-base font-black text-slate-900 dark:text-white">لیست علاقه‌مندی‌ها</h2>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
                   کالاهایی که برای خرید ذخیره کرده‌اید
                 </p>
               </div>
 
               {favorites.length === 0 ? (
-                <div className="py-12 text-center text-slate-400 text-xs">
+                <div className="py-12 text-center text-slate-400 dark:text-slate-500 text-xs">
                   هیچ محصولی در لیست علاقه‌مندی‌های شما وجود ندارد.
                 </div>
               ) : (
@@ -921,7 +921,7 @@ export function UserPanelView() {
                   {favorites.map((item) => (
                     <div
                       key={item.id}
-                      className="bg-white rounded-2xl border border-slate-200 p-3.5 flex items-center justify-between gap-3 hover:shadow-xs transition-shadow"
+                      className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-3.5 flex items-center justify-between gap-3 hover:shadow-xs transition-shadow"
                     >
                       <button
                         type="button"
@@ -929,7 +929,7 @@ export function UserPanelView() {
                           removeFavorite(item.id);
                           toast.info("محصول از لیست علاقه‌مندی‌ها حذف شد.");
                         }}
-                        className="text-red-500 hover:text-red-600 p-1.5 cursor-pointer"
+                        className="text-red-500 dark:text-rose-400 hover:text-red-600 p-1.5 cursor-pointer"
                         aria-label="حذف از علاقه‌مندی"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -937,11 +937,11 @@ export function UserPanelView() {
 
                       <div className="flex-1 text-right">
                         <Link href={`/products/${item.id}`} className="cursor-pointer block">
-                          <h3 className="text-xs font-bold text-slate-900 line-clamp-2 leading-snug hover:text-[#2563eb] transition-colors">
+                          <h3 className="text-xs font-bold text-slate-900 dark:text-white line-clamp-2 leading-snug hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors">
                             {item.title}
                           </h3>
                         </Link>
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                           <Button
                             variant="secondary"
                             size="sm"
@@ -957,13 +957,13 @@ export function UserPanelView() {
                           >
                             خرید
                           </Button>
-                          <span className="text-xs font-black text-slate-900">
+                          <span className="text-xs font-black text-slate-900 dark:text-white">
                             {item.priceString} تومان
                           </span>
                         </div>
                       </div>
 
-                      <Link href={`/products/${item.id}`} className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 shrink-0 border border-slate-200/80 p-1 flex items-center justify-center cursor-pointer">
+                      <Link href={`/products/${item.id}`} className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800 shrink-0 border border-slate-200/80 dark:border-slate-700/80 p-1 flex items-center justify-center cursor-pointer">
                         <img
                           src={item.image}
                           alt={item.title}
@@ -978,20 +978,20 @@ export function UserPanelView() {
           )}
 
           {activeTab === "orders" && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
                 <div>
-                  <h2 className="text-base font-black text-slate-900">تاریخچه سفارش‌ها</h2>
-                  <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  <h2 className="text-base font-black text-slate-900 dark:text-white">تاریخچه سفارش‌ها</h2>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
                     تمام سفارش‌های ثبت شده در فروشگاه پویان افزار
                   </p>
                 </div>
-                {loadingOrders && <Loader2 className="w-4 h-4 animate-spin text-[#2563eb]" />}
+                {loadingOrders && <Loader2 className="w-4 h-4 animate-spin text-[#2563eb] dark:text-blue-400" />}
               </div>
 
               <div className="space-y-4">
                 {liveOrders.length === 0 ? (
-                  <div className="py-12 text-center text-slate-400 text-xs">
+                  <div className="py-12 text-center text-slate-400 dark:text-slate-500 text-xs">
                     هنوز سفارشی ثبت نشده است.
                   </div>
                 ) : (
@@ -999,33 +999,33 @@ export function UserPanelView() {
                     <div
                       key={ord.id}
                       onClick={() => setSelectedOrderModal(ord)}
-                      className="rounded-2xl border border-slate-200 p-4 space-y-3 hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer bg-slate-50/30"
+                      className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xs transition-all cursor-pointer bg-slate-50/30 dark:bg-slate-900/40"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
                         <span className={`text-xs font-black px-3 py-1 rounded-full ${
                           ord.paymentStatus === "PAID" || ord.paymentStatus === "paid"
-                            ? "bg-emerald-50 text-emerald-700"
+                            ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400"
                             : ord.paymentStatus === "CANCELLED" || ord.paymentStatus === "cancelled"
-                            ? "bg-rose-50 text-rose-700"
-                            : "bg-blue-50 text-[#2563eb]"
+                            ? "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400"
+                            : "bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400"
                         }`}>
                           {ord.statusFa || ord.paymentStatusFa || ord.paymentStatus}
                         </span>
-                        <div className="flex items-center gap-3 text-xs font-bold text-slate-700">
+                        <div className="flex items-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-300">
                           <span>{ord.date || new Intl.DateTimeFormat("fa-IR").format(new Date(ord.createdAt))}</span>
-                          <span className="font-mono text-slate-900" dir="ltr">#{ord.trackingCode}</span>
+                          <span className="font-mono text-slate-900 dark:text-white" dir="ltr">#{ord.trackingCode}</span>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between text-xs pt-1">
-                        <span className="font-bold text-slate-900">
+                        <span className="font-bold text-slate-900 dark:text-white">
                           مبلغ کل: {formatPrice(ord.finalAmount || ord.amount)} تومان
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-slate-500 font-medium">
+                          <span className="text-slate-500 dark:text-slate-400 font-medium">
                             {ord.items?.length || 1} کالا
                           </span>
-                          <span className="text-xs text-[#2563eb] font-bold">
+                          <span className="text-xs text-[#2563eb] dark:text-blue-400 font-bold">
                             مشاهده جزئیات فاکتور ←
                           </span>
                         </div>
@@ -1038,16 +1038,16 @@ export function UserPanelView() {
           )}
 
           {activeTab === "profile" && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-6">
-              <div className="pb-4 border-b border-slate-100">
-                <h2 className="text-base font-black text-slate-900">اطلاعات حساب کاربری</h2>
-                <p className="text-xs text-slate-400 font-medium mt-0.5">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs space-y-6">
+              <div className="pb-4 border-b border-slate-100 dark:border-slate-800">
+                <h2 className="text-base font-black text-slate-900 dark:text-white">اطلاعات حساب کاربری</h2>
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-0.5">
                   مشاهده و ویرایش مشخصات فردی
                 </p>
               </div>
 
               {profileSuccessMsg && (
-                <div className="p-3 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-xl text-xs font-bold">
                   {profileSuccessMsg}
                 </div>
               )}
@@ -1055,59 +1055,59 @@ export function UserPanelView() {
               <form onSubmit={handleSaveProfile} className="space-y-4 max-w-xl">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">نام</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">نام</label>
                     <input
                       type="text"
                       required
                       value={firstNameInput}
                       onChange={(e) => setFirstNameInput(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#2563eb]"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#2563eb]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">نام خانوادگی</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">نام خانوادگی</label>
                     <input
                       type="text"
                       required
                       value={lastNameInput}
                       onChange={(e) => setLastNameInput(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#2563eb]"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#2563eb]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">شماره موبایل</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">شماره موبایل</label>
                     <input
                       type="text"
                       disabled
                       value={toPersianDigits(user?.phone || "")}
-                      className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-500 font-mono"
+                      className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-500 dark:text-slate-400 font-mono"
                       dir="ltr"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">کد ملی</label>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">کد ملی</label>
                     <input
                       type="text"
                       value={nationalCodeInput}
                       onChange={(e) => setNationalCodeInput(e.target.value)}
                       placeholder="۱۰ رقمی"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-mono focus:outline-none focus:border-[#2563eb]"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-mono focus:outline-none focus:border-[#2563eb]"
                       dir="ltr"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">ایمیل</label>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">ایمیل</label>
                   <input
                     type="email"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                     placeholder="example@mail.com"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-mono focus:outline-none focus:border-[#2563eb]"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100 font-mono focus:outline-none focus:border-[#2563eb]"
                     dir="ltr"
                   />
                 </div>
@@ -1128,12 +1128,12 @@ export function UserPanelView() {
           )}
 
           {(activeTab === "notifications" || activeTab === "security") && (
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-2xs space-y-4">
-              <h2 className="text-base font-black text-slate-900">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs space-y-4">
+              <h2 className="text-base font-black text-slate-900 dark:text-white">
                 {activeTab === "notifications" && "اعلان‌ها"}
                 {activeTab === "security" && "امنیت و رمز عبور"}
               </h2>
-              <div className="p-4 rounded-xl bg-slate-50 text-xs text-slate-600 leading-relaxed">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 حساب شما با تایید دو مرحله‌ای پیامکی فعال و امن است.
               </div>
             </div>
@@ -1144,17 +1144,17 @@ export function UserPanelView() {
       {/* Order Detail Modal */}
       {selectedOrderModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-2xl w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 max-w-2xl w-full shadow-2xl text-right my-8 animate-in fade-in zoom-in-95 duration-200 space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center">
                   <ReceiptText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-slate-900">
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">
                     جزئیات و فاکتور سفارش
                   </h3>
-                  <p className="text-xs text-slate-400 font-mono" dir="ltr">
+                  <p className="text-xs text-slate-400 dark:text-slate-500 font-mono" dir="ltr">
                     #{selectedOrderModal.trackingCode}
                   </p>
                 </div>
@@ -1163,34 +1163,34 @@ export function UserPanelView() {
               <button
                 type="button"
                 onClick={() => setSelectedOrderModal(null)}
-                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs">
               <div>
-                <span className="text-slate-400 block mb-1">وضعیت پرداخت:</span>
-                <span className="font-bold text-slate-900">
+                <span className="text-slate-400 dark:text-slate-500 block mb-1">وضعیت پرداخت:</span>
+                <span className="font-bold text-slate-900 dark:text-white">
                   {selectedOrderModal.paymentStatusFa || selectedOrderModal.statusFa || selectedOrderModal.paymentStatus}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block mb-1">وضعیت ارسال:</span>
-                <span className="font-bold text-slate-900">
+                <span className="text-slate-400 dark:text-slate-500 block mb-1">وضعیت ارسال:</span>
+                <span className="font-bold text-slate-900 dark:text-white">
                   {selectedOrderModal.shippingStatusFa || selectedOrderModal.shippingStatus}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block mb-1">تاریخ ثبت:</span>
-                <span className="font-bold text-slate-900">
+                <span className="text-slate-400 dark:text-slate-500 block mb-1">تاریخ ثبت:</span>
+                <span className="font-bold text-slate-900 dark:text-white">
                   {selectedOrderModal.date || new Intl.DateTimeFormat("fa-IR").format(new Date(selectedOrderModal.createdAt))}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block mb-1">مبلغ پرداختی:</span>
-                <span className="font-black text-[#2563eb]">
+                <span className="text-slate-400 dark:text-slate-500 block mb-1">مبلغ پرداختی:</span>
+                <span className="font-black text-[#2563eb] dark:text-blue-400">
                   {formatPrice(selectedOrderModal.finalAmount || selectedOrderModal.amount)} تومان
                 </span>
               </div>
@@ -1221,9 +1221,9 @@ export function UserPanelView() {
               ];
 
               return (
-                <div className="bg-slate-50/70 rounded-2xl p-4 border border-slate-100">
+                <div className="bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
                   <div className="relative">
-                    <div className="absolute top-4 sm:top-4.5 left-13 right-13 h-1 bg-slate-200 -translate-y-1/2 z-0">
+                    <div className="absolute top-4 sm:top-4.5 left-13 right-13 h-1 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0">
                       <div
                         className="h-full bg-emerald-500 transition-all duration-500 rounded-full"
                         style={{
@@ -1246,10 +1246,10 @@ export function UserPanelView() {
                           <div
                             className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
                               s.done
-                                ? "bg-emerald-600 text-white shadow-sm ring-4 ring-emerald-50"
+                                ? "bg-emerald-600 text-white shadow-sm ring-4 ring-emerald-50 dark:ring-emerald-950/40"
                                 : s.current
-                                ? "bg-[#2563eb] text-white shadow-sm ring-4 ring-blue-100"
-                                : "bg-white border-2 border-slate-200 text-slate-400"
+                                ? "bg-[#2563eb] text-white shadow-sm ring-4 ring-blue-100 dark:ring-blue-950/40"
+                                : "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500"
                             }`}
                           >
                             {s.done ? (
@@ -1261,10 +1261,10 @@ export function UserPanelView() {
                           <span
                             className={`text-[9px] sm:text-[11px] font-bold leading-tight ${
                               s.done
-                                ? "text-emerald-700"
+                                ? "text-emerald-700 dark:text-emerald-400"
                                 : s.current
-                                ? "text-[#2563eb] font-black"
-                                : "text-slate-400"
+                                ? "text-[#2563eb] dark:text-blue-400 font-black"
+                                : "text-slate-400 dark:text-slate-500"
                             }`}
                           >
                             {s.label}
@@ -1278,38 +1278,38 @@ export function UserPanelView() {
             })()}
 
             {selectedOrderModal.shippingAddress && (
-              <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100 text-xs space-y-1">
-                <span className="font-bold text-slate-700 block mb-1">نشانی تحویل گیرنده:</span>
-                <p className="text-slate-600 leading-relaxed">
+              <div className="bg-slate-50/60 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 text-xs space-y-1">
+                <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">نشانی تحویل گیرنده:</span>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                   {selectedOrderModal.shippingAddress.fullAddress || selectedOrderModal.customerAddress}
                 </p>
-                <p className="text-slate-400 pt-1">
+                <p className="text-slate-400 dark:text-slate-500 pt-1">
                   تحویل گیرنده: {selectedOrderModal.shippingAddress.receiverName || selectedOrderModal.customerName} ({toPersianDigits(selectedOrderModal.shippingAddress.receiverPhone || selectedOrderModal.customerPhone)})
                 </p>
               </div>
             )}
 
             <div className="space-y-3">
-              <h4 className="text-xs font-black text-slate-800">کالاهای این سفارش:</h4>
-              <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl p-2 bg-white max-h-60 overflow-y-auto">
+              <h4 className="text-xs font-black text-slate-800 dark:text-slate-200">کالاهای این سفارش:</h4>
+              <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-2 bg-white dark:bg-slate-900 max-h-60 overflow-y-auto">
                 {selectedOrderModal.items?.map((item, idx) => (
                   <div key={idx} className="p-3 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       {item.image && (
-                        <Link href={`/products/${item.productId}`} className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 shrink-0 p-1 flex items-center justify-center cursor-pointer">
+                        <Link href={`/products/${item.productId}`} className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 p-1 flex items-center justify-center cursor-pointer">
                           <img src={item.image} alt={item.title} className="w-full h-full object-contain" />
                         </Link>
                       )}
                       <div>
-                        <Link href={`/products/${item.productId}`} className="font-bold text-xs text-slate-800 hover:text-[#2563eb] transition-colors cursor-pointer block">
+                        <Link href={`/products/${item.productId}`} className="font-bold text-xs text-slate-800 dark:text-slate-200 hover:text-[#2563eb] dark:hover:text-blue-400 transition-colors cursor-pointer block">
                           {item.title}
                         </Link>
-                        {item.color && <span className="text-[10px] text-slate-400">رنگ: {item.color}</span>}
+                        {item.color && <span className="text-[10px] text-slate-400 dark:text-slate-500">رنگ: {item.color}</span>}
                       </div>
                     </div>
                     <div className="text-left text-xs">
-                      <span className="font-bold text-slate-900">{formatPrice(item.price * item.quantity)} تومان</span>
-                      <span className="text-slate-400 block text-[10px]">تعداد: {toPersianDigits(item.quantity)}</span>
+                      <span className="font-bold text-slate-900 dark:text-white">{formatPrice(item.price * item.quantity)} تومان</span>
+                      <span className="text-slate-400 dark:text-slate-500 block text-[10px]">تعداد: {toPersianDigits(item.quantity)}</span>
                     </div>
                   </div>
                 ))}

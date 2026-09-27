@@ -1,6 +1,8 @@
 @import url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css");
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark, [data-theme="dark"], .dark *, [data-theme="dark"] *));
+
 @theme {
   --font-sans: "Vazirmatn", var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-vazir: "Vazirmatn", var(--font-vazir), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -20,10 +22,11 @@
   --border: #e2e8f0;
 }
 
-[data-theme="dark"] {
-  --background: #090d16;
+[data-theme="dark"],
+.dark {
+  --background: #0b0f19;
   --foreground: #f8fafc;
-  --card: #0f172a;
+  --card: #111827;
   --card-foreground: #f8fafc;
   --primary: #1e293b;
   --primary-foreground: #ffffff;
@@ -31,7 +34,7 @@
   --accent-light: #1e3a8a;
   --muted: #94a3b8;
   --muted-light: #1e293b;
-  --border: #1e293b;
+  --border: #1f2937;
 }
 
 html,
@@ -43,12 +46,43 @@ textarea {
   font-family: var(--font-vazir), "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   direction: rtl;
   text-align: right;
   overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Telegram-like View Transition for theme toggle */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 999999;
+}
+
+.dark::view-transition-old(root),
+[data-theme="dark"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root),
+[data-theme="dark"]::view-transition-new(root) {
+  z-index: 999999;
 }
 
 @keyframes pulseSubtle {
@@ -146,13 +180,28 @@ body {
   background: #f1f5f9;
 }
 
+.dark ::-webkit-scrollbar-track,
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
 
+.dark ::-webkit-scrollbar-thumb,
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover,
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 @keyframes toastSlideIn {

@@ -33,18 +33,18 @@ export function Features() {
           return (
             <div
               key={item.title}
-              className="bg-white rounded-2xl p-3 sm:p-5 border border-slate-200/90 flex items-center justify-between hover:border-slate-300 hover:shadow-xs transition-all duration-200 cursor-pointer"
+              className="bg-white dark:bg-[#111827] rounded-2xl p-3 sm:p-5 border border-slate-200/90 dark:border-slate-800/80 flex items-center justify-between hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xs transition-all duration-200 cursor-pointer"
             >
               <div className="flex flex-col text-right">
-                <span className="text-xs sm:text-sm font-black text-slate-800">
+                <span className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100">
                   {item.title}
                 </span>
-                <span className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 font-medium">
+                <span className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 sm:mt-1 font-medium">
                   {item.desc}
                 </span>
               </div>
 
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50/80 border border-blue-100 flex items-center justify-center text-[#2563eb] shrink-0">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50/80 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/60 flex items-center justify-center text-[#2563eb] dark:text-blue-400 shrink-0">
                 <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>

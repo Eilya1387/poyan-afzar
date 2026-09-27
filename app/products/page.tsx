@@ -92,24 +92,24 @@ function ProductsContent() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 pb-16 md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 pb-16 md:pb-0">
       <Header
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-[#111827] p-4 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xs">
           <div>
-            <h1 className="text-lg sm:text-xl font-black text-[#0b1528] tracking-tight">
+            <h1 className="text-lg sm:text-xl font-black text-[#0b1528] dark:text-white tracking-tight">
               محصولات
             </h1>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               نمایش {toPersianDigits(displayedProducts.length)} محصول با ضمانت اصالت
             </p>
           </div>
 
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl self-start sm:self-auto overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto overflow-x-auto no-scrollbar">
             {sortOptions.map((opt) => (
               <button
                 key={opt.id}
@@ -117,8 +117,8 @@ function ProductsContent() {
                 onClick={() => setCurrentSort(opt.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   currentSort === opt.id
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 {opt.label}
@@ -128,19 +128,19 @@ function ProductsContent() {
         </div>
 
         {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-500">
-            <Loader2 className="w-8 h-8 animate-spin text-[#2563eb]" />
+          <div className="py-20 flex flex-col items-center justify-center gap-3 text-slate-500 dark:text-slate-400">
+            <Loader2 className="w-8 h-8 animate-spin text-[#2563eb] dark:text-blue-400" />
             <span className="text-sm font-medium">در حال دریافت جدیدترین لیست محصولات از سرور...</span>
           </div>
         ) : displayedProducts.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-slate-200/90 py-16 px-6 text-center text-slate-500 space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#2563eb] flex items-center justify-center mx-auto">
+          <div className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200/90 dark:border-slate-800 py-16 px-6 text-center text-slate-500 dark:text-slate-400 space-y-3">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center mx-auto">
               <Loader2 className="w-7 h-7" />
             </div>
-            <p className="text-base font-black text-slate-800">
+            <p className="text-base font-black text-slate-800 dark:text-slate-100">
               {searchQuery ? "محصولی مطابق با جستجوی شما یافت نشد." : "در حال حاضر هیچ محصولی در فروشگاه ثبت نشده است."}
             </p>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            <p className="text-xs text-slate-400 dark:text-slate-500 max-w-sm mx-auto">
               {searchQuery ? "عبارت دیگری را جستجو کنید یا فیلترها را حذف نمایید." : "محصولات پس از ثبت در پنل مدیریت در این بخش نمایش داده خواهند شد."}
             </p>
           </div>

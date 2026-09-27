@@ -107,13 +107,13 @@ export function ProductReviews({
   };
 
   return (
-    <section id="reviews" className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 space-y-6 shadow-2xs text-right">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+    <section id="reviews" className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] p-6 md:p-8 space-y-6 shadow-2xs text-right">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900">
+          <h2 className="text-base sm:text-lg md:text-xl font-black text-slate-900 dark:text-white">
             امتیاز و نظرات کاربران
           </h2>
-          <p className="text-xs text-slate-400 font-medium mt-1">
+          <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mt-1">
             بر اساس نظرات خریداران واقعی در پویان افزار
           </p>
         </div>
@@ -130,28 +130,28 @@ export function ProductReviews({
         </Button>
       </div>
 
-      <div className="rounded-2xl bg-slate-50/60 border border-slate-200/80 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+      <div className="rounded-2xl bg-slate-50/60 dark:bg-slate-850 border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
         <div className="md:col-span-8 space-y-2.5 px-2 order-2 md:order-1">
           {distVal.map((item) => (
             <div key={item.stars} className="flex items-center gap-3 text-xs">
-              <span className="w-12 text-slate-500 font-bold shrink-0">
+              <span className="w-12 text-slate-500 dark:text-slate-400 font-bold shrink-0">
                 {formatPersianNumber(item.stars)} ستاره
               </span>
-              <div className="flex-1 bg-slate-200/80 h-2 rounded-full overflow-hidden">
+              <div className="flex-1 bg-slate-200/80 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
                 <div
-                  className="bg-[#0b1528] h-full rounded-full transition-all duration-500"
+                  className="bg-[#0b1528] dark:bg-blue-500 h-full rounded-full transition-all duration-500"
                   style={{ width: `${item.percent}%` }}
                 />
               </div>
-              <span className="w-10 text-slate-400 font-medium text-left shrink-0">
+              <span className="w-10 text-slate-400 dark:text-slate-500 font-medium text-left shrink-0">
                 {formatPersianNumber(item.percent)}٪
               </span>
             </div>
           ))}
         </div>
 
-        <div className="md:col-span-4 flex flex-col items-center justify-center text-center p-2 border-b md:border-b-0 md:border-r border-slate-200 order-1 md:order-2">
-          <div className="text-3xl sm:text-4xl font-black text-slate-900 mb-1.5 tracking-tight">
+        <div className="md:col-span-4 flex flex-col items-center justify-center text-center p-2 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 order-1 md:order-2">
+          <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-1.5 tracking-tight">
             {formatPersianNumber(ratingVal)} از ۵
           </div>
           <div className="flex items-center gap-1 mb-2">
@@ -161,12 +161,12 @@ export function ProductReviews({
                 className={`w-4 h-4 ${
                   s <= Math.round(ratingVal)
                     ? "fill-amber-400 text-amber-400"
-                    : "text-slate-200"
+                    : "text-slate-200 dark:text-slate-700"
                 }`}
               />
             ))}
           </div>
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
             از مجموع {formatPersianNumber(reviewsCountVal)} ثبت نظر
           </span>
         </div>
@@ -174,27 +174,27 @@ export function ProductReviews({
 
       <div className="pt-2">
         {reviewsList.length === 0 ? (
-          <div className="py-12 text-center text-slate-400 text-xs bg-slate-50/50 rounded-2xl border border-slate-100 p-6 space-y-2">
-            <p className="font-bold text-slate-700 text-sm">هنوز دیدگاهی برای این کالا ثبت نشده است</p>
-            <p className="text-slate-400 text-xs font-medium">اولین نفری باشید که نظر و تجربه خود را درباره این کالا با دیگران به اشتراک می‌گذارد.</p>
+          <div className="py-12 text-center text-slate-400 dark:text-slate-500 text-xs bg-slate-50/50 dark:bg-slate-850 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 space-y-2">
+            <p className="font-bold text-slate-700 dark:text-slate-200 text-sm">هنوز دیدگاهی برای این کالا ثبت نشده است</p>
+            <p className="text-slate-400 dark:text-slate-500 text-xs font-medium">اولین نفری باشید که نظر و تجربه خود را درباره این کالا با دیگران به اشتراک می‌گذارد.</p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {reviewsList.map((rev) => (
               <div key={rev.id} className="py-5 first:pt-2 space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-black text-sm text-slate-900">
+                    <span className="font-black text-sm text-slate-900 dark:text-white">
                       {rev.user}
                     </span>
                     {rev.verified && (
-                      <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/60">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      <span className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/60">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                         خریدار تایید شده
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-400 font-medium font-mono" dir="ltr">
+                  <span className="text-xs text-slate-400 dark:text-slate-500 font-medium font-mono" dir="ltr">
                     {rev.date}
                   </span>
                 </div>
@@ -208,7 +208,7 @@ export function ProductReviews({
                   ))}
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   {rev.comment}
                 </p>
               </div>
@@ -218,16 +218,16 @@ export function ProductReviews({
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-black text-slate-900">
+              <h3 className="text-base font-black text-slate-900 dark:text-white">
                 ثبت نظر درباره محصول
               </h3>
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -235,7 +235,7 @@ export function ProductReviews({
 
             <form onSubmit={handleReviewSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   امتیاز شما
                 </label>
                 <div className="flex items-center gap-1.5">
@@ -250,19 +250,19 @@ export function ProductReviews({
                         className={`w-5 h-5 ${
                           s <= formRating
                             ? "fill-amber-400 text-amber-400"
-                            : "text-slate-200"
+                            : "text-slate-200 dark:text-slate-700"
                         }`}
                       />
                     </button>
                   ))}
-                  <span className="text-xs font-bold text-slate-600 mr-2">
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-400 mr-2">
                     {formatPersianNumber(formRating)} ستاره
                   </span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   نام و نام خانوادگی
                 </label>
                 <input
@@ -271,12 +271,12 @@ export function ProductReviews({
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="مثال: علی محمدی"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#2563eb]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   متن نظر شما
                 </label>
                 <textarea
@@ -285,7 +285,7 @@ export function ProductReviews({
                   value={userComment}
                   onChange={(e) => setUserComment(e.target.value)}
                   placeholder="نقاط قوت، ضعف و تجربه کاربری خود را بنویسید..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-[#2563eb]"
                 />
               </div>
 

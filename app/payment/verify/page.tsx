@@ -50,24 +50,24 @@ function PaymentVerifyContent() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto my-12 bg-white rounded-3xl border border-slate-200 p-8 shadow-xl text-center space-y-6">
+    <div className="max-w-md w-full mx-auto my-12 bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-xl text-center space-y-6">
       {loading ? (
         <div className="py-12 space-y-4">
-          <Loader2 className="w-12 h-12 animate-spin text-[#2563eb] mx-auto" />
-          <h2 className="text-base font-black text-slate-800">
+          <Loader2 className="w-12 h-12 animate-spin text-[#2563eb] dark:text-blue-400 mx-auto" />
+          <h2 className="text-base font-black text-slate-800 dark:text-slate-200">
             در حال تأیید تراکنش با درگاه بانکی...
           </h2>
-          <p className="text-xs text-slate-400">لطفاً صفحه را نبندید</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">لطفاً صفحه را نبندید</p>
         </div>
       ) : error || !result?.success ? (
         <div className="space-y-4">
-          <div className="w-16 h-16 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border-4 border-rose-100">
+          <div className="w-16 h-16 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto border-4 border-rose-100 dark:border-rose-900/60">
             <XCircle className="w-10 h-10" />
           </div>
-          <h2 className="text-lg font-black text-slate-900">
+          <h2 className="text-lg font-black text-slate-900 dark:text-white">
             پرداخت ناموفق بود
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {error || result?.message || "تراکنش توسط کاربر لغو شد یا مشکلی در پرداخت به وجود آمد."}
           </p>
           <div className="pt-4 flex items-center justify-center gap-3">
@@ -85,39 +85,39 @@ function PaymentVerifyContent() {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border-4 border-emerald-100">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border-4 border-emerald-100 dark:border-emerald-900/60">
             <CheckCircle2 className="w-10 h-10" />
           </div>
-          <h2 className="text-lg font-black text-slate-900">
+          <h2 className="text-lg font-black text-slate-900 dark:text-white">
             پرداخت با موفقیت انجام شد
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {result.message || "سفارش شما با موفقیت تایید گردید و در صف پردازش انبار قرار گرفت."}
           </p>
 
-          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-xs space-y-2 text-right">
+          <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 text-xs space-y-2 text-right">
             {result.trackingCode && (
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">کد رهگیری:</span>
-                <span className="font-mono font-black text-[#2563eb]" dir="ltr">#{result.trackingCode}</span>
+                <span className="text-slate-500 dark:text-slate-400">کد رهگیری:</span>
+                <span className="font-mono font-black text-[#2563eb] dark:text-blue-400" dir="ltr">#{result.trackingCode}</span>
               </div>
             )}
             {result.refId && (
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">شماره ارجاع بانک:</span>
-                <span className="font-mono font-bold text-slate-800" dir="ltr">{result.refId}</span>
+                <span className="text-slate-500 dark:text-slate-400">شماره ارجاع بانک:</span>
+                <span className="font-mono font-bold text-slate-800 dark:text-slate-200" dir="ltr">{result.refId}</span>
               </div>
             )}
             {result.amount && (
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">مبلغ تراکنش:</span>
-                <span className="font-black text-slate-900">{formatPrice(result.amount)} تومان</span>
+                <span className="text-slate-500 dark:text-slate-400">مبلغ تراکنش:</span>
+                <span className="font-black text-slate-900 dark:text-white">{formatPrice(result.amount)} تومان</span>
               </div>
             )}
             {result.cardPan && (
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">شماره کارت:</span>
-                <span className="font-mono text-slate-600" dir="ltr">{result.cardPan}</span>
+                <span className="text-slate-500 dark:text-slate-400">شماره کارت:</span>
+                <span className="font-mono text-slate-600 dark:text-slate-300" dir="ltr">{result.cardPan}</span>
               </div>
             )}
           </div>
@@ -142,7 +142,7 @@ function PaymentVerifyContent() {
 
 export default function PaymentVerifyPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc]">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] dark:bg-[#0b0f19]">
       <Header />
       <main className="flex-1 flex items-center justify-center p-4">
         <Suspense fallback={<div className="py-20 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-[#2563eb]" /></div>}>

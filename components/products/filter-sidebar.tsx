@@ -95,28 +95,28 @@ export function FilterSidebar({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-5 sticky top-24">
-      <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+    <div className="bg-white dark:bg-[#111827] rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs space-y-5 sticky top-24">
+      <div className="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center font-bold">
+          <div className="w-7 h-7 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#2563eb] dark:text-blue-400 flex items-center justify-center font-bold">
             <Sliders className="w-4 h-4" />
           </div>
-          <h2 className="text-sm font-extrabold text-[#0b1528]">
+          <h2 className="text-sm font-extrabold text-[#0b1528] dark:text-white">
             فیلتر پیشرفته
           </h2>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-1 text-xs text-rose-500 font-bold transition-colors cursor-pointer px-2 py-1 rounded-lg"
+          className="inline-flex items-center gap-1 text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 font-bold transition-colors cursor-pointer px-2 py-1 rounded-lg"
         >
           <RotateCcw className="w-3 h-3" />
           <span>بازنشانی</span>
         </button>
       </div>
 
-      <div className="flex items-center justify-between bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-200/50">
-        <span className="text-xs sm:text-sm font-bold text-slate-800">
+      <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 px-3 py-2.5 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+        <span className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">
           فقط کالاهای موجود
         </span>
         <button
@@ -125,7 +125,7 @@ export function FilterSidebar({
           aria-checked={filters.onlyInStock}
           onClick={toggleOnlyInStock}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-            filters.onlyInStock ? "bg-[#2563eb]" : "bg-slate-300"
+            filters.onlyInStock ? "bg-[#2563eb]" : "bg-slate-300 dark:bg-slate-700"
           }`}
         >
           <span
@@ -137,8 +137,8 @@ export function FilterSidebar({
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-[#0b1528]">
-          <Layers className="w-3.5 h-3.5 text-[#2563eb]" />
+        <div className="flex items-center gap-1.5 text-xs font-bold text-[#0b1528] dark:text-white">
+          <Layers className="w-3.5 h-3.5 text-[#2563eb] dark:text-blue-400" />
           <span>دسته‌بندی‌ها</span>
         </div>
         <div className="space-y-2">
@@ -147,7 +147,7 @@ export function FilterSidebar({
             return (
               <label
                 key={cat.id}
-                className="flex items-center justify-between gap-3 text-xs sm:text-sm text-slate-700 cursor-pointer select-none p-1.5 rounded-xl"
+                className="flex items-center justify-between gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 cursor-pointer select-none p-1.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40"
                 onClick={() => toggleCategory(cat.id)}
               >
                 <div className="flex items-center gap-2.5">
@@ -155,7 +155,7 @@ export function FilterSidebar({
                     className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
                       isChecked
                         ? "bg-[#2563eb] border-[#2563eb] text-white shadow-xs"
-                        : "border-slate-300 bg-white"
+                        : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
                     }`}
                   >
                     {isChecked && <Check className="w-3 h-3 stroke-3" />}
@@ -163,8 +163,8 @@ export function FilterSidebar({
                   <span
                     className={
                       isChecked
-                        ? "font-bold text-[#0b1528]"
-                        : "font-medium text-slate-700"
+                        ? "font-bold text-[#0b1528] dark:text-white"
+                        : "font-medium text-slate-700 dark:text-slate-300"
                     }
                   >
                     {cat.label}
@@ -176,11 +176,11 @@ export function FilterSidebar({
         </div>
       </div>
 
-      <div className="h-px bg-slate-100" />
+      <div className="h-px bg-slate-100 dark:bg-slate-800" />
 
       <div className="space-y-3">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-[#0b1528]">
-          <Tag className="w-3.5 h-3.5 text-[#2563eb]" />
+        <div className="flex items-center gap-1.5 text-xs font-bold text-[#0b1528] dark:text-white">
+          <Tag className="w-3.5 h-3.5 text-[#2563eb] dark:text-blue-400" />
           <span>برند سازنده</span>
         </div>
         <div className="space-y-2">
@@ -189,7 +189,7 @@ export function FilterSidebar({
             return (
               <label
                 key={brand.id}
-                className="flex items-center justify-between gap-3 text-xs sm:text-sm text-slate-700 cursor-pointer select-none p-1.5 rounded-xl"
+                className="flex items-center justify-between gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 cursor-pointer select-none p-1.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/40"
                 onClick={() => toggleBrand(brand.id)}
               >
                 <div className="flex items-center gap-2.5">
@@ -197,7 +197,7 @@ export function FilterSidebar({
                     className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
                       isChecked
                         ? "bg-[#2563eb] border-[#2563eb] text-white shadow-xs"
-                        : "border-slate-300 bg-white"
+                        : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
                     }`}
                   >
                     {isChecked && <Check className="w-3 h-3 stroke-3" />}
@@ -205,8 +205,8 @@ export function FilterSidebar({
                   <span
                     className={
                       isChecked
-                        ? "font-bold text-[#0b1528]"
-                        : "font-medium text-slate-700"
+                        ? "font-bold text-[#0b1528] dark:text-white"
+                        : "font-medium text-slate-700 dark:text-slate-300"
                     }
                   >
                     {brand.label}
