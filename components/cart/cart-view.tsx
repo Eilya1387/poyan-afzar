@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { useCartStore } from "@/lib/store";
 import { CheckoutModal } from "./checkout-modal";
 import { cartApi } from "@/lib/api/cart";
@@ -93,21 +94,28 @@ export function CartView() {
       if (res.valid) {
         const discountAmt = res.discountAmount || 0;
         setCouponDiscount(cleanCode, discountAmt);
-        setCouponSuccessMessage(
+        const msg =
           res.message ||
-          `کد تخفیف ${res.code} به مبلغ ${formatPrice(discountAmt)} تومان با موفقیت اعمال شد.`
-        );
+          `کد تخفیف ${res.code} به مبلغ ${formatPrice(discountAmt)} تومان با موفقیت اعمال شد.`;
+        setCouponSuccessMessage(msg);
+        toast.success("کد تخفیف اعمال شد", msg);
         setInputCoupon("");
       } else {
-        setCouponError(res.message || "کد تخفیف وارد شده نامعتبر است");
+        const errTxt = res.message || "کد تخفیف وارد شده نامعتبر است";
+        setCouponError(errTxt);
+        toast.error("کد تخفیف نامعتبر است", errTxt);
       }
     } catch (err: any) {
       const localSuccess = applyCoupon(cleanCode);
       if (localSuccess) {
-        setCouponSuccessMessage(`کد تخفیف ${cleanCode} با موفقیت اعمال شد.`);
+        const msg = `کد تخفیف ${cleanCode} با موفقیت اعمال شد.`;
+        setCouponSuccessMessage(msg);
+        toast.success("کد تخفیف اعمال شد", msg);
         setInputCoupon("");
       } else {
-        setCouponError(err?.message || "کد تخفیف وارد شده معتبر نیست");
+        const errTxt = err?.message || "کد تخفیف وارد شده معتبر نیست";
+        setCouponError(errTxt);
+        toast.error("کد تخفیف نامعتبر است", errTxt);
       }
     } finally {
       setCouponLoading(false);
@@ -249,7 +257,10 @@ export function CartView() {
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => {
+                          removeItem(item.id);
+                          toast.info("کالا از سبد خرید حذف شد.");
+                        }}
                         className="w-8 h-8 rounded-xl border border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200 flex items-center justify-center transition-colors cursor-pointer"
                         aria-label="حذف کالا"
                       >

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { Product } from "@/lib/products";
 import { useFavoritesStore } from "@/lib/store";
 import { useAuth } from "@/components/auth/auth-context";
@@ -29,6 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
       return;
     }
 
+    const willBeFav = !isFav;
     toggleFavorite({
       id: product.id,
       title: product.title,
@@ -38,6 +40,12 @@ export function ProductCard({ product }: ProductCardProps) {
       brand: product.brand,
     });
     userApi.toggleFavorite(product.id).catch(() => {});
+
+    if (willBeFav) {
+      toast.success("به علاقه‌مندی‌ها اضافه شد", `${product.title} به لیست علاقه‌مندی‌های شما افزوده شد.`);
+    } else {
+      toast.info("از علاقه‌مندی‌ها حذف شد", `${product.title} از لیست علاقه‌مندی‌های شما حذف گردید.`);
+    }
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {

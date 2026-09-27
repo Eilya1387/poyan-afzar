@@ -3,6 +3,7 @@ import { Vazirmatn } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/components/auth/auth-context";
 import { BottomNav } from "@/components/layout/bottom-nav";
+import { Toaster } from "@/components/ui/toast";
 import "./globals.css";
 
 const vazir = Vazirmatn({
@@ -29,6 +30,7 @@ export default function RootLayout({
           <AuthProvider>
             {children}
             <BottomNav />
+            <Toaster />
           </AuthProvider>
         </ThemeProvider>
       </body>

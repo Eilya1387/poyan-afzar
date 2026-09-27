@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Smartphone, ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { useAuth } from "./auth-context";
 import { authApi } from "@/lib/auth/better-auth";
 import { userApi } from "@/lib/api/user";
@@ -70,12 +71,15 @@ export function LoginForm() {
       setStep("otp");
       setTimer(res?.expiresInSeconds || 120);
       setCanResend(false);
+      toast.info("کد تایید پیامک شد", "لطفاً کد ۴ رقمی دریافتی را وارد نمایید.");
       setTimeout(() => {
         otpInputsRef.current[0]?.focus();
       }, 100);
     } catch (err: any) {
       setIsLoading(false);
-      setPhoneError(err?.message || "خطا در ارسال کد تایید. لطفاً دوباره تلاش کنید.");
+      const msg = err?.message || "خطا در ارسال کد تایید. لطفاً دوباره تلاش کنید.";
+      setPhoneError(msg);
+      toast.error("خطا در ارسال پیامک", msg);
     }
   };
 
@@ -131,16 +135,18 @@ export function LoginForm() {
         Boolean(user.name);
 
       if (isExistingUser) {
+        const uName =
+          user.name ||
+          (user.firstName
+            ? `${user.firstName} ${user.lastName || ""}`.trim()
+            : user.phone || cleanPhone);
+
         login(
           {
             id: user.id,
             firstName: user.firstName || "",
             lastName: user.lastName || "",
-            name:
-              user.name ||
-              (user.firstName
-                ? `${user.firstName} ${user.lastName || ""}`.trim()
-                : user.phone || cleanPhone),
+            name: uName,
             phone: user.phone || cleanPhone,
             role: user.role,
             email: user.email,
@@ -149,6 +155,7 @@ export function LoginForm() {
           res.accessToken,
           res.refreshToken
         );
+        toast.success("ورود موفقیت‌آمیز", `خوش آمدید، ${uName}`);
         setIsLoading(false);
         const searchParams = new URLSearchParams(window.location.search);
         const redirectUrl = searchParams.get("redirect") || "/";
@@ -175,9 +182,12 @@ export function LoginForm() {
       setCanResend(false);
       setOtp(["", "", "", ""]);
       setOtpError("");
+      toast.info("کد تایید مجدداً ارسال شد.");
       otpInputsRef.current[0]?.focus();
     } catch (err: any) {
-      setOtpError(err?.message || "خطا در ارسال مجدد کد");
+      const msg = err?.message || "خطا در ارسال مجدد کد";
+      setOtpError(msg);
+      toast.error("خطا در ارسال مجدد کد", msg);
     }
   };
 
@@ -200,26 +210,30 @@ export function LoginForm() {
         lastName: lastName.trim(),
       });
 
+      const fullName = `${firstName.trim()} ${lastName.trim()}`;
       login({
         id: updated.id,
         firstName: updated.firstName || firstName.trim(),
         lastName: updated.lastName || lastName.trim(),
-        name: `${firstName.trim()} ${lastName.trim()}`,
+        name: fullName,
         phone: updated.phone || cleanPhone,
         email: updated.email,
       });
 
+      toast.success("حساب کاربری با موفقیت تکمیل شد", `خوش آمدید، ${fullName}`);
       const searchParams = new URLSearchParams(window.location.search);
       const redirectUrl = searchParams.get("redirect") || "/";
       setIsLoading(false);
       router.push(redirectUrl);
     } catch {
       // If updateProfile had issue, still complete local login
+      const fullName = `${firstName.trim()} ${lastName.trim()}`;
       login({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         phone: phone.trim(),
       });
+      toast.success("حساب کاربری با موفقیت تکمیل شد", `خوش آمدید، ${fullName}`);
       const searchParams = new URLSearchParams(window.location.search);
       const redirectUrl = searchParams.get("redirect") || "/";
       setIsLoading(false);

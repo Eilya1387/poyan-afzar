@@ -11,6 +11,7 @@ import {
   Minus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { Product } from "@/lib/products";
 import { useCartStore, useFavoritesStore } from "@/lib/store";
 import { useAuth } from "@/components/auth/auth-context";
@@ -73,6 +74,12 @@ export function BuyBox({
         },
         quantity,
       );
+      toast.success("به سبد خرید اضافه شد", `${product.title} به سبد خرید افزوده شد.`, {
+        action: {
+          label: "مشاهده سبد خرید",
+          onClick: () => router.push("/cart"),
+        },
+      });
     }
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
@@ -85,6 +92,7 @@ export function BuyBox({
     }
 
     if (product) {
+      const willBeFav = !isFav;
       toggleFavorite({
         id: product.id,
         title: product.title,
@@ -95,6 +103,12 @@ export function BuyBox({
         rating: product.rating,
       });
       userApi.toggleFavorite(product.id).catch(() => {});
+
+      if (willBeFav) {
+        toast.success("به علاقه‌مندی‌ها اضافه شد", `${product.title} به لیست علاقه‌مندی‌های شما افزوده شد.`);
+      } else {
+        toast.info("از علاقه‌مندی‌ها حذف شد", `${product.title} از لیست علاقه‌مندی‌های شما حذف گردید.`);
+      }
     }
   };
 

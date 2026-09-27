@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { X, MapPin, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { fetchProvinces, fetchCitiesByProvince, Province } from "@/lib/iran-cities";
 import { useAddressStore } from "@/lib/store";
 
@@ -85,11 +86,13 @@ export function AddressModal({ isOpen, onClose, onSuccess }: AddressModalProps) 
         if (onSuccess) onSuccess("new");
       }
 
+      toast.success("آدرس جدید با موفقیت ثبت شد.");
       setIsLoading(false);
       onClose();
     } catch {
       setIsLoading(false);
       setError("خطا در ثبت آدرس");
+      toast.error("خطا در ثبت آدرس", "لطفاً مجدداً تلاش نمایید.");
     }
   };
 

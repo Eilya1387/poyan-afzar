@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { newsletterApi } from "@/lib/api/newsletter";
 import { Loader2 } from "lucide-react";
 
@@ -20,8 +21,14 @@ export function Newsletter() {
     try {
       await newsletterApi.subscribe(email.trim());
       setSubscribed(true);
+      toast.success(
+        "عضویت در خبرنامه با موفقیت انجام شد.",
+        "از جدیدترین تخفیف‌ها و پیشنهادات ویژه پویان افزار باخبر خواهید شد."
+      );
     } catch (err: any) {
-      setError(err?.message || "خطا در ثبت ایمیل. لطفاً مجدداً تلاش نمایید.");
+      const msg = err?.message || "خطا در ثبت ایمیل. لطفاً مجدداً تلاش نمایید.";
+      setError(msg);
+      toast.error("خطا در عضویت خبرنامه", msg);
     } finally {
       setLoading(false);
     }

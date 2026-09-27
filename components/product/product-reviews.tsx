@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Star, CheckCircle2, PenSquare, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { ProductReview, RatingDistributionItem } from "@/lib/products";
 import { productsApi } from "@/lib/api/products";
 import { useAuth } from "@/components/auth/auth-context";
@@ -35,9 +36,7 @@ export function ProductReviews({
     user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : ""
   );
   const [userComment, setUserComment] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fetchLiveReviews = async () => {
     if (!productId) return;
@@ -82,7 +81,6 @@ export function ProductReviews({
     if (!userComment.trim()) return;
 
     setSubmitting(true);
-    setErrorMsg(null);
     try {
       if (productId) {
         await productsApi.createReview(productId, {
@@ -92,15 +90,12 @@ export function ProductReviews({
         });
       }
 
-      setSubmitted(true);
+      toast.success("نظر شما با موفقیت ثبت شد.", "دیدگاه شما پس از بررسی کارشناسان تایید و نمایش داده خواهد شد.");
+      setShowModal(false);
+      setUserComment("");
       await fetchLiveReviews();
-      setTimeout(() => {
-        setShowModal(false);
-        setSubmitted(false);
-        setUserComment("");
-      }, 1800);
     } catch (err: any) {
-      setErrorMsg(err?.message || "خطا در ثبت دیدگاه.");
+      toast.error("خطا در ثبت دیدگاه", err?.message || "لطفاً مجدداً تلاش نمایید.");
     } finally {
       setSubmitting(false);
     }
@@ -224,7 +219,7 @@ export function ProductReviews({
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-black text-slate-900">
                 ثبت نظر درباره محصول
@@ -238,93 +233,81 @@ export function ProductReviews({
               </button>
             </div>
 
-            {submitted ? (
-              <div className="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-center text-xs font-bold border border-emerald-200">
-                نظر شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد.
+            <form onSubmit={handleReviewSubmit} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  امتیاز شما
+                </label>
+                <div className="flex items-center gap-1.5">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setFormRating(s)}
+                      className="cursor-pointer"
+                    >
+                      <Star
+                        className={`w-5 h-5 ${
+                          s <= formRating
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-slate-200"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="text-xs font-bold text-slate-600 mr-2">
+                    {formatPersianNumber(formRating)} ستاره
+                  </span>
+                </div>
               </div>
-            ) : (
-              <form onSubmit={handleReviewSubmit} className="space-y-3.5">
-                {errorMsg && (
-                  <div className="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
-                    {errorMsg}
-                  </div>
-                )}
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    امتیاز شما
-                  </label>
-                  <div className="flex items-center gap-1.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setFormRating(s)}
-                        className="cursor-pointer"
-                      >
-                        <Star
-                          className={`w-5 h-5 ${
-                            s <= formRating
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-slate-200"
-                          }`}
-                        />
-                      </button>
-                    ))}
-                    <span className="text-xs font-bold text-slate-600 mr-2">
-                      {formatPersianNumber(formRating)} ستاره
-                    </span>
-                  </div>
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  نام و نام خانوادگی
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="مثال: علی محمدی"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
+                />
+              </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    نام و نام خانوادگی
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    placeholder="مثال: علی محمدی"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  متن نظر شما
+                </label>
+                <textarea
+                  rows={4}
+                  required
+                  value={userComment}
+                  onChange={(e) => setUserComment(e.target.value)}
+                  placeholder="نقاط قوت، ضعف و تجربه کاربری خود را بنویسید..."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
+                />
+              </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    متن نظر شما
-                  </label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={userComment}
-                    onChange={(e) => setUserComment(e.target.value)}
-                    placeholder="نقاط قوت، ضعف و تجربه کاربری خود را بنویسید..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#2563eb]"
-                  />
-                </div>
-
-                <div className="flex items-center justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowModal(false)}
-                  >
-                    انصراف
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="sm"
-                    disabled={submitting}
-                  >
-                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "ارسال نظر"}
-                  </Button>
-                </div>
-              </form>
-            )}
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowModal(false)}
+                >
+                  انصراف
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="sm"
+                  disabled={submitting}
+                >
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "ارسال نظر"}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}

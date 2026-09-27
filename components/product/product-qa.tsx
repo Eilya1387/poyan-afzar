@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { HelpCircle, ChevronDown, MessageSquarePlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { productsApi } from "@/lib/api/products";
 import { useAuth } from "@/components/auth/auth-context";
 
@@ -40,7 +41,6 @@ export function ProductQA({ productId }: { productId?: string }) {
   const [openId, setOpenId] = useState<number | string | null>(1);
   const [questionText, setQuestionText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (!productId) return;
@@ -83,13 +83,10 @@ export function ProductQA({ productId }: { productId?: string }) {
           userName: authorName,
         });
       }
-      setSent(true);
+      toast.success("پرسش شما با موفقیت ثبت شد.", "پس از بررسی کارشناسان، پاسخ به پرسش شما در این بخش نمایش داده خواهد شد.");
       setQuestionText("");
-      setTimeout(() => {
-        setSent(false);
-      }, 3000);
-    } catch (err) {
-      console.error("Failed to submit QA:", err);
+    } catch (err: any) {
+      toast.error("خطا در ارسال پرسش", err?.message || "لطفاً مجدداً تلاش نمایید.");
     } finally {
       setLoading(false);
     }
@@ -170,7 +167,7 @@ export function ProductQA({ productId }: { productId?: string }) {
             className="text-xs font-bold shrink-0"
             rightIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquarePlus className="w-4 h-4" />}
           >
-            {sent ? "ثبت شد (در انتظار تایید)" : "ارسال پرسش"}
+            ارسال پرسش
           </Button>
         </div>
       </form>

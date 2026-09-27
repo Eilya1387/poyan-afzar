@@ -29,6 +29,7 @@ import {
   ReceiptText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { useAuth } from "./auth-context";
 import { useFavoritesStore, useAddressStore, useCartStore } from "@/lib/store";
 import { AddressModal } from "./address-modal";
@@ -125,6 +126,7 @@ export function UserPanelView() {
 
   const handleLogout = async () => {
     await logout();
+    toast.info("با موفقیت از حساب کاربری خارج شدید.");
     router.push("/");
   };
 
@@ -141,9 +143,10 @@ export function UserPanelView() {
       });
       await refreshProfile();
       setProfileSuccessMsg("اطلاعات حساب کاربری با موفقیت به‌روزرسانی شد.");
+      toast.success("اطلاعات حساب کاربری با موفقیت ذخیره شد.");
       setTimeout(() => setProfileSuccessMsg(null), 3000);
     } catch (err: any) {
-      alert(err?.message || "خطا در ذخیره اطلاعات");
+      toast.error("خطا در ذخیره اطلاعات", err?.message || "لطفاً مجدداً تلاش نمایید.");
     } finally {
       setSavingProfile(false);
     }
@@ -155,8 +158,10 @@ export function UserPanelView() {
       await userApi.deleteAddress(addrId);
       removeAddress(addrId);
       setLiveAddresses((prev) => prev.filter((a) => a.id !== addrId));
+      toast.info("آدرس با موفقیت حذف شد.");
     } catch {
       removeAddress(addrId);
+      toast.info("آدرس با موفقیت حذف شد.");
     }
   };
 
@@ -167,8 +172,10 @@ export function UserPanelView() {
       setLiveAddresses((prev) =>
         prev.map((a) => ({ ...a, isDefault: a.id === addrId }))
       );
+      toast.success("آدرس پیش‌فرض با موفقیت تغییر یافت.");
     } catch {
       setDefaultAddress(addrId);
+      toast.success("آدرس پیش‌فرض با موفقیت تغییر یافت.");
     }
   };
 
@@ -749,7 +756,10 @@ export function UserPanelView() {
                         >
                           <button
                             type="button"
-                            onClick={() => removeFavorite(item.id)}
+                            onClick={() => {
+                              removeFavorite(item.id);
+                              toast.info("محصول از لیست علاقه‌مندی‌ها حذف شد.");
+                            }}
                             className="text-red-500 hover:text-red-600 p-1 cursor-pointer"
                             aria-label="حذف از علاقه‌مندی‌ها"
                           >
@@ -915,7 +925,10 @@ export function UserPanelView() {
                     >
                       <button
                         type="button"
-                        onClick={() => removeFavorite(item.id)}
+                        onClick={() => {
+                          removeFavorite(item.id);
+                          toast.info("محصول از لیست علاقه‌مندی‌ها حذف شد.");
+                        }}
                         className="text-red-500 hover:text-red-600 p-1.5 cursor-pointer"
                         aria-label="حذف از علاقه‌مندی"
                       >

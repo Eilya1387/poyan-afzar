@@ -16,6 +16,7 @@ import {
   ReceiptText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import { useCartStore, useAddressStore } from "@/lib/store";
 import { useAuth } from "@/components/auth/auth-context";
 import { AddressModal } from "@/components/auth/address-modal";
@@ -97,6 +98,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
       setTrackingCode(code);
       clearCart();
+      toast.success("سفارش شما با موفقیت ثبت شد!", `کد رهگیری: ${code}`);
 
       if (paymentMethod === "gateway" && orderData.paymentUrl) {
         if (orderData.paymentUrl.startsWith("http://localhost") || orderData.paymentUrl.includes("/payment/verify")) {
@@ -110,7 +112,9 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
       setOrderComplete(true);
     } catch (err: any) {
-      setErrorMessage(err?.message || "خطا در ثبت و پرداخت سفارش. لطفاً دوباره تلاش کنید.");
+      const msg = err?.message || "خطا در ثبت و پرداخت سفارش. لطفاً دوباره تلاش کنید.";
+      setErrorMessage(msg);
+      toast.error("خطا در ثبت سفارش", msg);
     } finally {
       setIsProcessing(false);
     }
