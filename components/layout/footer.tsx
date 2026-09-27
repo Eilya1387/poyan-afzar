@@ -240,7 +240,7 @@ export function Footer() {
             <span>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</span>
             <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
             <span className="font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md text-[11px] border border-slate-200/60 dark:border-slate-700">
-              نسخه ۴.۲.۷
+              نسخه  ۴.۲.۷
             </span>
           </div>
 
