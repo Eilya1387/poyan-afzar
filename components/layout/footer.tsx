@@ -90,7 +90,8 @@ export function Footer() {
                 className="w-10 h-10 object-contain rounded-xl shadow-2xs group-hover:scale-105 transition-transform"
               />
               <span className="text-2xl font-black tracking-tight text-[#0b1528] dark:text-white">
-                پویان <span className="text-[#2563eb] dark:text-blue-400">افزار</span>
+                پویان{" "}
+                <span className="text-[#2563eb] dark:text-blue-400">افزار</span>
               </span>
             </Link>
 
@@ -138,15 +139,22 @@ export function Footer() {
             </h3>
             <div className="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
               <div className="flex items-start gap-2.5 justify-center lg:justify-start leading-relaxed">
-                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">آدرس:</span>
+                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">
+                  آدرس:
+                </span>
                 <span>
                   تهران، خیابان ولیعصر، نرسیده به تقاطع میرداماد، مجتمع تجاری
                   پویان، طبقه ۳
                 </span>
               </div>
               <div className="flex items-center gap-2.5 justify-center lg:justify-start">
-                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">تلفن:</span>
-                <span dir="ltr" className="font-bold text-slate-900 dark:text-slate-100">
+                <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">
+                  تلفن:
+                </span>
+                <span
+                  dir="ltr"
+                  className="font-bold text-slate-900 dark:text-slate-100"
+                >
                   ۰۲۱-۸۸۷۷۶۶۵۵
                 </span>
               </div>
@@ -238,12 +246,13 @@ export function Footer() {
         <div className="border-t border-slate-100 dark:border-slate-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400 text-center md:text-right">
           <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
             <span>تمامی حقوق برای فروشگاه پویان افزار محفوظ است © ۱۴۰۳</span>
-            <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
-            <span className="font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md text-[11px] border border-slate-200/60 dark:border-slate-700">
-              نسخه  ۴.۲.۷
+            <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">
+              •
             </span>
           </div>
-
+          <span className="font-semibold text-slate-500 dark:text-slate-400 dark:bg-slate-800 px-2 py-0.5 rounded-md text-[11px]">
+            نسخه ۴.۲.۷
+          </span>
           <div className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-slate-300 font-medium">
             <span>قدرت گرفته از</span>
             <a
